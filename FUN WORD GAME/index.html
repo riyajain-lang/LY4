@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Kids Synonym Slide Game</title>
+
+<style>
+body {
+    font-family: 'Comic Sans MS', cursive;
+    background: linear-gradient(135deg, #ffe4ec, #e0f7ff, #eaffea);
+    margin: 0;
+}
+
+.container {
+    max-width: 650px;
+    margin: 30px auto;
+    background: #ffffffdd;
+    padding: 25px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.slide {
+    display: none;
+}
+
+.active {
+    display: block;
+}
+
+.option {
+    display: block;
+    margin: 10px;
+    padding: 14px;
+    font-size: 20px;
+    background: #f0f8ff;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.option:hover {
+    background: #dff0ff;
+}
+
+.correct {
+    background: #caffbf !important;
+}
+
+.wrong {
+    background: #ffadad !important;
+}
+
+img {
+    width: 40px;
+    margin-bottom: 10px;
+}
+
+#score {
+    font-size: 22px;
+    margin-top: 15px;
+}
+
+#answers {
+    display: none;
+    margin-top: 20px;
+    background: #eef6ff;
+    padding: 15px;
+    border-radius: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>🧸 Fun Word Game</h1>
+<p>Pick the word that means the same!</p>
+
+<!-- Question Slides -->
+
+<div class="slide active" id="q1">
+<img src="https://img.icons8.com/color/48/sun.png">
+<p><b>1.</b> The sun is very <u>big</u>.</p>
+<div class="option" onclick="check(this,1,true)">A. Large</div>
+<div class="option" onclick="check(this,1)">B. Tiny</div>
+<div class="option" onclick="check(this,1)">C. Cold</div>
+<div class="option" onclick="check(this,1)">D. Fast</div>
+</div>
+
+<div class="slide" id="q2">
+<img src="https://img.icons8.com/color/48/happy.png">
+<p><b>2.</b> She feels <u>happy</u>.</p>
+<div class="option" onclick="check(this,2)">A. Sad</div>
+<div class="option" onclick="check(this,2,true)">B. Glad</div>
+<div class="option" onclick="check(this,2)">C. Angry</div>
+<div class="option" onclick="check(this,2)">D. Sleepy</div>
+</div>
+
+<div class="slide" id="q3">
+<img src="https://img.icons8.com/color/48/cat.png">
+<p><b>3.</b> The kitten is very <u>small</u>.</p>
+<div class="option" onclick="check(this,3)">A. Big</div>
+<div class="option" onclick="check(this,3,true)">B. Little</div>
+<div class="option" onclick="check(this,3)">C. Loud</div>
+<div class="option" onclick="check(this,3)">D. Fast</div>
+</div>
+
+<div class="slide" id="q4">
+<img src="https://img.icons8.com/color/48/running.png">
+<p><b>4.</b> He can run <u>fast</u>.</p>
+<div class="option" onclick="check(this,4)">A. Slow</div>
+<div class="option" onclick="check(this,4,true)">B. Quick</div>
+<div class="option" onclick="check(this,4)">C. Tall</div>
+<div class="option" onclick="check(this,4)">D. Heavy</div>
+</div>
+
+<div class="slide" id="q5">
+<img src="https://img.icons8.com/color/48/sleeping.png">
+<p><b>5.</b> The baby is <u>sleepy</u>.</p>
+<div class="option" onclick="check(this,5,true)">A. Tired</div>
+<div class="option" onclick="check(this,5)">B. Hungry</div>
+<div class="option" onclick="check(this,5)">C. Happy</div>
+<div class="option" onclick="check(this,5)">D. Loud</div>
+</div>
+
+<div id="score">⭐ Score: 0 / 5</div>
+
+<button onclick="showAnswers()">Show Answers 👀</button>
+
+<div id="answers">
+<h3>🔒 Answers & Simple Meanings</h3>
+
+<p><b>1. Large</b> — "Big" means large.<br>
+Closest distractor: Tiny (very small).</p>
+
+<p><b>2. Glad</b> — "Happy" means glad.<br>
+Closest distractor: Sad (opposite).</p>
+
+<p><b>3. Little</b> — "Small" means little.<br>
+Closest distractor: Big (opposite).</p>
+
+<p><b>4. Quick</b> — "Fast" means quick.<br>
+Closest distractor: Slow (opposite).</p>
+
+<p><b>5. Tired</b> — "Sleepy" means tired.<br>
+Closest distractor: Hungry (different feeling).</p>
+
+</div>
+
+</div>
+
+<script>
+let current = 1;
+let score = 0;
+let answered = {};
+
+function check(el, q, correct=false) {
+    if (answered[q]) return;
+    answered[q] = true;
+
+    if (correct) {
+        el.classList.add("correct");
+        score++;
+    } else {
+        el.classList.add("wrong");
+    }
+
+    document.getElementById("score").innerText = "⭐ Score: " + score + " / 5";
+
+    setTimeout(() => {
+        nextSlide();
+    }, 800);
+}
+
+function nextSlide() {
+    let currentSlide = document.getElementById("q" + current);
+    if (currentSlide) currentSlide.classList.remove("active");
+
+    current++;
+    let next = document.getElementById("q" + current);
+
+    if (next) {
+        next.classList.add("active");
+    }
+}
+
+function showAnswers() {
+    document.getElementById("answers").style.display = "block";
+}
+</script>
+
+</body>
+</html>
