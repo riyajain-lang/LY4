@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Jumbled Flower Words</title>
+<title>Unique Flower Words</title>
 
 <style>
 *{
@@ -69,7 +69,7 @@ body{
   width:92vw;
   height:92vh;
   max-width:520px;
-  background:rgba(255,255,255,.82);
+  background:rgba(255,255,255,.84);
   border-radius:24px;
   border:3px solid #f4b8c9;
   box-shadow:0 8px 20px rgba(0,0,0,.14);
@@ -102,13 +102,13 @@ body{
   padding:6px;
 }
 
-.jumbleTitle{
+.spellingTitle{
   font-size:15px;
   color:#7b4b61;
   font-weight:bold;
 }
 
-#jumbledWord{
+#correctWord{
   font-size:24px;
   font-weight:bold;
   color:#b44273;
@@ -220,12 +220,69 @@ body{
   }
 }
 
+@media(max-width:480px){
+  .card{
+    height:95vh;
+    padding:8px;
+  }
+
+  .flowerImg{
+    width:135px;
+    height:100px;
+  }
+
+  #correctWord{
+    font-size:20px;
+  }
+
+  .blank{
+    width:28px;
+    height:33px;
+    font-size:19px;
+  }
+
+  .letter{
+    width:31px;
+    height:31px;
+    font-size:17px;
+  }
+
+  #blankArea{
+    gap:4px;
+    min-height:70px;
+  }
+
+  #letterArea{
+    gap:5px;
+  }
+}
+
 @media(max-height:620px){
-  .card{height:96vh;padding:8px;}
-  .flowerImg{width:135px;height:100px;}
-  #jumbledWord{font-size:20px;}
-  .blank{width:29px;height:34px;font-size:20px;}
-  .letter{width:32px;height:32px;font-size:18px;}
+  .card{
+    height:96vh;
+    padding:8px;
+  }
+
+  .flowerImg{
+    width:130px;
+    height:95px;
+  }
+
+  #correctWord{
+    font-size:19px;
+  }
+
+  .blank{
+    width:27px;
+    height:32px;
+    font-size:18px;
+  }
+
+  .letter{
+    width:30px;
+    height:30px;
+    font-size:17px;
+  }
 }
 </style>
 </head>
@@ -254,8 +311,8 @@ body{
 
     <img id="flowerImage" class="flowerImg" src="" alt="Flower">
 
-    <div class="jumbleTitle">Jumbled spelling</div>
-    <div id="jumbledWord"></div>
+    <div class="spellingTitle">Correct spelling</div>
+    <div id="correctWord"></div>
 
     <div id="blankArea"></div>
 
@@ -274,27 +331,32 @@ body{
 const questions = [
   {
     answer:"CHERRY BLOSSOM",
-    jumble:"YHERCR SBOLSOM",
+    display:"CHERRY BLOSSOM",
+    letters:"CHERRYBLOSSOM",
     image:"./assets/cherry-blossom.png"
   },
   {
     answer:"RAFFLESIA",
-    jumble:"SIAFLARFE",
+    display:"RAFFLESIA",
+    letters:"RAFFLESIA",
     image:"./assets/rafflesia.png"
   },
   {
-    answer:"PASSION",
-    jumble:"SIPASON",
+    answer:"PASSION FLOWER",
+    display:"PASSION FLOWER",
+    letters:"PASSIONFLOWER",
     image:"./assets/passion.png"
   },
   {
     answer:"SNOWDROP",
-    jumble:"WDOSNROP",
+    display:"SNOWDROP",
+    letters:"SNOWDROP",
     image:"./assets/snowdrop.png"
   },
   {
     answer:"PROTEA",
-    jumble:"TAEPOR",
+    display:"PROTEA",
+    letters:"PROTEA",
     image:"./assets/protea.png"
   }
 ];
@@ -329,13 +391,15 @@ function loadQuestion(){
 
   const q = questions[current];
 
-  document.getElementById("slideNo").innerText = "Question " + (current + 1) + " / " + questions.length;
+  document.getElementById("slideNo").innerText =
+  "Question " + (current + 1) + " / " + questions.length;
+
   document.getElementById("flowerImage").src = q.image;
-  document.getElementById("jumbledWord").innerText = q.jumble;
+  document.getElementById("correctWord").innerText = q.display;
   document.getElementById("message").innerText = "";
 
   createBlanks(q.answer);
-  createLetters(q.jumble);
+  createLetters(q.letters);
 }
 
 function createBlanks(answer){
@@ -359,11 +423,11 @@ function createBlanks(answer){
   }
 }
 
-function createLetters(jumble){
+function createLetters(lettersText){
   const letterArea = document.getElementById("letterArea");
   letterArea.innerHTML = "";
 
-  const letters = jumble.replaceAll(" ","").split("");
+  const letters = lettersText.split("");
 
   letters.forEach(letter => {
     const btn = document.createElement("button");
@@ -374,7 +438,10 @@ function createLetters(jumble){
       selectedLetter = letter;
       selectedButton = btn;
 
-      document.querySelectorAll(".letter").forEach(b => b.style.outline = "none");
+      document.querySelectorAll(".letter").forEach(b => {
+        b.style.outline = "none";
+      });
+
       btn.style.outline = "3px solid #8e4d72";
     };
 
@@ -412,6 +479,7 @@ function placeLetter(blank){
   }else{
     playSound("wrongSound");
     document.getElementById("message").innerText = "Try again";
+
     setTimeout(() => {
       document.getElementById("message").innerText = "";
     }, 800);
