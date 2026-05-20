@@ -185,13 +185,13 @@ const questions = [
   {
     answer:"RAFFLESIA",
     display:"RAFFLESIA",
-    jumble:"RAFFLESIA",
+    jumble:"AFRSEFAIL",
     image:"./assets/rafflesia.png"
   },
   {
     answer:"PASSION FLOWER",
     display:"PASSION FLOWER",
-    jumble:"SIPAONFROWEL",
+    jumble:"SIPASNOFROWLE",
     image:"./assets/passion.png"
   },
   {
@@ -262,9 +262,7 @@ function createBlanks(answer){
       const blank = document.createElement("div");
       blank.className = "blank";
       blank.dataset.correct = answer[i];
-      blank.onclick = function(){
-        placeLetter(blank);
-      };
+      blank.onclick = function(){ placeLetter(blank); };
       blankArea.appendChild(blank);
     }
   }
