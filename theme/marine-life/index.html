@@ -139,6 +139,7 @@ html,body{
   font-weight:bold;
   text-shadow:2px 3px 4px #001;
   cursor:pointer;
+  overflow:hidden;
 }
 
 .zone span{
@@ -163,6 +164,20 @@ html,body{
   height:44px;
   object-fit:contain;
   z-index:4;
+  animation:swimAcross 6s linear infinite, floatUpDown 2s ease-in-out infinite;
+}
+
+@keyframes swimAcross{
+  0%{transform:translateX(0) scaleX(1)}
+  45%{transform:translateX(95px) scaleX(1)}
+  50%{transform:translateX(95px) scaleX(-1)}
+  95%{transform:translateX(0) scaleX(-1)}
+  100%{transform:translateX(0) scaleX(1)}
+}
+
+@keyframes floatUpDown{
+  0%,100%{margin-top:0}
+  50%{margin-top:-8px}
 }
 
 .footer{
@@ -266,6 +281,14 @@ button{
   .placedAnimal{
     width:34px;
     height:34px;
+  }
+
+  @keyframes swimAcross{
+    0%{transform:translateX(0) scaleX(1)}
+    45%{transform:translateX(55px) scaleX(1)}
+    50%{transform:translateX(55px) scaleX(-1)}
+    95%{transform:translateX(0) scaleX(-1)}
+    100%{transform:translateX(0) scaleX(1)}
   }
 
   button{
@@ -442,6 +465,7 @@ function placeAnimal(animalDiv,zone){
 
   img.style.left=spots[count%spots.length][0];
   img.style.top=spots[count%spots.length][1];
+  img.style.animationDelay=(count * 0.35)+"s";
 
   zone.appendChild(img);
 }
