@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Marine Life Ocean Zones</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Comic Sans MS", Arial, sans-serif;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* SLIDE 1 */
+#logoSlide {
+  width: 100%;
+  height: 100%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#logoSlide img {
+  width: min(55vw, 300px);
+  height: auto;
+}
+
+/* GAME */
+#gameSlide {
+  display: none;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(#b9f3ff, #e7fbff);
+  padding: 1.5vh 1.5vw;
+}
+
+.header {
+  height: 8vh;
+  text-align: center;
+  font-size: clamp(18px, 4vw, 34px);
+  color: #034b7a;
+  font-weight: bold;
+}
+
+.main {
+  display: flex;
+  width: 100%;
+  height: 84vh;
+  gap: 1.2vw;
+}
+
+.animalsPanel {
+  width: 50%;
+  background: rgba(255,255,255,0.9);
+  border-radius: 22px;
+  padding: 1vh;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1vh;
+  border: 4px solid #6ed6ff;
+}
+
+.animal {
+  background: #ffffff;
+  border-radius: 18px;
+  border: 3px dashed #8bdcff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  min-height: 0;
+}
+
+.animal img {
+  max-width: 90%;
+  max-height: 80%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.zonesPanel {
+  width: 50%;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 4px solid #07518a;
+  position: relative;
+}
+
+.zone {
+  height: 33.33%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: clamp(15px, 3vw, 28px);
+  font-weight: bold;
+  text-shadow: 1px 2px 4px #003;
+  position: relative;
+}
+
+.zone span {
+  background: rgba(0,0,0,0.18);
+  padding: 8px 14px;
+  border-radius: 16px;
+}
+
+.sunlight {
+  background: linear-gradient(#34c8ee, #1684ce);
+}
+
+.twilight {
+  background: linear-gradient(#0b63b0, #063d82);
+}
+
+.midnight {
+  background: linear-gradient(#03285f, #010f35);
+}
+
+.zone.highlight {
+  outline: 5px solid #fff59d;
+  outline-offset: -8px;
+}
+
+.footer {
+  height: 8vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1vw;
+}
+
+button {
+  border: none;
+  border-radius: 18px;
+  padding: 10px 22px;
+  font-size: clamp(14px, 2.6vw, 22px);
+  font-weight: bold;
+  background: #ffcc33;
+  color: #00456d;
+  box-shadow: 0 5px 0 #d99d00;
+}
+
+button:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 #d99d00;
+}
+
+#message {
+  font-size: clamp(15px, 2.6vw, 24px);
+  color: #064c73;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* END SCREEN */
+#endSlide {
+  display: none;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(#8eeeff, #006fb5);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: white;
+  text-align: center;
+}
+
+#endSlide h1 {
+  font-size: clamp(32px, 8vw, 70px);
+}
+
+#endSlide p {
+  font-size: clamp(18px, 4vw, 34px);
+  margin: 15px;
+}
+
+/* Drag clone */
+.dragging {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  width: 80px;
+  height: 80px;
+  background: white;
+  border-radius: 18px;
+  border: 3px solid #ffcc33;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dragging img {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+/* Small phones */
+@media (max-width: 700px) {
+  .main {
+    gap: 1vw;
+  }
+
+  .animalsPanel {
+    grid-template-columns: repeat(2, 1fr);
+    border-radius: 16px;
+    padding: 0.8vh;
+  }
+
+  .animal {
+    border-radius: 14px;
+  }
+
+  .zonesPanel {
+    border-radius: 16px;
+  }
+
+  button {
+    padding: 8px 14px;
+  }
+}
+</style>
+</head>
+
+<body>
+<div id="app">
+
+  <!-- Slide 1 -->
+  <div id="logoSlide">
+    <img src="assets/innovine-logo.png" alt="Innovine Logo">
+  </div>
+
+  <!-- Slide 2 -->
+  <div id="gameSlide">
+    <div class="header">Drag the Marine Animals to Their Ocean Zones</div>
+
+    <div class="main">
+      <div class="animalsPanel" id="animalsPanel"></div>
+
+      <div class="zonesPanel">
+        <div class="zone sunlight" data-zone="sunlight"><span>Sunlight Zone</span></div>
+        <div class="zone twilight" data-zone="twilight"><span>Twilight Zone</span></div>
+        <div class="zone midnight" data-zone="midnight"><span>Midnight Zone</span></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <button onclick="resetGame()">Clear</button>
+      <div id="message">Place each animal in the correct zone.</div>
+      <button onclick="checkGame()">Check</button>
+    </div>
+  </div>
+
+  <!-- Slide 3 -->
+  <div id="endSlide">
+    <h1>Great Job!</h1>
+    <p>You sorted the marine animals beautifully!</p>
+    <button onclick="resetGame()">Play Again</button>
+  </div>
+
+</div>
+
+<audio id="correctSound" src="assets/correct.mp3"></audio>
+<audio id="wrongSound" src="assets/wrong.mp3"></audio>
+<audio id="clapSound" src="assets/freesound_community-claps-44774.mp3"></audio>
+
+<script>
+const animals = [
+  { name: "Clownfish", img: "clownfish.png", zone: "sunlight" },
+  { name: "Dolphin", img: "dolphin.png", zone: "sunlight" },
+  { name: "Sea Turtle", img: "sea-turtle.png", zone: "sunlight" },
+  { name: "Starfish", img: "starfish.png", zone: "sunlight" },
+
+  { name: "Jellyfish", img: "jellyfish.png", zone: "twilight" },
+  { name: "Squid", img: "squid.png", zone: "twilight" },
+  { name: "Octopus", img: "octopus.png", zone: "twilight" },
+  { name: "Eel", img: "eel.png", zone: "twilight" },
+
+  { name: "Anglerfish", img: "anglerfish.png", zone: "midnight" },
+  { name: "Shrimp", img: "shrimp.png", zone: "midnight" }
+];
+
+let placements = {};
+let attempts = 0;
+let dragItem = null;
+let dragClone = null;
+
+setTimeout(() => {
+  document.getElementById("logoSlide").style.display = "none";
+  document.getElementById("gameSlide").style.display = "block";
+  loadAnimals();
+}, 2000);
+
+function shuffle(array) {
+  return array.sort(() => Math.random() - 0.5);
+}
+
+function loadAnimals() {
+  const panel = document.getElementById("animalsPanel");
+  panel.innerHTML = "";
+  placements = {};
+  attempts = 0;
+  document.getElementById("message").textContent = "Place each animal in the correct zone.";
+
+  shuffle([...animals]).forEach(animal => {
+    const div = document.createElement("div");
+    div.className = "animal";
+    div.dataset.name = animal.name;
+    div.dataset.zone = animal.zone;
+    div.innerHTML = `<img src="assets/${animal.img}" alt="${animal.name}">`;
+
+    div.addEventListener("pointerdown", startDrag);
+    panel.appendChild(div);
+  });
+}
+
+function startDrag(e) {
+  dragItem = e.currentTarget;
+
+  dragClone = dragItem.cloneNode(true);
+  dragClone.className = "dragging";
+  document.body.appendChild(dragClone);
+
+  moveClone(e.clientX, e.clientY);
+
+  document.addEventListener("pointermove", dragMove);
+  document.addEventListener("pointerup", endDrag);
+}
+
+function dragMove(e) {
+  moveClone(e.clientX, e.clientY);
+
+  document.querySelectorAll(".zone").forEach(z => z.classList.remove("highlight"));
+  const target = document.elementFromPoint(e.clientX, e.clientY);
+  const zone = target && target.closest(".zone");
+  if (zone) zone.classList.add("highlight");
+}
+
+function moveClone(x, y) {
+  if (!dragClone) return;
+  dragClone.style.left = x - 40 + "px";
+  dragClone.style.top = y - 40 + "px";
+}
+
+function endDrag(e) {
+  document.querySelectorAll(".zone").forEach(z => z.classList.remove("highlight"));
+
+  const target = document.elementFromPoint(e.clientX, e.clientY);
+  const zone = target && target.closest(".zone");
+
+  if (zone && dragItem) {
+    const selectedZone = zone.dataset.zone;
+    placements[dragItem.dataset.name] = selectedZone;
+
+    const placedImg = dragItem.querySelector("img").cloneNode(true);
+    placedImg.style.position = "absolute";
+    placedImg.style.width = "18%";
+    placedImg.style.maxHeight = "28%";
+    placedImg.style.objectFit = "contain";
+    placedImg.style.left = Math.random() * 65 + 12 + "%";
+    placedImg.style.top = Math.random() * 45 + 25 + "%";
+    placedImg.dataset.name = dragItem.dataset.name;
+
+    removeOldPlacedImage(dragItem.dataset.name);
+    zone.appendChild(placedImg);
+
+    dragItem.style.opacity = "0.35";
+  }
+
+  if (dragClone) dragClone.remove();
+  dragClone = null;
+  dragItem = null;
+
+  document.removeEventListener("pointermove", dragMove);
+  document.removeEventListener("pointerup", endDrag);
+}
+
+function removeOldPlacedImage(name) {
+  document.querySelectorAll(".zone img").forEach(img => {
+    if (img.dataset.name === name) img.remove();
+  });
+}
+
+function checkGame() {
+  attempts++;
+
+  let correct = 0;
+
+  animals.forEach(animal => {
+    if (placements[animal.name] === animal.zone) {
+      correct++;
+    }
+  });
+
+  if (correct === animals.length) {
+    document.getElementById("correctSound").play();
+    document.getElementById("clapSound").play();
+    document.getElementById("gameSlide").style.display = "none";
+    document.getElementById("endSlide").style.display = "flex";
+  } else {
+    document.getElementById("wrongSound").play();
+
+    if (attempts < 2) {
+      document.getElementById("message").textContent =
+        "Try once more! Some animals need a different zone.";
+    } else {
+      showCorrectAnswers();
+      document.getElementById("message").textContent =
+        "Look! The correct answers are shown.";
+    }
+  }
+}
+
+function showCorrectAnswers() {
+  document.querySelectorAll(".zone img").forEach(img => img.remove());
+
+  animals.forEach(animal => {
+    const zone = document.querySelector(`.zone[data-zone="${animal.zone}"]`);
+    const img = document.createElement("img");
+    img.src = `assets/${animal.img}`;
+    img.alt = animal.name;
+    img.style.position = "absolute";
+    img.style.width = "16%";
+    img.style.maxHeight = "25%";
+    img.style.objectFit = "contain";
+    img.style.left = Math.random() * 65 + 12 + "%";
+    img.style.top = Math.random() * 45 + 28 + "%";
+    zone.appendChild(img);
+  });
+}
+
+function resetGame() {
+  document.getElementById("endSlide").style.display = "none";
+  document.getElementById("gameSlide").style.display = "block";
+  document.querySelectorAll(".zone img").forEach(img => img.remove());
+  loadAnimals();
+}
+</script>
+</body>
+</html>
