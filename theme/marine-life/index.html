@@ -3,109 +3,160 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Marine Ocean Zones</title>
+<title>Marine Life Ocean Zones</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:"Comic Sans MS",Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;font-family:"Comic Sans MS",Arial,sans-serif;-webkit-user-select:none;user-select:none}
 html,body{width:100%;height:100%;overflow:hidden;background:#c9f7ff}
 #app{width:100vw;height:100vh;overflow:hidden}
 
 #logoSlide{
-  width:100%;height:100%;background:white;
+  width:100%;height:100%;background:#fff;
   display:flex;align-items:center;justify-content:center;
 }
 #logoSlide img{width:min(55vw,300px)}
 
 #gameSlide{
   display:none;width:100%;height:100%;
-  padding:0.6vh 1vw;background:#c9f7ff;
+  background:#c9f7ff;padding:.5vh 1vw;
 }
 
 .header{
   height:6vh;text-align:center;font-weight:bold;
-  font-size:clamp(16px,3vw,34px);
-  color:#004f83;text-shadow:1px 2px white;
+  font-size:clamp(16px,3vw,32px);
+  color:#004f83;text-shadow:1px 2px #fff;
 }
 
 .main{
-  height:87vh;display:flex;gap:1.2vw;
+  height:88vh;
+  display:flex;
+  gap:1.2vw;
 }
 
 .animalsPanel{
   width:50%;height:100%;
-  background:rgba(255,255,255,.95);
-  border:3px solid #55cfff;border-radius:18px;
+  background:rgba(255,255,255,.96);
+  border:3px solid #55cfff;
+  border-radius:16px;
   display:grid;
   grid-template-columns:repeat(2,1fr);
   grid-template-rows:repeat(5,1fr);
-  gap:.4vh;padding:.7vh;
+  gap:.5vh .7vw;
+  padding:.6vh .8vw;
   overflow:hidden;
 }
 
 .animal{
-  width:82%;height:82%;margin:auto;
-  border-radius:50%;
-  background:radial-gradient(circle at 30% 25%,#fff,#eaffff,#bcefff);
-  border:2px solid #76d9ff;
-  box-shadow:0 4px 8px rgba(0,80,120,.2), inset -5px -5px 10px rgba(0,120,160,.15);
+  width:100%;height:100%;
+  border-radius:24px;
   display:flex;align-items:center;justify-content:center;
-  touch-action:none;cursor:grab;
+  touch-action:none;
+  cursor:grab;
+}
+
+.bubble{
+  width:min(82%,145px);
+  height:min(82%,82px);
+  border-radius:50%;
+  background:radial-gradient(circle at 30% 25%,#fff,#ecffff,#c9f7ff);
+  border:2px solid #7bdcff;
+  box-shadow:0 3px 8px rgba(0,80,120,.2), inset -4px -4px 9px rgba(0,120,160,.14);
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;
 }
 
 .animal img{
-  max-width:78%;max-height:78%;object-fit:contain;pointer-events:none;
+  max-width:78%;
+  max-height:78%;
+  object-fit:contain;
+  pointer-events:none;
 }
 
-.animal.done{opacity:.25}
+.animal.done{opacity:.25;pointer-events:none}
 
 .zonesPanel{
   width:50%;height:100%;
-  border:3px solid #07518a;border-radius:18px;
-  overflow:hidden;box-shadow:0 6px 14px rgba(0,50,90,.25);
+  border:3px solid #07518a;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 5px 12px rgba(0,50,90,.25);
 }
 
 .zone{
-  height:33.333%;position:relative;
+  height:33.333%;
+  position:relative;
   display:flex;align-items:center;justify-content:center;
   color:white;font-weight:bold;
-  font-size:clamp(15px,2.5vw,30px);
+  font-size:clamp(15px,2.4vw,28px);
   text-shadow:2px 3px 4px #001;
 }
 
 .zone span{
   background:rgba(0,0,0,.25);
-  padding:7px 14px;border-radius:12px;
+  padding:7px 14px;
+  border-radius:12px;
+  z-index:3;
 }
 
 .sunlight{background:linear-gradient(#37c7ee,#1f94d6)}
 .twilight{background:linear-gradient(#1269ad,#073f83)}
 .midnight{background:linear-gradient(#032c65,#011438)}
-
 .zone.hover{outline:5px solid #fff176;outline-offset:-7px}
 
 .placedAnimal{
-  position:absolute;width:58px;height:58px;object-fit:contain;z-index:5;
+  position:absolute;
+  width:50px;height:50px;
+  object-fit:contain;
+  z-index:5;
+  pointer-events:none;
 }
 
 .footer{
-  height:6vh;display:flex;align-items:center;justify-content:space-between;
+  height:5.5vh;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 }
 
 button{
-  background:#ffd447;color:#00456d;border:none;border-radius:15px;
-  padding:7px 15px;font-weight:bold;box-shadow:0 4px #d99d00;
+  background:#ffd447;
+  color:#00456d;
+  border:none;
+  border-radius:14px;
+  padding:6px 14px;
+  font-weight:bold;
+  box-shadow:0 3px #d99d00;
+  cursor:pointer;
 }
 
 #message{
-  font-size:clamp(12px,2vw,20px);
-  color:#004f83;font-weight:bold;text-align:center;
+  font-size:clamp(12px,1.8vw,18px);
+  color:#004f83;
+  font-weight:bold;
+  text-align:center;
 }
 
+.dragging{
+  position:fixed;
+  z-index:9999;
+  pointer-events:none;
+  width:70px;height:70px;
+  border-radius:50%;
+  background:#fff;
+  border:3px solid #ffd447;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 12px rgba(0,0,0,.25);
+}
+
+.dragging img{max-width:82%;max-height:82%;object-fit:contain}
+
 #endSlide{
-  display:none;width:100%;height:100%;
+  display:none;
+  width:100%;height:100%;
   background:linear-gradient(#9ff1ff,#008bd7,#00386e);
   color:white;text-align:center;
-  align-items:center;justify-content:center;flex-direction:column;
+  align-items:center;justify-content:center;
+  flex-direction:column;
   overflow:hidden;
 }
 
@@ -116,21 +167,16 @@ button{
 
 #endSlide p{
   font-size:clamp(18px,4vw,34px);
-  margin:14px;font-weight:bold;
+  margin:14px;
+  font-weight:bold;
 }
-
-.dragging{
-  position:fixed;z-index:9999;pointer-events:none;
-  width:72px;height:72px;border-radius:50%;
-  background:white;border:3px solid #ffd447;
-  display:flex;align-items:center;justify-content:center;
-}
-
-.dragging img{max-width:78%;max-height:78%}
 
 .confetti{
-  position:fixed;top:-20px;width:10px;height:16px;
-  animation:fall 3s linear forwards;z-index:99;
+  position:fixed;
+  top:-20px;
+  width:10px;height:16px;
+  animation:fall 3s linear forwards;
+  z-index:99;
 }
 
 @keyframes fall{
@@ -138,11 +184,11 @@ button{
 }
 
 @media(max-width:700px){
-  .main{height:88vh}
-  .header{height:6vh;font-size:18px}
-  .footer{height:6vh}
-  .animal{width:78%;height:78%}
-  .placedAnimal{width:42px;height:42px}
+  .main{height:88.5vh}
+  .header{height:6vh;font-size:17px}
+  .footer{height:5.5vh}
+  .bubble{width:82%;height:78%}
+  .placedAnimal{width:38px;height:38px}
 }
 </style>
 </head>
@@ -202,8 +248,8 @@ const animals=[
 let placements={},dragItem=null,dragClone=null,audioUnlocked=false;
 
 setTimeout(()=>{
-  logoSlide.style.display="none";
-  gameSlide.style.display="block";
+  document.getElementById("logoSlide").style.display="none";
+  document.getElementById("gameSlide").style.display="block";
   loadAnimals();
 },2000);
 
@@ -215,7 +261,6 @@ function unlockAudio(){
     a.play().then(()=>{a.pause();a.currentTime=0}).catch(()=>{});
   });
 }
-
 document.addEventListener("pointerdown",unlockAudio,{once:true});
 
 function shuffle(arr){return arr.sort(()=>Math.random()-.5)}
@@ -231,7 +276,7 @@ function loadAnimals(){
     div.className="animal";
     div.dataset.name=a.name;
     div.dataset.zone=a.zone;
-    div.innerHTML=`<img src="assets/${a.img}" alt="${a.name}">`;
+    div.innerHTML=`<div class="bubble"><img src="assets/${a.img}" alt="${a.name}"></div>`;
     div.addEventListener("pointerdown",startDrag);
     animalsPanel.appendChild(div);
   });
@@ -240,9 +285,13 @@ function loadAnimals(){
 function startDrag(e){
   if(e.currentTarget.classList.contains("done"))return;
   dragItem=e.currentTarget;
-  dragClone=dragItem.cloneNode(true);
+
+  const img=dragItem.querySelector("img").cloneNode(true);
+  dragClone=document.createElement("div");
   dragClone.className="dragging";
+  dragClone.appendChild(img);
   document.body.appendChild(dragClone);
+
   moveClone(e.clientX,e.clientY);
   document.addEventListener("pointermove",dragMove);
   document.addEventListener("pointerup",endDrag);
@@ -256,12 +305,14 @@ function dragMove(e){
 }
 
 function moveClone(x,y){
-  dragClone.style.left=x-36+"px";
-  dragClone.style.top=y-36+"px";
+  if(!dragClone)return;
+  dragClone.style.left=x-35+"px";
+  dragClone.style.top=y-35+"px";
 }
 
 function endDrag(e){
   document.querySelectorAll(".zone").forEach(z=>z.classList.remove("hover"));
+
   const zone=document.elementFromPoint(e.clientX,e.clientY)?.closest(".zone");
 
   if(zone && dragItem){
@@ -273,8 +324,12 @@ function endDrag(e){
       placements[name]=chosenZone;
       placeAnimal(dragItem,zone);
       dragItem.classList.add("done");
+      playClap();
       message.textContent="Good! Keep going.";
-      if(Object.keys(placements).length===animals.length)finishGame();
+
+      if(Object.keys(placements).length===animals.length){
+        setTimeout(finishGame,600);
+      }
     }else{
       playWrong();
       message.textContent="Try again! This animal belongs to another zone.";
@@ -285,6 +340,7 @@ function endDrag(e){
   if(dragClone)dragClone.remove();
   dragClone=null;
   dragItem=null;
+
   document.removeEventListener("pointermove",dragMove);
   document.removeEventListener("pointerup",endDrag);
 }
@@ -292,21 +348,25 @@ function endDrag(e){
 function placeAnimal(item,zone){
   const img=item.querySelector("img").cloneNode(true);
   img.className="placedAnimal";
+
   const count=zone.querySelectorAll(".placedAnimal").length;
   const spots=[
-    ["8%","18%"],["22%","55%"],["42%","20%"],
-    ["58%","55%"],["75%","22%"]
+    ["7%","15%"],["20%","55%"],["36%","16%"],
+    ["52%","55%"],["68%","16%"],["82%","55%"]
   ];
+
   img.style.left=spots[count%spots.length][0];
   img.style.top=spots[count%spots.length][1];
+
   zone.appendChild(img);
 }
 
 function checkGame(){
-  if(Object.keys(placements).length===animals.length)finishGame();
-  else{
+  if(Object.keys(placements).length===animals.length){
+    finishGame();
+  }else{
     playWrong();
-    message.textContent="Place all animals in their correct zones.";
+    message.textContent="Some animals are still left. Drag all animals first.";
   }
 }
 
@@ -314,7 +374,7 @@ function finishGame(){
   playClap();
   gameSlide.style.display="none";
   endSlide.style.display="flex";
-  confetti();
+  makeConfetti();
 }
 
 function playWrong(){
@@ -327,7 +387,7 @@ function playClap(){
   clapSound.play().catch(()=>{});
 }
 
-function confetti(){
+function makeConfetti(){
   const colors=["#ff4d6d","#ffd166","#06d6a0","#4cc9f0","#fff","#ff9f1c"];
   for(let i=0;i<90;i++){
     const c=document.createElement("div");
