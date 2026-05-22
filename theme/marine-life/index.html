@@ -17,7 +17,7 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: #ffffff;
+  background: #bdf5ff;
 }
 
 #app {
@@ -41,59 +41,84 @@ html, body {
   height: auto;
 }
 
-/* GAME */
+/* GAME SLIDE */
 #gameSlide {
   display: none;
   width: 100%;
   height: 100%;
-  background: linear-gradient(#b9f3ff, #e7fbff);
-  padding: 1.5vh 1.5vw;
+  background: linear-gradient(#bdf5ff, #eaffff);
+  padding: 1vh 1.2vw;
 }
 
 .header {
   height: 8vh;
   text-align: center;
-  font-size: clamp(18px, 4vw, 34px);
-  color: #034b7a;
+  font-size: clamp(19px, 3.2vw, 38px);
+  color: #035283;
   font-weight: bold;
+  letter-spacing: 1px;
+  text-shadow: 1px 2px 0 #ffffff;
 }
 
 .main {
   display: flex;
   width: 100%;
   height: 84vh;
-  gap: 1.2vw;
+  gap: 1.3vw;
 }
 
 .animalsPanel {
   width: 50%;
   background: rgba(255,255,255,0.9);
-  border-radius: 22px;
+  border-radius: 24px;
   padding: 1vh;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1vh;
-  border: 4px solid #6ed6ff;
+  border: 4px solid #55cfff;
 }
 
 .animal {
-  background: #ffffff;
-  border-radius: 18px;
-  border: 3px dashed #8bdcff;
+  background: radial-gradient(circle at 35% 30%, #ffffff 0%, #f1fdff 45%, #bdefff 100%);
+  border-radius: 50%;
+  border: 3px solid #7bdcff;
+  box-shadow:
+    inset -8px -8px 15px rgba(0, 130, 180, 0.18),
+    inset 7px 7px 13px rgba(255, 255, 255, 0.95),
+    0 5px 12px rgba(0, 90, 140, 0.18);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: grab;
   touch-action: none;
   user-select: none;
+  aspect-ratio: 1 / 1;
   min-height: 0;
+  position: relative;
+}
+
+.animal::after {
+  content: "";
+  position: absolute;
+  top: 13%;
+  left: 18%;
+  width: 22%;
+  height: 14%;
+  background: rgba(255,255,255,0.85);
+  border-radius: 50%;
+  transform: rotate(-25deg);
 }
 
 .animal img {
-  max-width: 90%;
-  max-height: 80%;
+  max-width: 82%;
+  max-height: 82%;
   object-fit: contain;
   pointer-events: none;
+  z-index: 2;
+}
+
+.animal.used {
+  opacity: 0.35;
 }
 
 .zonesPanel {
@@ -102,6 +127,7 @@ html, body {
   overflow: hidden;
   border: 4px solid #07518a;
   position: relative;
+  box-shadow: 0 8px 18px rgba(0, 50, 90, 0.3);
 }
 
 .zone {
@@ -110,32 +136,33 @@ html, body {
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: clamp(15px, 3vw, 28px);
+  font-size: clamp(17px, 2.8vw, 32px);
   font-weight: bold;
-  text-shadow: 1px 2px 4px #003;
+  text-shadow: 2px 3px 4px #001b3d;
   position: relative;
 }
 
 .zone span {
-  background: rgba(0,0,0,0.18);
-  padding: 8px 14px;
+  background: rgba(0,0,0,0.22);
+  padding: 8px 16px;
   border-radius: 16px;
+  z-index: 5;
 }
 
 .sunlight {
-  background: linear-gradient(#34c8ee, #1684ce);
+  background: linear-gradient(#36c7ed, #1891d2);
 }
 
 .twilight {
-  background: linear-gradient(#0b63b0, #063d82);
+  background: linear-gradient(#1268ad, #073f83);
 }
 
 .midnight {
-  background: linear-gradient(#03285f, #010f35);
+  background: linear-gradient(#032c65, #011438);
 }
 
 .zone.highlight {
-  outline: 5px solid #fff59d;
+  outline: 5px solid #fff176;
   outline-offset: -8px;
 }
 
@@ -150,12 +177,13 @@ html, body {
 button {
   border: none;
   border-radius: 18px;
-  padding: 10px 22px;
-  font-size: clamp(14px, 2.6vw, 22px);
+  padding: 8px 20px;
+  font-size: clamp(14px, 2.4vw, 22px);
   font-weight: bold;
-  background: #ffcc33;
+  background: #ffd44d;
   color: #00456d;
   box-shadow: 0 5px 0 #d99d00;
+  cursor: pointer;
 }
 
 button:active {
@@ -164,76 +192,104 @@ button:active {
 }
 
 #message {
-  font-size: clamp(15px, 2.6vw, 24px);
+  font-size: clamp(14px, 2.3vw, 23px);
   color: #064c73;
   font-weight: bold;
   text-align: center;
 }
 
-/* END SCREEN */
+/* END SLIDE */
 #endSlide {
   display: none;
   width: 100%;
   height: 100%;
-  background: linear-gradient(#8eeeff, #006fb5);
+  background: linear-gradient(#99efff, #0088d6, #00386e);
   align-items: center;
   justify-content: center;
   flex-direction: column;
   color: white;
   text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
 #endSlide h1 {
-  font-size: clamp(32px, 8vw, 70px);
+  font-size: clamp(38px, 8vw, 80px);
+  text-shadow: 3px 5px 0 #00436d;
+  margin-bottom: 14px;
 }
 
 #endSlide p {
   font-size: clamp(18px, 4vw, 34px);
-  margin: 15px;
+  margin: 12px;
+  font-weight: bold;
 }
 
-/* Drag clone */
+.confetti {
+  position: fixed;
+  top: -20px;
+  width: 10px;
+  height: 16px;
+  animation: fall 2.8s linear forwards;
+  z-index: 50;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* DRAG CLONE */
 .dragging {
   position: fixed;
   z-index: 9999;
   pointer-events: none;
-  width: 80px;
-  height: 80px;
-  background: white;
-  border-radius: 18px;
-  border: 3px solid #ffcc33;
+  width: 88px;
+  height: 88px;
+  background: radial-gradient(circle at 35% 30%, #ffffff 0%, #f1fdff 45%, #bdefff 100%);
+  border-radius: 50%;
+  border: 3px solid #ffd44d;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.25);
 }
 
 .dragging img {
-  max-width: 90%;
-  max-height: 90%;
+  max-width: 82%;
+  max-height: 82%;
 }
 
-/* Small phones */
+/* SMALL SCREENS */
 @media (max-width: 700px) {
+  .header {
+    height: 7vh;
+  }
+
   .main {
+    height: 85vh;
     gap: 1vw;
   }
 
   .animalsPanel {
     grid-template-columns: repeat(2, 1fr);
-    border-radius: 16px;
-    padding: 0.8vh;
-  }
-
-  .animal {
-    border-radius: 14px;
+    border-radius: 18px;
+    padding: 0.7vh;
+    gap: 0.7vh;
   }
 
   .zonesPanel {
-    border-radius: 16px;
+    border-radius: 18px;
+  }
+
+  .footer {
+    height: 8vh;
   }
 
   button {
-    padding: 8px 14px;
+    padding: 7px 12px;
   }
 }
 </style>
@@ -263,7 +319,7 @@ button:active {
 
     <div class="footer">
       <button onclick="resetGame()">Clear</button>
-      <div id="message">Place each animal in the correct zone.</div>
+      <div id="message">Drag each animal to the correct ocean zone.</div>
       <button onclick="checkGame()">Check</button>
     </div>
   </div>
@@ -271,7 +327,7 @@ button:active {
   <!-- Slide 3 -->
   <div id="endSlide">
     <h1>Great Job!</h1>
-    <p>You sorted the marine animals beautifully!</p>
+    <p>You placed all marine animals correctly!</p>
     <button onclick="resetGame()">Play Again</button>
   </div>
 
@@ -283,18 +339,16 @@ button:active {
 
 <script>
 const animals = [
-  { name: "Clownfish", img: "clownfish.png", zone: "sunlight" },
-  { name: "Dolphin", img: "dolphin.png", zone: "sunlight" },
-  { name: "Sea Turtle", img: "sea-turtle.png", zone: "sunlight" },
-  { name: "Starfish", img: "starfish.png", zone: "sunlight" },
-
-  { name: "Jellyfish", img: "jellyfish.png", zone: "twilight" },
-  { name: "Squid", img: "squid.png", zone: "twilight" },
-  { name: "Octopus", img: "octopus.png", zone: "twilight" },
-  { name: "Eel", img: "eel.png", zone: "twilight" },
-
-  { name: "Anglerfish", img: "anglerfish.png", zone: "midnight" },
-  { name: "Shrimp", img: "shrimp.png", zone: "midnight" }
+  { name: "anglerfish", img: "anglerfish.png", zone: "midnight" },
+  { name: "clownfish", img: "clownfish.png", zone: "sunlight" },
+  { name: "dolphin", img: "dolphin.png", zone: "sunlight" },
+  { name: "eel", img: "eel.png", zone: "midnight" },
+  { name: "jellyfish", img: "jellyfish.png", zone: "twilight" },
+  { name: "octopus", img: "octopus.png", zone: "twilight" },
+  { name: "sea turtle", img: "sea-turtle.png", zone: "sunlight" },
+  { name: "shrimp", img: "shrimp.png", zone: "twilight" },
+  { name: "squid", img: "squid.png", zone: "twilight" },
+  { name: "starfish", img: "starfish.png", zone: "sunlight" }
 ];
 
 let placements = {};
@@ -317,7 +371,8 @@ function loadAnimals() {
   panel.innerHTML = "";
   placements = {};
   attempts = 0;
-  document.getElementById("message").textContent = "Place each animal in the correct zone.";
+  document.getElementById("message").textContent = "Drag each animal to the correct ocean zone.";
+  document.querySelectorAll(".zone img").forEach(img => img.remove());
 
   shuffle([...animals]).forEach(animal => {
     const div = document.createElement("div");
@@ -325,7 +380,6 @@ function loadAnimals() {
     div.dataset.name = animal.name;
     div.dataset.zone = animal.zone;
     div.innerHTML = `<img src="assets/${animal.img}" alt="${animal.name}">`;
-
     div.addEventListener("pointerdown", startDrag);
     panel.appendChild(div);
   });
@@ -348,15 +402,17 @@ function dragMove(e) {
   moveClone(e.clientX, e.clientY);
 
   document.querySelectorAll(".zone").forEach(z => z.classList.remove("highlight"));
+
   const target = document.elementFromPoint(e.clientX, e.clientY);
   const zone = target && target.closest(".zone");
+
   if (zone) zone.classList.add("highlight");
 }
 
 function moveClone(x, y) {
   if (!dragClone) return;
-  dragClone.style.left = x - 40 + "px";
-  dragClone.style.top = y - 40 + "px";
+  dragClone.style.left = x - 44 + "px";
+  dragClone.style.top = y - 44 + "px";
 }
 
 function endDrag(e) {
@@ -369,19 +425,19 @@ function endDrag(e) {
     const selectedZone = zone.dataset.zone;
     placements[dragItem.dataset.name] = selectedZone;
 
+    removeOldPlacedImage(dragItem.dataset.name);
+
     const placedImg = dragItem.querySelector("img").cloneNode(true);
     placedImg.style.position = "absolute";
-    placedImg.style.width = "18%";
+    placedImg.style.width = "15%";
     placedImg.style.maxHeight = "28%";
     placedImg.style.objectFit = "contain";
-    placedImg.style.left = Math.random() * 65 + 12 + "%";
-    placedImg.style.top = Math.random() * 45 + 25 + "%";
+    placedImg.style.left = Math.random() * 68 + 10 + "%";
+    placedImg.style.top = Math.random() * 45 + 28 + "%";
     placedImg.dataset.name = dragItem.dataset.name;
 
-    removeOldPlacedImage(dragItem.dataset.name);
     zone.appendChild(placedImg);
-
-    dragItem.style.opacity = "0.35";
+    dragItem.classList.add("used");
   }
 
   if (dragClone) dragClone.remove();
@@ -399,8 +455,6 @@ function removeOldPlacedImage(name) {
 }
 
 function checkGame() {
-  attempts++;
-
   let correct = 0;
 
   animals.forEach(animal => {
@@ -410,46 +464,60 @@ function checkGame() {
   });
 
   if (correct === animals.length) {
-    document.getElementById("correctSound").play();
-    document.getElementById("clapSound").play();
-    document.getElementById("gameSlide").style.display = "none";
-    document.getElementById("endSlide").style.display = "flex";
+    playSound("correctSound");
+    playSound("clapSound");
+    showEndSlide();
   } else {
-    document.getElementById("wrongSound").play();
+    attempts++;
+    playSound("wrongSound");
+
+    if (navigator.vibrate) {
+      navigator.vibrate(150);
+    }
 
     if (attempts < 2) {
       document.getElementById("message").textContent =
-        "Try once more! Some animals need a different zone.";
+        "Try again! Some animals are in the wrong zone.";
     } else {
-      showCorrectAnswers();
       document.getElementById("message").textContent =
-        "Look! The correct answers are shown.";
+        "Try again carefully. Check each ocean zone!";
     }
   }
 }
 
-function showCorrectAnswers() {
-  document.querySelectorAll(".zone img").forEach(img => img.remove());
+function showEndSlide() {
+  document.getElementById("gameSlide").style.display = "none";
+  document.getElementById("endSlide").style.display = "flex";
+  makeConfetti();
+}
 
-  animals.forEach(animal => {
-    const zone = document.querySelector(`.zone[data-zone="${animal.zone}"]`);
-    const img = document.createElement("img");
-    img.src = `assets/${animal.img}`;
-    img.alt = animal.name;
-    img.style.position = "absolute";
-    img.style.width = "16%";
-    img.style.maxHeight = "25%";
-    img.style.objectFit = "contain";
-    img.style.left = Math.random() * 65 + 12 + "%";
-    img.style.top = Math.random() * 45 + 28 + "%";
-    zone.appendChild(img);
-  });
+function makeConfetti() {
+  const colors = ["#ff4d6d", "#ffd166", "#06d6a0", "#4cc9f0", "#ffffff", "#ff9f1c"];
+
+  for (let i = 0; i < 90; i++) {
+    const piece = document.createElement("div");
+    piece.className = "confetti";
+    piece.style.left = Math.random() * 100 + "vw";
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDelay = Math.random() * 1.2 + "s";
+    piece.style.transform = "rotate(" + Math.random() * 360 + "deg)";
+    document.body.appendChild(piece);
+
+    setTimeout(() => {
+      piece.remove();
+    }, 4200);
+  }
+}
+
+function playSound(id) {
+  const sound = document.getElementById(id);
+  sound.currentTime = 0;
+  sound.play().catch(() => {});
 }
 
 function resetGame() {
   document.getElementById("endSlide").style.display = "none";
   document.getElementById("gameSlide").style.display = "block";
-  document.querySelectorAll(".zone img").forEach(img => img.remove());
   loadAnimals();
 }
 </script>
