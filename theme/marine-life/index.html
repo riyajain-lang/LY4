@@ -6,76 +6,121 @@
 <title>Marine Life Ocean Zones</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:"Comic Sans MS",Arial,sans-serif;-webkit-user-select:none;user-select:none}
-html,body{width:100%;height:100%;overflow:hidden;background:#c9f7ff}
-#app{width:100vw;height:100vh;overflow:hidden}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:"Comic Sans MS",Arial,sans-serif;
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#c9f7ff;
+}
+
+#app{
+  width:100vw;
+  height:100vh;
+  overflow:hidden;
+}
 
 #logoSlide{
-  width:100%;height:100%;background:#fff;
-  display:flex;align-items:center;justify-content:center;
+  width:100%;
+  height:100%;
+  background:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
-#logoSlide img{width:min(55vw,300px)}
+
+#logoSlide img{
+  width:min(55vw,300px);
+}
 
 #gameSlide{
-  display:none;width:100%;height:100%;
-  background:#c9f7ff;padding:.5vh 1vw;
+  display:none;
+  width:100%;
+  height:100%;
+  background:#c9f7ff;
+  padding:.5vh 1vw;
 }
 
 .header{
-  height:6vh;text-align:center;font-weight:bold;
+  height:6vh;
+  text-align:center;
   font-size:clamp(16px,3vw,32px);
-  color:#004f83;text-shadow:1px 2px #fff;
+  font-weight:bold;
+  color:#004f83;
+  text-shadow:1px 2px white;
 }
 
 .main{
   height:88vh;
   display:flex;
-  gap:1.2vw;
+  gap:1vw;
 }
 
 .animalsPanel{
-  width:50%;height:100%;
-  background:rgba(255,255,255,.96);
+  width:50%;
+  height:100%;
+  background:white;
   border:3px solid #55cfff;
   border-radius:16px;
+  padding:.7vh .7vw;
   display:grid;
   grid-template-columns:repeat(2,1fr);
   grid-template-rows:repeat(5,1fr);
   gap:.5vh .7vw;
-  padding:.6vh .8vw;
   overflow:hidden;
 }
 
 .animal{
-  width:100%;height:100%;
-  border-radius:24px;
-  display:flex;align-items:center;justify-content:center;
-  touch-action:none;
-  cursor:grab;
+  width:100%;
+  height:100%;
+  border-radius:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
 }
 
 .bubble{
-  width:min(82%,145px);
-  height:min(82%,82px);
+  width:92%;
+  height:88%;
   border-radius:50%;
-  background:radial-gradient(circle at 30% 25%,#fff,#ecffff,#c9f7ff);
-  border:2px solid #7bdcff;
-  box-shadow:0 3px 8px rgba(0,80,120,.2), inset -4px -4px 9px rgba(0,120,160,.14);
-  display:flex;align-items:center;justify-content:center;
-  pointer-events:none;
+  background:radial-gradient(circle at 30% 25%,#ffffff,#ecffff,#c9f7ff);
+  border:2px solid #75d9ff;
+  box-shadow:0 3px 8px rgba(0,80,120,.18), inset -4px -4px 8px rgba(0,120,160,.15);
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
 .animal img{
-  max-width:78%;
-  max-height:78%;
+  max-width:76%;
+  max-height:76%;
   object-fit:contain;
   pointer-events:none;
 }
 
-.animal.done{opacity:.25;pointer-events:none}
+.animal.selected .bubble{
+  border:4px solid #ffd447;
+  box-shadow:0 0 15px #ffd447;
+}
+
+.animal.done{
+  opacity:.25;
+  pointer-events:none;
+}
 
 .zonesPanel{
-  width:50%;height:100%;
+  width:50%;
+  height:100%;
   border:3px solid #07518a;
   border-radius:16px;
   overflow:hidden;
@@ -85,30 +130,38 @@ html,body{width:100%;height:100%;overflow:hidden;background:#c9f7ff}
 .zone{
   height:33.333%;
   position:relative;
-  display:flex;align-items:center;justify-content:center;
-  color:white;font-weight:bold;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
   font-size:clamp(15px,2.4vw,28px);
+  font-weight:bold;
   text-shadow:2px 3px 4px #001;
+  cursor:pointer;
 }
 
 .zone span{
   background:rgba(0,0,0,.25);
   padding:7px 14px;
   border-radius:12px;
-  z-index:3;
+  z-index:5;
 }
 
 .sunlight{background:linear-gradient(#37c7ee,#1f94d6)}
 .twilight{background:linear-gradient(#1269ad,#073f83)}
 .midnight{background:linear-gradient(#032c65,#011438)}
-.zone.hover{outline:5px solid #fff176;outline-offset:-7px}
+
+.zone.flash{
+  outline:5px solid #fff176;
+  outline-offset:-8px;
+}
 
 .placedAnimal{
   position:absolute;
-  width:50px;height:50px;
+  width:46px;
+  height:46px;
   object-fit:contain;
-  z-index:5;
-  pointer-events:none;
+  z-index:4;
 }
 
 .footer{
@@ -136,26 +189,15 @@ button{
   text-align:center;
 }
 
-.dragging{
-  position:fixed;
-  z-index:9999;
-  pointer-events:none;
-  width:70px;height:70px;
-  border-radius:50%;
-  background:#fff;
-  border:3px solid #ffd447;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 6px 12px rgba(0,0,0,.25);
-}
-
-.dragging img{max-width:82%;max-height:82%;object-fit:contain}
-
 #endSlide{
   display:none;
-  width:100%;height:100%;
+  width:100%;
+  height:100%;
   background:linear-gradient(#9ff1ff,#008bd7,#00386e);
-  color:white;text-align:center;
-  align-items:center;justify-content:center;
+  color:white;
+  text-align:center;
+  align-items:center;
+  justify-content:center;
   flex-direction:column;
   overflow:hidden;
 }
@@ -174,26 +216,32 @@ button{
 .confetti{
   position:fixed;
   top:-20px;
-  width:10px;height:16px;
+  width:10px;
+  height:16px;
   animation:fall 3s linear forwards;
   z-index:99;
 }
 
 @keyframes fall{
-  to{transform:translateY(110vh) rotate(720deg);opacity:0}
+  to{
+    transform:translateY(110vh) rotate(720deg);
+    opacity:0;
+  }
 }
 
 @media(max-width:700px){
+  .header{height:6vh;font-size:16px}
   .main{height:88.5vh}
-  .header{height:6vh;font-size:17px}
-  .footer{height:5.5vh}
-  .bubble{width:82%;height:78%}
-  .placedAnimal{width:38px;height:38px}
+  .bubble{width:90%;height:84%}
+  .placedAnimal{width:34px;height:34px}
+  button{padding:5px 10px;font-size:11px}
+  #message{font-size:11px}
 }
 </style>
 </head>
 
 <body>
+
 <div id="app">
 
   <div id="logoSlide">
@@ -201,7 +249,7 @@ button{
   </div>
 
   <div id="gameSlide">
-    <div class="header">Drag the Marine Animals to Their Ocean Zones</div>
+    <div class="header">Tap the Marine Animal, Then Tap Its Ocean Zone</div>
 
     <div class="main">
       <div class="animalsPanel" id="animalsPanel"></div>
@@ -215,7 +263,7 @@ button{
 
     <div class="footer">
       <button onclick="resetGame()">Clear</button>
-      <div id="message">Drag each animal to the correct ocean zone.</div>
+      <div id="message">Tap one animal first.</div>
       <button onclick="checkGame()">Check</button>
     </div>
   </div>
@@ -245,7 +293,9 @@ const animals=[
   {name:"starfish",img:"starfish.png",zone:"sunlight"}
 ];
 
-let placements={},dragItem=null,dragClone=null,audioUnlocked=false;
+let selectedAnimal=null;
+let placedCount=0;
+let audioUnlocked=false;
 
 setTimeout(()=>{
   document.getElementById("logoSlide").style.display="none";
@@ -258,101 +308,93 @@ function unlockAudio(){
   audioUnlocked=true;
   [wrongSound,clapSound].forEach(a=>{
     a.volume=1;
-    a.play().then(()=>{a.pause();a.currentTime=0}).catch(()=>{});
+    a.play().then(()=>{
+      a.pause();
+      a.currentTime=0;
+    }).catch(()=>{});
   });
 }
+
 document.addEventListener("pointerdown",unlockAudio,{once:true});
 
-function shuffle(arr){return arr.sort(()=>Math.random()-.5)}
+function shuffle(arr){
+  return arr.sort(()=>Math.random()-.5);
+}
 
 function loadAnimals(){
-  animalsPanel.innerHTML="";
-  placements={};
+  const panel=document.getElementById("animalsPanel");
+  panel.innerHTML="";
+  selectedAnimal=null;
+  placedCount=0;
   document.querySelectorAll(".placedAnimal,.confetti").forEach(e=>e.remove());
-  message.textContent="Drag each animal to the correct ocean zone.";
+  document.getElementById("message").textContent="Tap one animal first.";
 
   shuffle([...animals]).forEach(a=>{
     const div=document.createElement("div");
     div.className="animal";
     div.dataset.name=a.name;
     div.dataset.zone=a.zone;
+    div.dataset.img=a.img;
     div.innerHTML=`<div class="bubble"><img src="assets/${a.img}" alt="${a.name}"></div>`;
-    div.addEventListener("pointerdown",startDrag);
-    animalsPanel.appendChild(div);
+    div.onclick=()=>selectAnimal(div);
+    panel.appendChild(div);
   });
 }
 
-function startDrag(e){
-  if(e.currentTarget.classList.contains("done"))return;
-  dragItem=e.currentTarget;
-
-  const img=dragItem.querySelector("img").cloneNode(true);
-  dragClone=document.createElement("div");
-  dragClone.className="dragging";
-  dragClone.appendChild(img);
-  document.body.appendChild(dragClone);
-
-  moveClone(e.clientX,e.clientY);
-  document.addEventListener("pointermove",dragMove);
-  document.addEventListener("pointerup",endDrag);
+function selectAnimal(animalDiv){
+  document.querySelectorAll(".animal").forEach(a=>a.classList.remove("selected"));
+  selectedAnimal=animalDiv;
+  selectedAnimal.classList.add("selected");
+  document.getElementById("message").textContent="Now tap the correct ocean zone.";
 }
 
-function dragMove(e){
-  moveClone(e.clientX,e.clientY);
-  document.querySelectorAll(".zone").forEach(z=>z.classList.remove("hover"));
-  const zone=document.elementFromPoint(e.clientX,e.clientY)?.closest(".zone");
-  if(zone)zone.classList.add("hover");
-}
+document.querySelectorAll(".zone").forEach(zone=>{
+  zone.onclick=()=>tapZone(zone);
+});
 
-function moveClone(x,y){
-  if(!dragClone)return;
-  dragClone.style.left=x-35+"px";
-  dragClone.style.top=y-35+"px";
-}
-
-function endDrag(e){
-  document.querySelectorAll(".zone").forEach(z=>z.classList.remove("hover"));
-
-  const zone=document.elementFromPoint(e.clientX,e.clientY)?.closest(".zone");
-
-  if(zone && dragItem){
-    const correctZone=dragItem.dataset.zone;
-    const chosenZone=zone.dataset.zone;
-    const name=dragItem.dataset.name;
-
-    if(chosenZone===correctZone){
-      placements[name]=chosenZone;
-      placeAnimal(dragItem,zone);
-      dragItem.classList.add("done");
-      playClap();
-      message.textContent="Good! Keep going.";
-
-      if(Object.keys(placements).length===animals.length){
-        setTimeout(finishGame,600);
-      }
-    }else{
-      playWrong();
-      message.textContent="Try again! This animal belongs to another zone.";
-      if(navigator.vibrate)navigator.vibrate(180);
-    }
+function tapZone(zone){
+  if(!selectedAnimal){
+    document.getElementById("message").textContent="Tap one animal first.";
+    playWrong();
+    return;
   }
 
-  if(dragClone)dragClone.remove();
-  dragClone=null;
-  dragItem=null;
+  zone.classList.add("flash");
+  setTimeout(()=>zone.classList.remove("flash"),250);
 
-  document.removeEventListener("pointermove",dragMove);
-  document.removeEventListener("pointerup",endDrag);
+  const correctZone=selectedAnimal.dataset.zone;
+  const chosenZone=zone.dataset.zone;
+
+  if(correctZone===chosenZone){
+    placeAnimal(selectedAnimal,zone);
+    selectedAnimal.classList.remove("selected");
+    selectedAnimal.classList.add("done");
+    selectedAnimal=null;
+    placedCount++;
+    playClap();
+
+    if(placedCount===animals.length){
+      document.getElementById("message").textContent="Excellent!";
+      setTimeout(finishGame,700);
+    }else{
+      document.getElementById("message").textContent="Good! Tap another animal.";
+    }
+  }else{
+    playWrong();
+    document.getElementById("message").textContent="Try again! Tap the correct zone.";
+    if(navigator.vibrate)navigator.vibrate(150);
+  }
 }
 
-function placeAnimal(item,zone){
-  const img=item.querySelector("img").cloneNode(true);
+function placeAnimal(animalDiv,zone){
+  const img=document.createElement("img");
+  img.src=`assets/${animalDiv.dataset.img}`;
   img.className="placedAnimal";
 
   const count=zone.querySelectorAll(".placedAnimal").length;
   const spots=[
-    ["7%","15%"],["20%","55%"],["36%","16%"],
-    ["52%","55%"],["68%","16%"],["82%","55%"]
+    ["7%","12%"],["20%","56%"],["35%","16%"],
+    ["50%","55%"],["65%","16%"],["80%","55%"]
   ];
 
   img.style.left=spots[count%spots.length][0];
@@ -362,18 +404,18 @@ function placeAnimal(item,zone){
 }
 
 function checkGame(){
-  if(Object.keys(placements).length===animals.length){
+  if(placedCount===animals.length){
     finishGame();
   }else{
     playWrong();
-    message.textContent="Some animals are still left. Drag all animals first.";
+    document.getElementById("message").textContent="Keep going! Some animals are still left.";
   }
 }
 
 function finishGame(){
   playClap();
-  gameSlide.style.display="none";
-  endSlide.style.display="flex";
+  document.getElementById("gameSlide").style.display="none";
+  document.getElementById("endSlide").style.display="flex";
   makeConfetti();
 }
 
@@ -401,10 +443,11 @@ function makeConfetti(){
 }
 
 function resetGame(){
-  endSlide.style.display="none";
-  gameSlide.style.display="block";
+  document.getElementById("endSlide").style.display="none";
+  document.getElementById("gameSlide").style.display="block";
   loadAnimals();
 }
 </script>
+
 </body>
 </html>
