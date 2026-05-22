@@ -47,7 +47,7 @@ html, body {
   width: 100%;
   height: 100%;
   background: linear-gradient(#bdf5ff, #eaffff);
-  padding: 1vh 1.2vw;
+  padding: 0.8vh 1vw;
 }
 
 .header {
@@ -69,23 +69,27 @@ html, body {
 
 .animalsPanel {
   width: 50%;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.93);
   border-radius: 24px;
-  padding: 1vh;
+  padding: 0.8vh;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1vh;
+  gap: 0.7vh;
   border: 4px solid #55cfff;
+  overflow: hidden;
 }
 
 .animal {
+  width: 95%;
+  height: 95%;
+  margin: auto;
   background: radial-gradient(circle at 35% 30%, #ffffff 0%, #f1fdff 45%, #bdefff 100%);
   border-radius: 50%;
   border: 3px solid #7bdcff;
   box-shadow:
-    inset -8px -8px 15px rgba(0, 130, 180, 0.18),
+    inset -8px -8px 15px rgba(0, 130, 180, 0.16),
     inset 7px 7px 13px rgba(255, 255, 255, 0.95),
-    0 5px 12px rgba(0, 90, 140, 0.18);
+    0 4px 10px rgba(0, 90, 140, 0.16);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -93,7 +97,6 @@ html, body {
   touch-action: none;
   user-select: none;
   aspect-ratio: 1 / 1;
-  min-height: 0;
   position: relative;
 }
 
@@ -110,14 +113,14 @@ html, body {
 }
 
 .animal img {
-  max-width: 82%;
-  max-height: 82%;
+  max-width: 78%;
+  max-height: 78%;
   object-fit: contain;
   pointer-events: none;
   z-index: 2;
 }
 
-.animal.used {
+.animal.placed {
   opacity: 0.35;
 }
 
@@ -140,6 +143,7 @@ html, body {
   font-weight: bold;
   text-shadow: 2px 3px 4px #001b3d;
   position: relative;
+  overflow: hidden;
 }
 
 .zone span {
@@ -164,6 +168,15 @@ html, body {
 .zone.highlight {
   outline: 5px solid #fff176;
   outline-offset: -8px;
+}
+
+.placedAnimal {
+  position: absolute;
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  z-index: 10;
+  pointer-events: none;
 }
 
 .footer {
@@ -246,8 +259,8 @@ button:active {
   position: fixed;
   z-index: 9999;
   pointer-events: none;
-  width: 88px;
-  height: 88px;
+  width: 74px;
+  height: 74px;
   background: radial-gradient(circle at 35% 30%, #ffffff 0%, #f1fdff 45%, #bdefff 100%);
   border-radius: 50%;
   border: 3px solid #ffd44d;
@@ -258,14 +271,15 @@ button:active {
 }
 
 .dragging img {
-  max-width: 82%;
-  max-height: 82%;
+  max-width: 78%;
+  max-height: 78%;
 }
 
 /* SMALL SCREENS */
 @media (max-width: 700px) {
   .header {
     height: 7vh;
+    font-size: clamp(17px, 5vw, 26px);
   }
 
   .main {
@@ -276,12 +290,17 @@ button:active {
   .animalsPanel {
     grid-template-columns: repeat(2, 1fr);
     border-radius: 18px;
-    padding: 0.7vh;
-    gap: 0.7vh;
+    padding: 0.5vh;
+    gap: 0.5vh;
   }
 
   .zonesPanel {
     border-radius: 18px;
+  }
+
+  .placedAnimal {
+    width: 42px;
+    height: 42px;
   }
 
   .footer {
@@ -372,7 +391,7 @@ function loadAnimals() {
   placements = {};
   attempts = 0;
   document.getElementById("message").textContent = "Drag each animal to the correct ocean zone.";
-  document.querySelectorAll(".zone img").forEach(img => img.remove());
+  document.querySelectorAll(".placedAnimal").forEach(img => img.remove());
 
   shuffle([...animals]).forEach(animal => {
     const div = document.createElement("div");
@@ -380,6 +399,7 @@ function loadAnimals() {
     div.dataset.name = animal.name;
     div.dataset.zone = animal.zone;
     div.innerHTML = `<img src="assets/${animal.img}" alt="${animal.name}">`;
+
     div.addEventListener("pointerdown", startDrag);
     panel.appendChild(div);
   });
@@ -402,7 +422,6 @@ function dragMove(e) {
   moveClone(e.clientX, e.clientY);
 
   document.querySelectorAll(".zone").forEach(z => z.classList.remove("highlight"));
-
   const target = document.elementFromPoint(e.clientX, e.clientY);
   const zone = target && target.closest(".zone");
 
@@ -411,8 +430,8 @@ function dragMove(e) {
 
 function moveClone(x, y) {
   if (!dragClone) return;
-  dragClone.style.left = x - 44 + "px";
-  dragClone.style.top = y - 44 + "px";
+  dragClone.style.left = x - 37 + "px";
+  dragClone.style.top = y - 37 + "px";
 }
 
 function endDrag(e) {
@@ -422,22 +441,32 @@ function endDrag(e) {
   const zone = target && target.closest(".zone");
 
   if (zone && dragItem) {
+    const animalName = dragItem.dataset.name;
     const selectedZone = zone.dataset.zone;
-    placements[dragItem.dataset.name] = selectedZone;
 
-    removeOldPlacedImage(dragItem.dataset.name);
+    placements[animalName] = selectedZone;
+    dragItem.classList.add("placed");
+
+    removeOldPlacedImage(animalName);
 
     const placedImg = dragItem.querySelector("img").cloneNode(true);
-    placedImg.style.position = "absolute";
-    placedImg.style.width = "15%";
-    placedImg.style.maxHeight = "28%";
-    placedImg.style.objectFit = "contain";
-    placedImg.style.left = Math.random() * 68 + 10 + "%";
-    placedImg.style.top = Math.random() * 45 + 28 + "%";
-    placedImg.dataset.name = dragItem.dataset.name;
+    placedImg.className = "placedAnimal";
+    placedImg.dataset.name = animalName;
+
+    const count = zone.querySelectorAll(".placedAnimal").length;
+    const positions = [
+      { left: "8%", top: "48%" },
+      { left: "22%", top: "28%" },
+      { left: "38%", top: "52%" },
+      { left: "55%", top: "30%" },
+      { left: "72%", top: "52%" }
+    ];
+
+    const pos = positions[count % positions.length];
+    placedImg.style.left = pos.left;
+    placedImg.style.top = pos.top;
 
     zone.appendChild(placedImg);
-    dragItem.classList.add("used");
   }
 
   if (dragClone) dragClone.remove();
@@ -449,40 +478,54 @@ function endDrag(e) {
 }
 
 function removeOldPlacedImage(name) {
-  document.querySelectorAll(".zone img").forEach(img => {
-    if (img.dataset.name === name) img.remove();
+  document.querySelectorAll(".placedAnimal").forEach(img => {
+    if (img.dataset.name === name) {
+      img.remove();
+    }
   });
 }
 
 function checkGame() {
-  let correct = 0;
+  let allPlaced = animals.every(animal => placements[animal.name]);
+  let allCorrect = animals.every(animal => placements[animal.name] === animal.zone);
 
+  if (allCorrect) {
+    playSound("correctSound");
+    setTimeout(() => playSound("clapSound"), 300);
+    showEndSlide();
+    return;
+  }
+
+  attempts++;
+  playSound("wrongSound");
+
+  if (navigator.vibrate) {
+    navigator.vibrate(180);
+  }
+
+  returnWrongAnimalsToOptions();
+
+  if (!allPlaced) {
+    document.getElementById("message").textContent =
+      "Some animals are still left. Drag all animals first.";
+  } else {
+    document.getElementById("message").textContent =
+      "Try again! Wrong animals went back to the bubbles.";
+  }
+}
+
+function returnWrongAnimalsToOptions() {
   animals.forEach(animal => {
-    if (placements[animal.name] === animal.zone) {
-      correct++;
+    if (placements[animal.name] && placements[animal.name] !== animal.zone) {
+      delete placements[animal.name];
+
+      const original = document.querySelector(`.animal[data-name="${animal.name}"]`);
+      if (original) original.classList.remove("placed");
+
+      const placed = document.querySelector(`.placedAnimal[data-name="${animal.name}"]`);
+      if (placed) placed.remove();
     }
   });
-
-  if (correct === animals.length) {
-    playSound("correctSound");
-    playSound("clapSound");
-    showEndSlide();
-  } else {
-    attempts++;
-    playSound("wrongSound");
-
-    if (navigator.vibrate) {
-      navigator.vibrate(150);
-    }
-
-    if (attempts < 2) {
-      document.getElementById("message").textContent =
-        "Try again! Some animals are in the wrong zone.";
-    } else {
-      document.getElementById("message").textContent =
-        "Try again carefully. Check each ocean zone!";
-    }
-  }
 }
 
 function showEndSlide() {
@@ -511,6 +554,7 @@ function makeConfetti() {
 
 function playSound(id) {
   const sound = document.getElementById(id);
+  if (!sound) return;
   sound.currentTime = 0;
   sound.play().catch(() => {});
 }
@@ -518,6 +562,7 @@ function playSound(id) {
 function resetGame() {
   document.getElementById("endSlide").style.display = "none";
   document.getElementById("gameSlide").style.display = "block";
+  document.querySelectorAll(".confetti").forEach(c => c.remove());
   loadAnimals();
 }
 </script>
