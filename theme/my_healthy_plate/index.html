@@ -1,428 +1,570 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>My Healthy Plate Game</title>
-    <style>
-        /* Reset and Mobile Optimization */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
-            background-color: #ffffff;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>My Healthy Plate</title>
 
-        /* Slide 1: Logo Intro */
-        #intro-slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            transition: opacity 0.5s ease;
-        }
-        #intro-slide img {
-            max-width: 60%;
-            max-height: 60%;
-            object-fit: contain;
-        }
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select:none;
+    }
 
-        /* Slide 2: Main Game */
-        #game-slide {
-            display: none;
-            width: 100%;
-            height: 100%;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            /* Replace with url('assets/your-bg.png') if you want to use your background image */
-            background: linear-gradient(135deg, #e0f7fa 0%, #fff9c4 100%); 
-            position: relative;
-        }
+    body{
+      overflow:hidden;
+      font-family: Arial, sans-serif;
+      width:100vw;
+      height:100vh;
+      background:#fff7ea;
+    }
 
-        h1 {
-            font-size: 1.5rem;
-            color: #2e7d32;
-            text-align: center;
-            margin-bottom: 5px;
-            text-shadow: 1px 1px 0px #fff;
-        }
+    /* =========================
+       INTRO SCREEN
+    ==========================*/
+    #introScreen{
+      position:fixed;
+      inset:0;
+      background:white;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:100;
+      animation: hideIntro 2s forwards;
+      animation-delay:2s;
+    }
 
-        /* Plate Layout Container */
-        .plate-container {
-            width: 280px;
-            height: 280px;
-            border-radius: 50%;
-            background: #ffffff;
-            border: 8px solid #a1887f;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr 1fr;
-            position: relative;
-            overflow: hidden;
-        }
+    #introScreen img{
+      width:220px;
+      max-width:70%;
+    }
 
-        /* Food Group Zones */
-        .zone {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 0.85rem;
-            text-align: center;
-            padding: 5px;
-            transition: background 0.2s;
-            border: 1px dashed rgba(0,0,0,0.1);
-        }
-        .zone span {
-            background: rgba(255,255,255,0.7);
-            padding: 2px 6px;
-            border-radius: 10px;
-            pointer-events: none;
-        }
-        #fruits-zone      { background-color: #ffcdd2; color: #b71c1c; }
-        #grains-zone      { background-color: #d7ccc8; color: #4e342e; }
-        #vegetables-zone  { background-color: #c8e6c9; color: #1b5e20; }
-        #protein-zone     { background-color: #ffccbc; color: #e65100; }
-        
-        /* Dairy center circle */
-        #dairy-zone {
-            position: absolute;
-            top: 35%;
-            left: 35%;
-            width: 30%;
-            height: 30%;
-            border-radius: 50%;
-            background-color: #bbdefb;
-            color: #0d47a1;
-            border: 4px solid #ffffff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            grid-column: auto; /* break out of grid layout */
-            z-index: 2;
-        }
+    @keyframes hideIntro{
+      to{
+        opacity:0;
+        visibility:hidden;
+      }
+    }
 
-        .zone.drag-over {
-            filter: brightness(0.85);
-            border: 2px dashed #000;
-        }
+    /* =========================
+       MAIN GAME
+    ==========================*/
+    .game-container{
+      width:100%;
+      height:100vh;
+      position:relative;
+      overflow:hidden;
 
-        /* Food Items Bin */
-        .options-container {
-            width: 100%;
-            max-width: 500px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 15px;
-            padding: 8px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            justify-content: center;
-            align-items: center;
-            min-height: 110px;
-            border: 2px dashed #b0bec5;
-        }
+      background:
+      linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.15)),
+      url('https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=1400&auto=format&fit=crop') center center/cover no-repeat;
+    }
 
-        /* Individual Food Items */
-        .food-item {
-            background: #ffffff;
-            border: 2px solid #81c784;
-            border-radius: 20px;
-            padding: 6px 12px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            color: #333;
-            cursor: grab;
-            box-shadow: 0 3px 0px #81c784;
-            touch-action: none; /* Prevents scrolling while dragging on mobile */
-            transition: transform 0.1s ease;
-        }
-        .food-item:active {
-            cursor: grabbing;
-        }
+    /* Soft overlay */
+    .overlay{
+      position:absolute;
+      inset:0;
+      background:rgba(255,255,255,0.35);
+    }
 
-        /* Success State inside plate zones */
-        .zone .food-item {
-            font-size: 0.75rem;
-            padding: 3px 6px;
-            margin: 2px;
-            border-color: #4caf50;
-            box-shadow: none;
-            background: #e8f5e9;
-        }
+    .title{
+      position:absolute;
+      top:1%;
+      width:100%;
+      text-align:center;
+      font-size:clamp(22px,4vw,40px);
+      font-weight:bold;
+      color:#ff6b00;
+      text-shadow:2px 2px 6px white;
+      z-index:3;
+    }
 
-        /* Win Message overlay */
-        #win-message {
-            display: none;
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.9);
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 5;
-        }
-        #win-message h2 {
-            font-size: 2.5rem;
-            color: #4caf50;
-            margin-bottom: 20px;
-        }
-        #win-message button {
-            padding: 10px 20px;
-            font-size: 1.2rem;
-            background: #4caf50;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-        }
+    /* =========================
+       PLATE
+    ==========================*/
+    .plate-wrapper{
+      position:absolute;
+      top:10%;
+      left:50%;
+      transform:translateX(-50%);
+      width:min(55vw, 480px);
+      aspect-ratio:1/1;
+      z-index:2;
+    }
 
-        /* Scaling adjustment for tiny screens */
-        @media (max-height: 480px) {
-            h1 { font-size: 1.1rem; margin-0; }
-            .plate-container { width: 200px; height: 200px; border-width: 5px;}
-            .options-container { min-height: 70px; padding: 4px; }
-            .food-item { font-size: 0.75rem; padding: 4px 8px; }
-            .zone { font-size: 0.7rem; }
-        }
-    </style>
+    .plate{
+      width:100%;
+      height:100%;
+      border-radius:50%;
+      overflow:hidden;
+      position:relative;
+      border:12px solid white;
+      box-shadow:0 0 25px rgba(0,0,0,0.25);
+      background:white;
+    }
+
+    .section{
+      position:absolute;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      font-weight:bold;
+      font-size:clamp(13px,1.4vw,20px);
+      color:#333;
+      padding:5px;
+    }
+
+    .section span{
+      background:rgba(255,255,255,0.8);
+      padding:6px 10px;
+      border-radius:12px;
+    }
+
+    /* Fruits */
+    .fruits{
+      top:0;
+      left:0;
+      width:50%;
+      height:50%;
+      background:#ffd54f;
+      border-right:3px solid white;
+      border-bottom:3px solid white;
+    }
+
+    /* Vegetables */
+    .vegetables{
+      top:0;
+      right:0;
+      width:50%;
+      height:50%;
+      background:#81c784;
+      border-left:3px solid white;
+      border-bottom:3px solid white;
+    }
+
+    /* Grains */
+    .grains{
+      bottom:0;
+      left:0;
+      width:50%;
+      height:50%;
+      background:#ffcc80;
+      border-right:3px solid white;
+      border-top:3px solid white;
+    }
+
+    /* Protein */
+    .protein{
+      bottom:0;
+      right:0;
+      width:50%;
+      height:50%;
+      background:#ef9a9a;
+      border-left:3px solid white;
+      border-top:3px solid white;
+    }
+
+    /* Dairy circle */
+    .dairy{
+      width:30%;
+      height:30%;
+      border-radius:50%;
+      background:#90caf9;
+      position:absolute;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      border:5px solid white;
+      z-index:5;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      font-weight:bold;
+      color:#333;
+      font-size:clamp(12px,1.2vw,18px);
+    }
+
+    /* =========================
+       FOOD OPTIONS
+    ==========================*/
+    .food-container{
+      position:absolute;
+      bottom:1%;
+      left:50%;
+      transform:translateX(-50%);
+      width:96%;
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:8px;
+      z-index:4;
+    }
+
+    .food{
+      background:white;
+      border-radius:16px;
+      padding:10px 14px;
+      border:3px solid #ffb74d;
+      font-weight:bold;
+      color:#333;
+      cursor:grab;
+      touch-action:none;
+      font-size:clamp(12px,1vw,18px);
+      box-shadow:0 4px 10px rgba(0,0,0,0.15);
+      transition:0.2s;
+    }
+
+    .food:active{
+      transform:scale(1.08);
+      cursor:grabbing;
+    }
+
+    .correct{
+      background:#a5d6a7 !important;
+      border-color:#43a047 !important;
+      color:#1b5e20;
+    }
+
+    /* =========================
+       SUCCESS MESSAGE
+    ==========================*/
+    .success{
+      position:absolute;
+      top:45%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      background:white;
+      padding:20px 30px;
+      border-radius:20px;
+      font-size:clamp(22px,3vw,40px);
+      font-weight:bold;
+      color:#ff6b00;
+      box-shadow:0 0 20px rgba(0,0,0,0.3);
+      display:none;
+      z-index:10;
+      text-align:center;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ==========================*/
+    @media(max-width:768px){
+
+      .plate-wrapper{
+        width:78vw;
+        top:10%;
+      }
+
+      .food-container{
+        gap:6px;
+      }
+
+      .food{
+        padding:8px 10px;
+        font-size:13px;
+      }
+    }
+
+    @media(max-height:700px){
+
+      .plate-wrapper{
+        width:52vh;
+      }
+
+      .food{
+        padding:6px 8px;
+        font-size:12px;
+      }
+    }
+
+  </style>
 </head>
+
 <body>
 
-    <audio id="sound-correct" src="assets/freesound_community-claps-44744.mp3" preload="auto"></audio>
-    <audio id="sound-wrong" src="assets/wrong.mp3" preload="auto"></audio>
+  <!-- INTRO SCREEN -->
+  <div id="introScreen">
+    <img src="assets/innovine-logo.png" alt="Innovine Logo">
+  </div>
 
-    <div id="intro-slide">
-        <img src="assets/innovine-logo.png" alt="Logo">
+  <!-- MAIN GAME -->
+  <div class="game-container">
+
+    <div class="overlay"></div>
+
+    <div class="title">
+      🍎 My Healthy Plate 🍽️
     </div>
 
-    <div id="game-slide">
-        <h1>Fill Your Healthy Plate!</h1>
+    <!-- PLATE -->
+    <div class="plate-wrapper">
 
-        <div class="plate-container">
-            <div class="zone" id="fruits-zone" data-group="fruits"><span>Fruits</span></div>
-            <div class="zone" id="grains-zone" data-group="grains"><span>Grains</span></div>
-            <div class="zone" id="vegetables-zone" data-group="vegetables"><span>Veg</span></div>
-            <div class="zone" id="protein-zone" data-group="protein"><span>Protein</span></div>
-            <div class="zone" id="dairy-zone" data-group="dairy"><span>Dairy</span></div>
+      <div class="plate">
+
+        <div class="section fruits dropzone" data-group="fruits">
+          <span>🍎 Fruits</span>
         </div>
 
-        <div class="options-container" id="options-bin">
-            </div>
-
-        <div id="win-message">
-            <h2>Well Done! ⭐</h2>
-            <button onclick="resetGame()">Play Again</button>
+        <div class="section vegetables dropzone" data-group="vegetables">
+          <span>🥦 Vegetables</span>
         </div>
+
+        <div class="section grains dropzone" data-group="grains">
+          <span>🌾 Grains</span>
+        </div>
+
+        <div class="section protein dropzone" data-group="protein">
+          <span>🥚 Protein</span>
+        </div>
+
+        <div class="dairy dropzone" data-group="dairy">
+          🥛 Dairy
+        </div>
+
+      </div>
+
     </div>
 
-    <script>
-        // Game Configuration Data Matches Your exact specification
-        const foodItems = [
-            { id: "1", name: "banana", group: "fruits" },
-            { id: "2", name: "Spinach", group: "vegetables" },
-            { id: "3", name: "broccoli", group: "vegetables" },
-            { id: "4", name: "carrot", group: "vegetables" },
-            { id: "5", name: "brown rice", group: "grains" },
-            { id: "6", name: "oats", group: "grains" },
-            { id: "7", name: "whole wheat bread", group: "grains" },
-            { id: "8", name: "lentils", group: "protein" },
-            { id: "9", name: "beans", group: "protein" },
-            { id: "10", name: "eggs", group: "protein" },
-            { id: "11", name: "paneer", group: "protein" },
-            { id: "12", name: "orange", group: "fruits" },
-            { id: "13", name: "apple", group: "fruits" },
-            { id: "14", name: "buttermilk", group: "dairy" },
-            { id: "15", name: "yogurt", group: "dairy" }
-        ];
+    <!-- FOOD ITEMS -->
+    <div class="food-container" id="foodContainer">
 
-        // Slide Changer Setup: 2-second timeout for intro logo
-        window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                const intro = document.getElementById('intro-slide');
-                const game = document.getElementById('game-slide');
-                intro.style.opacity = '0';
-                setTimeout(() => {
-                    intro.style.display = 'none';
-                    game.style.display = 'flex';
-                    initGame();
-                }, 500);
-            }, 2000);
-        });
+      <div class="food" draggable="true" data-group="fruits">Banana</div>
+      <div class="food" draggable="true" data-group="vegetables">Spinach</div>
+      <div class="food" draggable="true" data-group="vegetables">Broccoli</div>
+      <div class="food" draggable="true" data-group="vegetables">Carrot</div>
 
-        const optionsBin = document.getElementById('options-bin');
-        const zones = document.querySelectorAll('.zone');
-        const soundCorrect = document.getElementById('sound-correct');
-        const soundWrong = document.getElementById('sound-wrong');
-        let draggedElement = null;
+      <div class="food" draggable="true" data-group="grains">Brown Rice</div>
+      <div class="food" draggable="true" data-group="grains">Oats</div>
+      <div class="food" draggable="true" data-group="grains">Whole Wheat Bread</div>
 
-        // Initialize / Reset Game State
-        function initGame() {
-            optionsBin.innerHTML = '';
-            document.getElementById('win-message').style.display = 'none';
-            
-            // Clean up old elements inside plate segments
-            zones.forEach(zone => {
-                const elements = zone.querySelectorAll('.food-item');
-                elements.forEach(el => el.remove());
-            });
+      <div class="food" draggable="true" data-group="protein">Lentils</div>
+      <div class="food" draggable="true" data-group="protein">Beans</div>
+      <div class="food" draggable="true" data-group="protein">Eggs</div>
+      <div class="food" draggable="true" data-group="protein">Paneer</div>
 
-            // Shuffle array to mix food items dynamically
-            const shuffledFoods = [...foodItems].sort(() => Math.random() - 0.5);
+      <div class="food" draggable="true" data-group="fruits">Orange</div>
+      <div class="food" draggable="true" data-group="fruits">Apple</div>
 
-            // Generate Food Cards
-            shuffledFoods.forEach(item => {
-                const foodDiv = document.createElement('div');
-                foodDiv.className = 'food-item';
-                foodDiv.textContent = item.name;
-                foodDiv.id = `food-${item.id}`;
-                foodDiv.setAttribute('draggable', 'true');
-                foodDiv.setAttribute('data-group', item.group);
+      <div class="food" draggable="true" data-group="dairy">Buttermilk</div>
+      <div class="food" draggable="true" data-group="dairy">Yogurt</div>
 
-                // standard drag listeners
-                foodDiv.addEventListener('dragstart', handleDragStart);
-                foodDiv.addEventListener('dragend', handleDragEnd);
+    </div>
 
-                // Mobile/Tablet Touch Interaction layer
-                foodDiv.addEventListener('touchstart', handleTouchStart, { passive: false });
-                foodDiv.addEventListener('touchmove', handleTouchMove, { passive: false });
-                foodDiv.addEventListener('touchend', handleTouchEnd);
+    <div class="success" id="successMessage">
+      🎉 Great Job! 🎉
+    </div>
 
-                optionsBin.appendChild(foodDiv);
-            });
+  </div>
+
+  <!-- AUDIO -->
+  <audio id="correctSound" src="assets/correct.mp3"></audio>
+  <audio id="wrongSound" src="assets/wrong.mp3"></audio>
+  <audio id="clapSound" src="assets/freesound_community-claps-44774.mp3"></audio>
+
+  <script>
+
+    const foods = document.querySelectorAll('.food');
+    const zones = document.querySelectorAll('.dropzone');
+
+    const correctSound = document.getElementById('correctSound');
+    const wrongSound = document.getElementById('wrongSound');
+    const clapSound = document.getElementById('clapSound');
+
+    let draggedFood = null;
+    let completed = 0;
+
+    // =========================
+    // DRAG EVENTS
+    // =========================
+    foods.forEach(food => {
+
+      food.addEventListener('dragstart', () => {
+        draggedFood = food;
+      });
+
+    });
+
+    zones.forEach(zone => {
+
+      zone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+      });
+
+      zone.addEventListener('drop', () => {
+
+        if(!draggedFood) return;
+
+        const correctGroup = draggedFood.dataset.group;
+        const zoneGroup = zone.dataset.group;
+
+        if(correctGroup === zoneGroup){
+
+          zone.appendChild(draggedFood);
+
+          draggedFood.classList.add('correct');
+          draggedFood.setAttribute('draggable', 'false');
+
+          draggedFood.style.margin = "4px";
+          draggedFood.style.position = "relative";
+          draggedFood.style.left = "0";
+          draggedFood.style.top = "0";
+
+          correctSound.currentTime = 0;
+          clapSound.currentTime = 0;
+
+          correctSound.play();
+          clapSound.play();
+
+          completed++;
+
+          if(completed === foods.length){
+
+            setTimeout(()=>{
+              document.getElementById('successMessage').style.display='block';
+            },500);
+
+          }
+
+        } else {
+
+          wrongSound.currentTime = 0;
+          wrongSound.play();
+
         }
 
-        // --- Core Desktop Drag and Drop Handlers ---
-        function handleDragStart(e) {
-            draggedElement = this;
-            e.dataTransfer.setData('text/plain', this.id);
-            setTimeout(() => this.style.opacity = '0.4', 0);
-        }
+      });
 
-        function handleDragEnd() {
-            this.style.opacity = '1';
-            draggedElement = null;
-        }
+    });
 
-        // Setup drop zones for desk top
+    // =========================
+    // TOUCH SUPPORT
+    // =========================
+    let activeFood = null;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    foods.forEach(food => {
+
+      food.addEventListener('touchstart', (e) => {
+
+        if(food.classList.contains('correct')) return;
+
+        activeFood = food;
+
+        const touch = e.touches[0];
+        const rect = food.getBoundingClientRect();
+
+        offsetX = touch.clientX - rect.left;
+        offsetY = touch.clientY - rect.top;
+
+        food.style.position = 'fixed';
+        food.style.zIndex = '9999';
+
+      });
+
+      food.addEventListener('touchmove', (e) => {
+
+        if(!activeFood) return;
+
+        e.preventDefault();
+
+        const touch = e.touches[0];
+
+        activeFood.style.left = (touch.clientX - offsetX) + 'px';
+        activeFood.style.top = (touch.clientY - offsetY) + 'px';
+
+      }, {passive:false});
+
+      food.addEventListener('touchend', (e) => {
+
+        if(!activeFood) return;
+
+        const touch = e.changedTouches[0];
+
+        let dropped = false;
+
         zones.forEach(zone => {
-            zone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                zone.classList.add('drag-over');
-            });
-            zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
-            zone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                zone.classList.remove('drag-over');
-                const id = e.dataTransfer.getData('text/plain');
-                const element = document.getElementById(id);
-                evaluatePlacement(element, zone);
-            });
+
+          const rect = zone.getBoundingClientRect();
+
+          if(
+            touch.clientX > rect.left &&
+            touch.clientX < rect.right &&
+            touch.clientY > rect.top &&
+            touch.clientY < rect.bottom
+          ){
+
+            const correctGroup = activeFood.dataset.group;
+            const zoneGroup = zone.dataset.group;
+
+            if(correctGroup === zoneGroup){
+
+              zone.appendChild(activeFood);
+
+              activeFood.classList.add('correct');
+              activeFood.style.position = 'relative';
+              activeFood.style.left = '0';
+              activeFood.style.top = '0';
+              activeFood.style.zIndex = '1';
+
+              activeFood.setAttribute('draggable', 'false');
+
+              correctSound.currentTime = 0;
+              clapSound.currentTime = 0;
+
+              correctSound.play();
+              clapSound.play();
+
+              completed++;
+
+              if(completed === foods.length){
+
+                setTimeout(()=>{
+                  document.getElementById('successMessage').style.display='block';
+                },500);
+
+              }
+
+            } else {
+
+              wrongSound.currentTime = 0;
+              wrongSound.play();
+
+              activeFood.style.position = 'relative';
+              activeFood.style.left = '0';
+              activeFood.style.top = '0';
+
+              document.getElementById('foodContainer').appendChild(activeFood);
+
+            }
+
+            dropped = true;
+          }
+
         });
 
-        // --- Mobile and Tablet Touch Fallback Handling ---
-        let touchStartBinX, touchStartBinY;
-        function handleTouchStart(e) {
-            draggedElement = this;
-            const rect = this.getBoundingClientRect();
-            // Remember original layout position in case it needs to bounce back
-            this.dataset.startX = rect.left;
-            this.dataset.startY = rect.top;
-            this.style.position = 'relative';
-            this.style.zIndex = '100';
+        if(!dropped){
+
+          activeFood.style.position = 'relative';
+          activeFood.style.left = '0';
+          activeFood.style.top = '0';
+
+          document.getElementById('foodContainer').appendChild(activeFood);
+
         }
 
-        function handleTouchMove(e) {
-            if (!draggedElement) return;
-            e.preventDefault(); // blocks native browser scrolling while moving food items
-            const touch = e.touches[0];
-            
-            // Track element following user finger coordinates
-            const parentRect = optionsBin.getBoundingClientRect();
-            const x = touch.clientX - parentRect.left - (draggedElement.offsetWidth / 2);
-            const y = touch.clientY - parentRect.top - (draggedElement.offsetHeight / 2);
-            
-            draggedElement.style.left = `${x}px`;
-            draggedElement.style.top = `${y}px`;
-        }
+        activeFood = null;
 
-        function handleTouchEnd(e) {
-            if (!draggedElement) return;
-            
-            const touch = e.changedTouches[0];
-            draggedElement.style.position = '';
-            draggedElement.style.zIndex = '';
-            draggedElement.style.left = '';
-            draggedElement.style.top = '';
+      });
 
-            // Find element drop location point
-            const targetZoneEl = document.elementFromPoint(touch.clientX, touch.clientY);
-            const validZone = targetZoneEl ? targetZoneEl.closest('.zone') : null;
+    });
 
-            if (validZone) {
-                evaluatePlacement(draggedElement, validZone);
-            } else {
-                playAudio(soundWrong);
-            }
-            draggedElement = null;
-        }
+  </script>
 
-        // --- Matching Logic Evaluation ---
-        function evaluatePlacement(element, zone) {
-            if (!element) return;
-            
-            const foodGroup = element.getAttribute('data-group');
-            const zoneGroup = zone.getAttribute('data-group');
-
-            if (foodGroup === zoneGroup) {
-                // Correct Match
-                zone.appendChild(element);
-                element.setAttribute('draggable', 'false');
-                // Remove touch bindings so it stays locked
-                element.onreplace = null; 
-                playAudio(soundCorrect);
-                checkWinCondition();
-            } else {
-                // Wrong Match - Return back safely to options bin
-                optionsBin.appendChild(element);
-                playAudio(soundWrong);
-            }
-        }
-
-        // Helper function safely firing sound files overlapping fast interactions
-        function playAudio(audioEl) {
-            audioEl.currentTime = 0;
-            audioEl.play().catch(err => console.log("Audio playback waiting user gesture active"));
-        }
-
-        function checkWinCondition() {
-            // Check if all items moved from option container
-            if (optionsBin.children.length === 0) {
-                setTimeout(() => {
-                    document.getElementById('win-message').style.display = 'flex';
-                }, 600);
-            }
-        }
-
-        function resetGame() {
-            initGame();
-        }
-    </script>
 </body>
 </html>
