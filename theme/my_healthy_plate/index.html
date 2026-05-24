@@ -28,7 +28,7 @@ body{
   height:100vh;
   overflow:hidden;
   font-family:'Baloo 2', cursive;
-  background:#fff6ef;
+  background:#fff7f0;
 }
 
 /* =========================================
@@ -49,7 +49,7 @@ body{
 
 #introScreen img{
   width:260px;
-  max-width:70%;
+  max-width:75%;
 }
 
 @keyframes fadeOut{
@@ -60,7 +60,7 @@ body{
 }
 
 /* =========================================
-   MAIN BACKGROUND
+   GAME BACKGROUND
 ========================================= */
 
 .game-container{
@@ -69,32 +69,88 @@ body{
   position:relative;
   overflow:hidden;
 
-  /* TABLE MAT BACKGROUND */
-
   background:
   linear-gradient(
-  rgba(255,248,245,0.4),
-  rgba(255,248,245,0.4)
+  rgba(255,248,240,0.3),
+  rgba(255,248,240,0.3)
   ),
 
-  url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1600&auto=format&fit=crop');
+  url('https://images.unsplash.com/photo-1498837167922-ddd27525d352?q=80&w=1600&auto=format&fit=crop');
 
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
 }
 
-/* Cute soft overlay */
+/* Table mat */
 
-.overlay{
+.table-mat{
   position:absolute;
-  inset:0;
+
+  width:min(70vw,850px);
+  aspect-ratio:1/1;
+
+  top:15%;
+  left:50%;
+
+  transform:translateX(-50%);
+
+  border-radius:50%;
 
   background:
-  linear-gradient(
-  rgba(255,245,240,0.35),
-  rgba(255,250,245,0.45)
+  repeating-radial-gradient(
+  circle,
+  #ffe0b2,
+  #ffe0b2 15px,
+  #ffd699 15px,
+  #ffd699 30px
   );
+
+  opacity:0.9;
+
+  z-index:1;
+
+  box-shadow:
+  0 0 30px rgba(0,0,0,0.2);
+}
+
+/* floating decorations */
+
+.floating{
+  position:absolute;
+  animation:float 4s ease-in-out infinite;
+  z-index:2;
+  opacity:0.9;
+}
+
+.float1{
+  top:8%;
+  left:5%;
+  width:70px;
+}
+
+.float2{
+  top:10%;
+  right:6%;
+  width:65px;
+}
+
+.float3{
+  bottom:15%;
+  left:4%;
+  width:70px;
+}
+
+.float4{
+  bottom:12%;
+  right:5%;
+  width:65px;
+}
+
+@keyframes float{
+  0%{transform:translateY(0px);}
+  50%{transform:translateY(-10px);}
+  100%{transform:translateY(0px);}
 }
 
 /* =========================================
@@ -106,13 +162,9 @@ body{
   top:2%;
   left:50%;
   transform:translateX(-50%);
-
   width:95%;
   z-index:100;
-
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+  text-align:center;
 }
 
 .title{
@@ -121,43 +173,121 @@ body{
   color:#ff7043;
 
   text-shadow:
-  2px 2px 8px rgba(255,255,255,0.9);
+  3px 3px 10px rgba(255,255,255,0.95);
 
-  margin-bottom:10px;
-
-  letter-spacing:1px;
+  margin-bottom:12px;
 }
 
 .instructions{
 
-  max-width:850px;
+  display:inline-block;
 
-  background:rgba(255,255,255,0.88);
+  background:rgba(255,255,255,0.92);
 
-  padding:12px 26px;
+  padding:12px 28px;
 
   border-radius:30px;
 
   font-size:clamp(15px,1.3vw,23px);
 
-  font-weight:600;
-
   color:#6d4c41;
 
-  text-align:center;
+  font-weight:600;
 
   box-shadow:
-  0 4px 14px rgba(0,0,0,0.12);
+  0 4px 12px rgba(0,0,0,0.12);
 }
 
 /* =========================================
-   PLATE AREA
+   PROGRESS
+========================================= */
+
+.progress-box{
+
+  position:absolute;
+
+  top:15px;
+  right:18px;
+
+  background:white;
+
+  padding:10px 18px;
+
+  border-radius:20px;
+
+  font-size:20px;
+
+  font-weight:700;
+
+  color:#ff7043;
+
+  z-index:200;
+
+  box-shadow:
+  0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* =========================================
+   CHEF CHARACTER
+========================================= */
+
+.chef{
+
+  position:absolute;
+
+  left:2%;
+  top:28%;
+
+  width:130px;
+
+  z-index:100;
+
+  animation:bounce 2s infinite;
+}
+
+.chef img{
+  width:100%;
+}
+
+.speech{
+
+  position:absolute;
+
+  top:-10px;
+  left:105px;
+
+  background:white;
+
+  padding:10px 14px;
+
+  border-radius:20px;
+
+  width:170px;
+
+  font-size:16px;
+
+  font-weight:700;
+
+  color:#ff7043;
+
+  box-shadow:
+  0 4px 10px rgba(0,0,0,0.15);
+}
+
+@keyframes bounce{
+  0%{transform:translateY(0);}
+  50%{transform:translateY(-8px);}
+  100%{transform:translateY(0);}
+}
+
+/* =========================================
+   PLATE
 ========================================= */
 
 .plate-wrapper{
   position:absolute;
 
-  top:19%;
+  top:18%;
   left:50%;
 
   transform:translateX(-50%);
@@ -166,11 +296,10 @@ body{
 
   aspect-ratio:1/1;
 
-  z-index:20;
+  z-index:10;
 }
 
 .plate{
-
   width:100%;
   height:100%;
 
@@ -178,12 +307,12 @@ body{
   overflow:hidden;
   position:relative;
 
-  border:22px solid #fff;
+  border:25px solid #fff;
 
   background:white;
 
   box-shadow:
-  0 10px 30px rgba(0,0,0,0.22),
+  0 12px 35px rgba(0,0,0,0.25),
   inset 0 0 10px rgba(255,255,255,0.95);
 }
 
@@ -196,9 +325,14 @@ body{
   flex-wrap:wrap;
 
   padding:14px;
+
+  transition:0.3s;
 }
 
-/* Sections */
+.section.glow{
+  box-shadow:
+  inset 0 0 30px rgba(255,255,255,0.8);
+}
 
 .fruits{
   top:0;
@@ -243,31 +377,18 @@ body{
 .dairy{
   width:30%;
   height:30%;
-
   position:absolute;
-
   top:50%;
   left:50%;
-
   transform:translate(-50%,-50%);
-
   border-radius:50%;
-
   background:#bbdefb;
-
   border:8px solid white;
-
   display:flex;
   justify-content:center;
   align-items:center;
-
   z-index:50;
-
-  box-shadow:
-  0 4px 12px rgba(0,0,0,0.15);
 }
-
-/* Labels */
 
 .section-label{
 
@@ -282,9 +403,6 @@ body{
   font-size:clamp(14px,1vw,22px);
 
   font-weight:700;
-
-  box-shadow:
-  0 2px 8px rgba(0,0,0,0.12);
 }
 
 .fruit-label{
@@ -316,33 +434,26 @@ body{
 ========================================= */
 
 .food-container{
-
   position:absolute;
-
   bottom:1%;
   left:50%;
-
   transform:translateX(-50%);
-
   width:98%;
-
   display:flex;
   flex-wrap:wrap;
   justify-content:center;
-
   gap:10px;
-
   z-index:200;
 }
 
 .food{
 
-  width:78px;
-  height:78px;
+  width:88px;
+  height:88px;
 
   background:white;
 
-  border-radius:20px;
+  border-radius:22px;
 
   border:4px solid #ffb74d;
 
@@ -357,7 +468,7 @@ body{
   box-shadow:
   0 4px 10px rgba(0,0,0,0.18);
 
-  transition:0.2s;
+  transition:0.25s;
 }
 
 .food:hover{
@@ -365,8 +476,8 @@ body{
 }
 
 .food img{
-  width:62px;
-  height:62px;
+  width:68px;
+  height:68px;
   object-fit:contain;
   pointer-events:none;
 }
@@ -374,39 +485,100 @@ body{
 .correct{
   border-color:#43a047 !important;
   background:#e8f5e9 !important;
+  animation:pop 0.4s ease;
+}
+
+.wrong{
+  animation:shake 0.4s;
+}
+
+@keyframes pop{
+  0%{transform:scale(0.5);}
+  100%{transform:scale(1);}
+}
+
+@keyframes shake{
+  0%{transform:translateX(0);}
+  25%{transform:translateX(-5px);}
+  50%{transform:translateX(5px);}
+  75%{transform:translateX(-5px);}
+  100%{transform:translateX(0);}
 }
 
 /* =========================================
-   SUCCESS
+   STARS
+========================================= */
+
+.star{
+  position:absolute;
+  font-size:32px;
+  animation:starPop 1s forwards;
+  z-index:500;
+}
+
+@keyframes starPop{
+  0%{
+    opacity:1;
+    transform:translateY(0) scale(0.5);
+  }
+
+  100%{
+    opacity:0;
+    transform:translateY(-80px) scale(1.5);
+  }
+}
+
+/* =========================================
+   SUCCESS SCREEN
 ========================================= */
 
 .success{
 
   position:absolute;
 
-  top:50%;
-  left:50%;
+  inset:0;
 
-  transform:translate(-50%,-50%);
-
-  background:white;
-
-  padding:28px 42px;
-
-  border-radius:28px;
-
-  font-size:clamp(30px,4vw,56px);
-
-  font-weight:700;
-
-  color:#ff6b6b;
+  background:rgba(255,255,255,0.95);
 
   display:none;
 
-  z-index:999;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
 
-  box-shadow:
-  0 8px 30px rgba(0,0,0,0.25);
+  z-index:9999;
+}
+
+.success h1{
+  font-size:clamp(42px,5vw,80px);
+  color:#ff7043;
+}
+
+.success p{
+  font-size:28px;
+  color:#6d4c41;
+  margin-top:10px;
+}
+
+.replay-btn{
+
+  margin-top:25px;
+
+  background:#ff7043;
+
+  color:white;
+
+  border:none;
+
+  padding:14px 30px;
+
+  border-radius:30px;
+
+  font-size:24px;
+
+  font-family:'Baloo 2', cursive;
+
+  cursor:pointer;
 }
 
 /* =========================================
@@ -415,13 +587,8 @@ body{
 
 @media(max-width:768px){
 
-  .header{
-    top:1%;
-  }
-
   .title{
     font-size:42px;
-    margin-bottom:8px;
   }
 
   .instructions{
@@ -432,43 +599,33 @@ body{
 
   .plate-wrapper{
     width:92vw;
-    top:18%;
+    top:20%;
   }
 
   .food{
-    width:56px;
-    height:56px;
+    width:60px;
+    height:60px;
   }
 
   .food img{
-    width:42px;
-    height:42px;
+    width:44px;
+    height:44px;
   }
 
-  .food-container{
-    gap:5px;
+  .chef{
+    width:80px;
+    top:26%;
   }
 
-  .section-label{
-    font-size:10px;
-    padding:5px 8px;
-  }
-}
-
-@media(max-height:700px){
-
-  .plate-wrapper{
-    width:66vh;
+  .speech{
+    width:120px;
+    font-size:11px;
+    left:70px;
   }
 
-  .food{
-    width:50px;
-    height:50px;
-  }
-
-  .food img{
-    width:36px;
-    height:36px;
+  .progress-box{
+    font-size:14px;
+    padding:7px 12px;
   }
 }
 
@@ -480,14 +637,23 @@ body{
 <!-- INTRO -->
 
 <div id="introScreen">
-  <img src="assets/innovine-logo.png" alt="logo">
+  <img src="assets/innovine-logo.png">
 </div>
 
 <!-- GAME -->
 
 <div class="game-container">
 
-  <div class="overlay"></div>
+  <!-- TABLE MAT -->
+
+  <div class="table-mat"></div>
+
+  <!-- FLOATING DECOR -->
+
+  <img src="assets/apple.png" class="floating float1">
+  <img src="assets/carrot.png" class="floating float2">
+  <img src="assets/broccoli.png" class="floating float3">
+  <img src="assets/orange.png" class="floating float4">
 
   <!-- HEADER -->
 
@@ -503,50 +669,73 @@ body{
 
   </div>
 
+  <!-- PROGRESS -->
+
+  <div class="progress-box">
+    ⭐ <span id="progress">0</span>/15
+  </div>
+
+  <!-- CHEF -->
+
+  <div class="chef">
+
+    <img src="https://cdn-icons-png.flaticon.com/512/1995/1995574.png">
+
+    <div class="speech" id="speechBubble">
+      Let's make a healthy plate!
+    </div>
+
+  </div>
+
   <!-- PLATE -->
 
   <div class="plate-wrapper">
 
     <div class="plate">
 
-      <!-- Fruits -->
+      <div class="section fruits dropzone"
+      data-group="fruits">
 
-      <div class="section fruits dropzone" data-group="fruits">
         <div class="section-label fruit-label">
           🍎 Fruits
         </div>
+
       </div>
 
-      <!-- Vegetables -->
+      <div class="section vegetables dropzone"
+      data-group="vegetables">
 
-      <div class="section vegetables dropzone" data-group="vegetables">
         <div class="section-label veg-label">
           🥦 Vegetables
         </div>
+
       </div>
 
-      <!-- Grains -->
+      <div class="section grains dropzone"
+      data-group="grains">
 
-      <div class="section grains dropzone" data-group="grains">
         <div class="section-label grain-label">
           🌾 Grains
         </div>
+
       </div>
 
-      <!-- Protein -->
+      <div class="section protein dropzone"
+      data-group="protein">
 
-      <div class="section protein dropzone" data-group="protein">
         <div class="section-label protein-label">
           🥚 Protein
         </div>
+
       </div>
 
-      <!-- Dairy -->
+      <div class="dairy dropzone"
+      data-group="dairy">
 
-      <div class="dairy dropzone" data-group="dairy">
         <div class="section-label dairy-label">
           🥛 Dairy
         </div>
+
       </div>
 
     </div>
@@ -556,8 +745,6 @@ body{
   <!-- FOOD ITEMS -->
 
   <div class="food-container" id="foodContainer">
-
-    <!-- Fruits -->
 
     <div class="food" draggable="true" data-group="fruits">
       <img src="assets/banana.png">
@@ -571,8 +758,6 @@ body{
       <img src="assets/orange.png">
     </div>
 
-    <!-- Vegetables -->
-
     <div class="food" draggable="true" data-group="vegetables">
       <img src="assets/spinach.png">
     </div>
@@ -585,8 +770,6 @@ body{
       <img src="assets/carrot.png">
     </div>
 
-    <!-- Grains -->
-
     <div class="food" draggable="true" data-group="grains">
       <img src="assets/brown-rice.png">
     </div>
@@ -598,8 +781,6 @@ body{
     <div class="food" draggable="true" data-group="grains">
       <img src="assets/whole-wheat-bread.png">
     </div>
-
-    <!-- Protein -->
 
     <div class="food" draggable="true" data-group="protein">
       <img src="assets/lentils.png">
@@ -617,8 +798,6 @@ body{
       <img src="assets/paneer.png">
     </div>
 
-    <!-- Dairy -->
-
     <div class="food" draggable="true" data-group="dairy">
       <img src="assets/yogurt.png">
     </div>
@@ -631,23 +810,50 @@ body{
 
   <!-- SUCCESS -->
 
-  <div class="success" id="successMessage">
-    🎉 Great Job! 🎉
+  <div class="success" id="successScreen">
+
+    <h1>🎉 Amazing! 🎉</h1>
+
+    <p>You made a Healthy Plate!</p>
+
+    <button class="replay-btn"
+    onclick="location.reload()">
+
+      Play Again
+
+    </button>
+
   </div>
 
 </div>
 
 <!-- AUDIO -->
 
-<audio id="correctSound" src="assets/correct.mp3"></audio>
-<audio id="wrongSound" src="assets/wrong.mp3"></audio>
+<audio id="correctSound"
+src="assets/correct.mp3"></audio>
+
+<audio id="wrongSound"
+src="assets/wrong.mp3"></audio>
+
 <audio id="clapSound"
 src="assets/freesound_community-claps-44774.mp3"></audio>
 
 <script>
 
-const foods = document.querySelectorAll('.food');
-const zones = document.querySelectorAll('.dropzone');
+const foods =
+document.querySelectorAll('.food');
+
+const zones =
+document.querySelectorAll('.dropzone');
+
+const progress =
+document.getElementById('progress');
+
+const speech =
+document.getElementById('speechBubble');
+
+const successScreen =
+document.getElementById('successScreen');
 
 const correctSound =
 document.getElementById('correctSound');
@@ -661,14 +867,38 @@ document.getElementById('clapSound');
 let draggedFood = null;
 let completed = 0;
 
-/* =========================
-   DESKTOP DRAG
-========================= */
+/* shuffle foods */
+
+const container =
+document.getElementById('foodContainer');
+
+for(let i = container.children.length;
+i >= 0;
+i--){
+
+  container.appendChild(
+  container.children[
+  Math.random() * i | 0
+  ]);
+}
+
+/* desktop drag */
 
 foods.forEach(food=>{
 
   food.addEventListener('dragstart',()=>{
+
     draggedFood = food;
+
+    zones.forEach(zone=>{
+
+      if(zone.dataset.group ===
+      food.dataset.group){
+
+        zone.classList.add('glow');
+      }
+    });
+
   });
 
 });
@@ -680,6 +910,10 @@ zones.forEach(zone=>{
   });
 
   zone.addEventListener('drop',()=>{
+
+    zones.forEach(z=>{
+      z.classList.remove('glow');
+    });
 
     if(!draggedFood) return;
 
@@ -703,167 +937,67 @@ zones.forEach(zone=>{
       draggedFood.setAttribute(
       'draggable','false');
 
-      correctSound.currentTime = 0;
-      clapSound.currentTime = 0;
-
       correctSound.play();
       clapSound.play();
 
+      createStar();
+
       completed++;
 
-      if(completed === foods.length){
+      progress.textContent =
+      completed;
+
+      speech.innerHTML =
+      "Great Job! ⭐";
+
+      if(completed === 15){
 
         setTimeout(()=>{
-          document.getElementById(
-          'successMessage').style.display='block';
-        },500);
+          successScreen.style.display='flex';
+        },1200);
       }
 
     }else{
 
-      wrongSound.currentTime = 0;
+      draggedFood.classList.add('wrong');
+
       wrongSound.play();
+
+      speech.innerHTML =
+      "Oops! Try Again!";
+
+      setTimeout(()=>{
+        draggedFood.classList.remove('wrong');
+      },400);
     }
 
   });
 
 });
 
-/* =========================
-   TOUCH SUPPORT
-========================= */
+/* stars */
 
-let activeFood = null;
-let offsetX = 0;
-let offsetY = 0;
+function createStar(){
 
-foods.forEach(food=>{
+  const star =
+  document.createElement('div');
 
-  food.addEventListener('touchstart',(e)=>{
+  star.className = 'star';
 
-    if(food.classList.contains('correct'))
-    return;
+  star.innerHTML = '⭐';
 
-    activeFood = food;
+  star.style.left =
+  Math.random()*window.innerWidth+'px';
 
-    const touch = e.touches[0];
-    const rect = food.getBoundingClientRect();
+  star.style.top =
+  (window.innerHeight-180)+'px';
 
-    offsetX = touch.clientX - rect.left;
-    offsetY = touch.clientY - rect.top;
+  document.body.appendChild(star);
 
-    food.style.position='fixed';
-    food.style.zIndex='9999';
-  });
-
-  food.addEventListener('touchmove',(e)=>{
-
-    if(!activeFood) return;
-
-    e.preventDefault();
-
-    const touch = e.touches[0];
-
-    activeFood.style.left =
-    (touch.clientX - offsetX) + 'px';
-
-    activeFood.style.top =
-    (touch.clientY - offsetY) + 'px';
-
-  }, {passive:false});
-
-  food.addEventListener('touchend',(e)=>{
-
-    if(!activeFood) return;
-
-    const touch = e.changedTouches[0];
-
-    let dropped = false;
-
-    zones.forEach(zone=>{
-
-      const rect =
-      zone.getBoundingClientRect();
-
-      if(
-        touch.clientX > rect.left &&
-        touch.clientX < rect.right &&
-        touch.clientY > rect.top &&
-        touch.clientY < rect.bottom
-      ){
-
-        const foodGroup =
-        activeFood.dataset.group;
-
-        const zoneGroup =
-        zone.dataset.group;
-
-        if(foodGroup === zoneGroup){
-
-          zone.appendChild(activeFood);
-
-          activeFood.classList.add('correct');
-
-          activeFood.style.position='relative';
-          activeFood.style.left='0';
-          activeFood.style.top='0';
-          activeFood.style.zIndex='1';
-          activeFood.style.margin='4px';
-
-          activeFood.setAttribute(
-          'draggable','false');
-
-          correctSound.currentTime = 0;
-          clapSound.currentTime = 0;
-
-          correctSound.play();
-          clapSound.play();
-
-          completed++;
-
-          if(completed === foods.length){
-
-            setTimeout(()=>{
-              document.getElementById(
-              'successMessage').style.display='block';
-            },500);
-          }
-
-        }else{
-
-          wrongSound.currentTime = 0;
-          wrongSound.play();
-
-          activeFood.style.position='relative';
-          activeFood.style.left='0';
-          activeFood.style.top='0';
-
-          document.getElementById(
-          'foodContainer')
-          .appendChild(activeFood);
-        }
-
-        dropped = true;
-      }
-
-    });
-
-    if(!dropped){
-
-      activeFood.style.position='relative';
-      activeFood.style.left='0';
-      activeFood.style.top='0';
-
-      document.getElementById(
-      'foodContainer')
-      .appendChild(activeFood);
-    }
-
-    activeFood = null;
-
-  });
-
-});
+  setTimeout(()=>{
+    star.remove();
+  },1000);
+}
 
 </script>
 
