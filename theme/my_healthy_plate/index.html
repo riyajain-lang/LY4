@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="viewport"
+        content="width=device-width,
+        initial-scale=1.0,
+        maximum-scale=1.0,
+        user-scalable=no"/>
 
   <title>My Healthy Plate</title>
+
+  <!-- Cute Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
 
@@ -20,13 +28,13 @@
       width:100vw;
       height:100vh;
       overflow:hidden;
-      font-family:Arial, sans-serif;
-      background:#f9f4ea;
+      font-family:'Baloo 2', cursive;
+      background:#fff4ef;
     }
 
-    /* ===================================
+    /* =====================================
        INTRO SCREEN
-    =================================== */
+    ===================================== */
 
     #introScreen{
       position:fixed;
@@ -52,9 +60,9 @@
       }
     }
 
-    /* ===================================
-       MAIN GAME BACKGROUND
-    =================================== */
+    /* =====================================
+       BEAUTIFUL BACKGROUND
+    ===================================== */
 
     .game-container{
       width:100%;
@@ -62,85 +70,182 @@
       position:relative;
       overflow:hidden;
 
-      /* Dining setup background */
+      /* MULTI LAYER BACKGROUND */
+
       background:
-      linear-gradient(rgba(255,255,255,0.15), rgba(255,255,255,0.15)),
-      url('https://i.pinimg.com/736x/68/ca/8f/68ca8fd145cf71f3eb6d80e6738d6f9f.jpg');
+
+      /* soft pastel overlay */
+      linear-gradient(
+      rgba(255,245,247,0.72),
+      rgba(255,250,240,0.72)
+      ),
+
+      /* cute dining background */
+      url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=1600&auto=format&fit=crop');
 
       background-size:cover;
       background-position:center;
       background-repeat:no-repeat;
     }
 
-    /* soft overlay */
+    /* FOOD BORDER DECORATION */
 
-    .overlay{
+    .food-border-top{
       position:absolute;
-      inset:0;
-      background:rgba(255,255,255,0.18);
+      top:0;
+      left:0;
+      width:100%;
+      height:95px;
+
+      background:
+      url('https://i.imgur.com/wM6XK6i.png');
+
+      background-size:contain;
+      background-repeat:repeat-x;
+
+      opacity:0.85;
+
+      z-index:2;
     }
 
-    /* ===================================
-       TITLE
-    =================================== */
+    .food-border-bottom{
+      position:absolute;
+      bottom:0;
+      left:0;
+      width:100%;
+      height:95px;
+
+      background:
+      url('https://i.imgur.com/wM6XK6i.png');
+
+      background-size:contain;
+      background-repeat:repeat-x;
+
+      opacity:0.85;
+
+      transform:rotate(180deg);
+
+      z-index:2;
+    }
+
+    /* floating pastel blobs */
+
+    .blob1,
+    .blob2,
+    .blob3{
+
+      position:absolute;
+      border-radius:50%;
+      filter:blur(15px);
+      opacity:0.45;
+      z-index:1;
+    }
+
+    .blob1{
+      width:280px;
+      height:280px;
+      background:#ffd6e0;
+      top:8%;
+      left:-5%;
+    }
+
+    .blob2{
+      width:240px;
+      height:240px;
+      background:#d6f5d6;
+      bottom:10%;
+      right:-5%;
+    }
+
+    .blob3{
+      width:200px;
+      height:200px;
+      background:#fff0b3;
+      top:45%;
+      left:8%;
+    }
+
+    /* =====================================
+       HEADER
+    ===================================== */
+
+    .header{
+      position:absolute;
+      top:2%;
+      width:100%;
+      z-index:50;
+      text-align:center;
+      padding:0 12px;
+    }
 
     .title{
-      position:absolute;
-      top:1%;
-      width:100%;
-      text-align:center;
-      font-size:clamp(26px,4vw,58px);
-      font-weight:bold;
-      color:#ff6b00;
-      text-shadow:3px 3px 8px rgba(255,255,255,0.9);
-      z-index:10;
-    }
+      font-size:clamp(34px,5vw,72px);
+      font-weight:700;
 
-    /* ===================================
-       INSTRUCTIONS
-    =================================== */
+      color:#ff6b6b;
+
+      text-shadow:
+      3px 3px 10px rgba(255,255,255,0.95);
+
+      margin-bottom:12px;
+
+      letter-spacing:1px;
+    }
 
     .instructions{
-      position:absolute;
-      top:10%;
-      width:100%;
-      text-align:center;
-      font-size:clamp(13px,1.2vw,20px);
-      font-weight:bold;
-      color:#4e342e;
-      z-index:10;
-      text-shadow:1px 1px 3px white;
-      padding:0 10px;
+
+      display:inline-block;
+
+      background:rgba(255,255,255,0.85);
+
+      padding:12px 28px;
+
+      border-radius:30px;
+
+      font-size:clamp(16px,1.4vw,24px);
+
+      color:#6d4c41;
+
+      font-weight:600;
+
+      box-shadow:
+      0 4px 12px rgba(0,0,0,0.12);
     }
 
-    /* ===================================
+    /* =====================================
        PLATE
-    =================================== */
+    ===================================== */
 
     .plate-wrapper{
       position:absolute;
-      top:15%;
+
+      top:18%;
       left:50%;
+
       transform:translateX(-50%);
-      width:min(50vw,650px);
+
+      width:min(68vw,780px);
+
       aspect-ratio:1/1;
-      z-index:5;
+
+      z-index:10;
     }
 
     .plate{
       width:100%;
       height:100%;
+
       border-radius:50%;
       overflow:hidden;
       position:relative;
 
-      border:18px solid #fafafa;
+      border:24px solid #fff;
 
       background:white;
 
       box-shadow:
-      0 0 35px rgba(0,0,0,0.25),
-      inset 0 0 10px rgba(255,255,255,0.8);
+      0 0 45px rgba(0,0,0,0.2),
+      inset 0 0 12px rgba(255,255,255,0.9);
     }
 
     .section{
@@ -149,141 +254,164 @@
       justify-content:center;
       align-items:center;
       flex-wrap:wrap;
-      padding:10px;
+      padding:14px;
     }
 
     .section-label{
       position:absolute;
-      background:rgba(255,255,255,0.9);
-      padding:8px 14px;
-      border-radius:20px;
-      font-weight:bold;
-      font-size:clamp(13px,1vw,20px);
-      box-shadow:0 2px 6px rgba(0,0,0,0.15);
+
+      background:rgba(255,255,255,0.95);
+
+      padding:10px 18px;
+
+      border-radius:24px;
+
+      font-weight:700;
+
+      font-size:clamp(14px,1vw,22px);
+
+      box-shadow:0 2px 8px rgba(0,0,0,0.12);
+
       z-index:20;
     }
 
-    /* Fruits */
+    /* plate colors */
+
     .fruits{
       top:0;
       left:0;
       width:50%;
       height:50%;
-      background:#ffe082;
-      border-right:4px solid white;
-      border-bottom:4px solid white;
+      background:#ffe08a;
+      border-right:5px solid white;
+      border-bottom:5px solid white;
     }
 
-    /* Vegetables */
     .vegetables{
       top:0;
       right:0;
       width:50%;
       height:50%;
-      background:#a5d6a7;
-      border-left:4px solid white;
-      border-bottom:4px solid white;
+      background:#b7e4c7;
+      border-left:5px solid white;
+      border-bottom:5px solid white;
     }
 
-    /* Grains */
     .grains{
       bottom:0;
       left:0;
       width:50%;
       height:50%;
-      background:#ffcc80;
-      border-right:4px solid white;
-      border-top:4px solid white;
+      background:#ffd6a5;
+      border-right:5px solid white;
+      border-top:5px solid white;
     }
 
-    /* Protein */
     .protein{
       bottom:0;
       right:0;
       width:50%;
       height:50%;
-      background:#ef9a9a;
-      border-left:4px solid white;
-      border-top:4px solid white;
+      background:#f8b4b4;
+      border-left:5px solid white;
+      border-top:5px solid white;
     }
 
-    /* Dairy center */
-
     .dairy{
-      width:30%;
-      height:30%;
+      width:31%;
+      height:31%;
+
       border-radius:50%;
+
       position:absolute;
+
       top:50%;
       left:50%;
+
       transform:translate(-50%,-50%);
-      background:#90caf9;
-      border:7px solid white;
+
+      background:#bde0fe;
+
+      border:8px solid white;
+
       display:flex;
       justify-content:center;
       align-items:center;
-      flex-wrap:wrap;
-      z-index:20;
-      box-shadow:0 4px 10px rgba(0,0,0,0.15);
+
+      z-index:30;
+
+      box-shadow:0 4px 12px rgba(0,0,0,0.12);
     }
 
     /* label positions */
 
     .fruit-label{
-      top:14px;
-      left:14px;
+      top:16px;
+      left:16px;
     }
 
     .veg-label{
-      top:14px;
-      right:14px;
+      top:16px;
+      right:16px;
     }
 
     .grain-label{
-      bottom:14px;
-      left:14px;
+      bottom:16px;
+      left:16px;
     }
 
     .protein-label{
-      bottom:14px;
-      right:14px;
+      bottom:16px;
+      right:16px;
     }
 
     .dairy-label{
       position:relative;
     }
 
-    /* ===================================
-       FOOD OPTIONS
-    =================================== */
+    /* =====================================
+       FOOD ITEMS
+    ===================================== */
 
     .food-container{
       position:absolute;
+
       bottom:1%;
       left:50%;
+
       transform:translateX(-50%);
+
       width:98%;
+
       display:flex;
       flex-wrap:wrap;
       justify-content:center;
+
       gap:12px;
-      z-index:20;
+
+      z-index:100;
     }
 
     .food{
-      width:80px;
-      height:80px;
+      width:84px;
+      height:84px;
+
       background:white;
-      border-radius:20px;
-      border:4px solid #ffb74d;
+
+      border-radius:22px;
+
+      border:4px solid #ffb84d;
+
       display:flex;
       justify-content:center;
       align-items:center;
+
       cursor:grab;
+
       touch-action:none;
 
       box-shadow:
-      0 4px 10px rgba(0,0,0,0.2);
+      0 4px 12px rgba(0,0,0,0.15);
 
       transition:0.2s;
     }
@@ -293,56 +421,68 @@
     }
 
     .food img{
-      width:65px;
-      height:65px;
+      width:68px;
+      height:68px;
       object-fit:contain;
       pointer-events:none;
     }
 
     .correct{
       border-color:#43a047 !important;
-      background:#dcedc8 !important;
+      background:#e8f5e9 !important;
     }
 
-    /* ===================================
-       SUCCESS POPUP
-    =================================== */
+    /* =====================================
+       SUCCESS
+    ===================================== */
 
     .success{
       position:absolute;
+
       top:45%;
       left:50%;
+
       transform:translate(-50%,-50%);
+
       background:white;
-      padding:25px 35px;
-      border-radius:24px;
-      font-size:clamp(24px,4vw,48px);
-      font-weight:bold;
-      color:#ff6b00;
+
+      padding:28px 40px;
+
+      border-radius:25px;
+
+      font-size:clamp(28px,4vw,54px);
+
+      font-weight:700;
+
+      color:#ff6b6b;
+
       display:none;
+
       z-index:999;
 
-      box-shadow:0 0 25px rgba(0,0,0,0.35);
+      box-shadow:0 0 30px rgba(0,0,0,0.25);
     }
 
-    /* ===================================
+    /* =====================================
        RESPONSIVE
-    =================================== */
+    ===================================== */
 
     @media(max-width:768px){
 
       .title{
-        font-size:40px;
+        font-size:42px;
+        line-height:1.1;
       }
 
       .instructions{
-        top:9%;
-        font-size:12px;
+        width:92%;
+        font-size:13px;
+        padding:10px 16px;
       }
 
       .plate-wrapper{
-        width:88vw;
-        top:14%;
+        width:95vw;
+        top:19%;
       }
 
       .food{
@@ -351,25 +491,29 @@
       }
 
       .food img{
-        width:46px;
-        height:46px;
+        width:44px;
+        height:44px;
       }
 
       .food-container{
         gap:6px;
-        bottom:1%;
       }
 
       .section-label{
         font-size:11px;
-        padding:5px 9px;
+        padding:5px 10px;
+      }
+
+      .food-border-top,
+      .food-border-bottom{
+        height:65px;
       }
     }
 
     @media(max-height:700px){
 
       .plate-wrapper{
-        width:60vh;
+        width:70vh;
       }
 
       .food{
@@ -378,8 +522,8 @@
       }
 
       .food img{
-        width:40px;
-        height:40px;
+        width:38px;
+        height:38px;
       }
     }
 
@@ -398,18 +542,27 @@
 
   <div class="game-container">
 
-    <div class="overlay"></div>
+    <!-- Decorative Background -->
 
-    <!-- TITLE -->
+    <div class="food-border-top"></div>
+    <div class="food-border-bottom"></div>
 
-    <div class="title">
-      🍽️ My Healthy Plate 🍎
-    </div>
+    <div class="blob1"></div>
+    <div class="blob2"></div>
+    <div class="blob3"></div>
 
-    <!-- INSTRUCTIONS -->
+    <!-- HEADER -->
 
-    <div class="instructions">
-      Drag each food item to the correct food group on the healthy plate.
+    <div class="header">
+
+      <div class="title">
+        🍽️ My Healthy Plate 🍎
+      </div>
+
+      <div class="instructions">
+        Drag each food item to the correct food group on the healthy plate!
+      </div>
+
     </div>
 
     <!-- PLATE -->
@@ -418,7 +571,7 @@
 
       <div class="plate">
 
-        <!-- FRUITS -->
+        <!-- Fruits -->
 
         <div class="section fruits dropzone" data-group="fruits">
           <div class="section-label fruit-label">
@@ -426,7 +579,7 @@
           </div>
         </div>
 
-        <!-- VEGETABLES -->
+        <!-- Vegetables -->
 
         <div class="section vegetables dropzone" data-group="vegetables">
           <div class="section-label veg-label">
@@ -434,7 +587,7 @@
           </div>
         </div>
 
-        <!-- GRAINS -->
+        <!-- Grains -->
 
         <div class="section grains dropzone" data-group="grains">
           <div class="section-label grain-label">
@@ -442,7 +595,7 @@
           </div>
         </div>
 
-        <!-- PROTEIN -->
+        <!-- Protein -->
 
         <div class="section protein dropzone" data-group="protein">
           <div class="section-label protein-label">
@@ -450,7 +603,7 @@
           </div>
         </div>
 
-        <!-- DAIRY -->
+        <!-- Dairy -->
 
         <div class="dairy dropzone" data-group="dairy">
           <div class="section-label dairy-label">
@@ -462,7 +615,7 @@
 
     </div>
 
-    <!-- FOOD OPTIONS -->
+    <!-- FOOD ITEMS -->
 
     <div class="food-container" id="foodContainer">
 
@@ -550,220 +703,8 @@
 
   <audio id="correctSound" src="assets/correct.mp3"></audio>
   <audio id="wrongSound" src="assets/wrong.mp3"></audio>
-  <audio id="clapSound" src="assets/freesound_community-claps-44774.mp3"></audio>
-
-  <script>
-
-    const foods = document.querySelectorAll('.food');
-    const zones = document.querySelectorAll('.dropzone');
-
-    const correctSound = document.getElementById('correctSound');
-    const wrongSound = document.getElementById('wrongSound');
-    const clapSound = document.getElementById('clapSound');
-
-    let draggedFood = null;
-    let completed = 0;
-
-    /* ===================================
-       DESKTOP DRAG
-    =================================== */
-
-    foods.forEach(food=>{
-
-      food.addEventListener('dragstart',()=>{
-        draggedFood = food;
-      });
-
-    });
-
-    zones.forEach(zone=>{
-
-      zone.addEventListener('dragover',(e)=>{
-        e.preventDefault();
-      });
-
-      zone.addEventListener('drop',()=>{
-
-        if(!draggedFood) return;
-
-        const foodGroup = draggedFood.dataset.group;
-        const zoneGroup = zone.dataset.group;
-
-        if(foodGroup === zoneGroup){
-
-          zone.appendChild(draggedFood);
-
-          draggedFood.classList.add('correct');
-
-          draggedFood.style.position='relative';
-          draggedFood.style.left='0';
-          draggedFood.style.top='0';
-          draggedFood.style.margin='4px';
-
-          draggedFood.setAttribute('draggable','false');
-
-          correctSound.currentTime = 0;
-          clapSound.currentTime = 0;
-
-          correctSound.play();
-          clapSound.play();
-
-          completed++;
-
-          if(completed === foods.length){
-
-            setTimeout(()=>{
-              document.getElementById('successMessage').style.display='block';
-            },500);
-
-          }
-
-        } else {
-
-          wrongSound.currentTime = 0;
-          wrongSound.play();
-
-        }
-
-      });
-
-    });
-
-    /* ===================================
-       TOUCH SUPPORT
-    =================================== */
-
-    let activeFood = null;
-    let offsetX = 0;
-    let offsetY = 0;
-
-    foods.forEach(food=>{
-
-      food.addEventListener('touchstart',(e)=>{
-
-        if(food.classList.contains('correct')) return;
-
-        activeFood = food;
-
-        const touch = e.touches[0];
-        const rect = food.getBoundingClientRect();
-
-        offsetX = touch.clientX - rect.left;
-        offsetY = touch.clientY - rect.top;
-
-        food.style.position='fixed';
-        food.style.zIndex='9999';
-
-      });
-
-      food.addEventListener('touchmove',(e)=>{
-
-        if(!activeFood) return;
-
-        e.preventDefault();
-
-        const touch = e.touches[0];
-
-        activeFood.style.left =
-        (touch.clientX - offsetX) + 'px';
-
-        activeFood.style.top =
-        (touch.clientY - offsetY) + 'px';
-
-      }, {passive:false});
-
-      food.addEventListener('touchend',(e)=>{
-
-        if(!activeFood) return;
-
-        const touch = e.changedTouches[0];
-
-        let dropped = false;
-
-        zones.forEach(zone=>{
-
-          const rect = zone.getBoundingClientRect();
-
-          if(
-            touch.clientX > rect.left &&
-            touch.clientX < rect.right &&
-            touch.clientY > rect.top &&
-            touch.clientY < rect.bottom
-          ){
-
-            const foodGroup =
-            activeFood.dataset.group;
-
-            const zoneGroup =
-            zone.dataset.group;
-
-            if(foodGroup === zoneGroup){
-
-              zone.appendChild(activeFood);
-
-              activeFood.classList.add('correct');
-
-              activeFood.style.position='relative';
-              activeFood.style.left='0';
-              activeFood.style.top='0';
-              activeFood.style.zIndex='1';
-              activeFood.style.margin='4px';
-
-              activeFood.setAttribute('draggable','false');
-
-              correctSound.currentTime = 0;
-              clapSound.currentTime = 0;
-
-              correctSound.play();
-              clapSound.play();
-
-              completed++;
-
-              if(completed === foods.length){
-
-                setTimeout(()=>{
-                  document.getElementById('successMessage').style.display='block';
-                },500);
-
-              }
-
-            } else {
-
-              wrongSound.currentTime = 0;
-              wrongSound.play();
-
-              activeFood.style.position='relative';
-              activeFood.style.left='0';
-              activeFood.style.top='0';
-
-              document.getElementById('foodContainer')
-              .appendChild(activeFood);
-
-            }
-
-            dropped = true;
-          }
-
-        });
-
-        if(!dropped){
-
-          activeFood.style.position='relative';
-          activeFood.style.left='0';
-          activeFood.style.top='0';
-
-          document.getElementById('foodContainer')
-          .appendChild(activeFood);
-
-        }
-
-        activeFood = null;
-
-      });
-
-    });
-
-  </script>
+  <audio id="clapSound"
+         src="assets/freesound_community-claps-44774.mp3"></audio>
 
 </body>
 </html>
