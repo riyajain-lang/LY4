@@ -32,7 +32,6 @@ body{
 .game{
   width:100vw;
   height:100svh;
-  max-height:100svh;
   display:grid;
   grid-template-rows:auto auto 1fr auto auto;
   gap:0.6vh;
@@ -42,12 +41,11 @@ body{
 
 .header{
   position:relative;
-  text-align:center;
   height:8vh;
   min-height:48px;
   display:flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
 }
 
 .title{
@@ -225,7 +223,6 @@ body{
 
 @media(max-width:700px){
   .game{
-    grid-template-rows:auto auto 1fr auto auto;
     padding:0.8vh 2vw 1vh;
     gap:0.5vh;
   }
@@ -312,6 +309,10 @@ body{
 
 <body>
 
+<audio id="correctSound" src="assets/correct.mp3" preload="auto"></audio>
+<audio id="clapSound" src="assets/freesound_community-claps-44774.mp3" preload="auto"></audio>
+<audio id="wrongSound" src="assets/wrong.mp3" preload="auto"></audio>
+
 <div class="game">
 
   <div class="header">
@@ -373,10 +374,42 @@ const foods = [
 let selected = null;
 let score = 0;
 let attempts = {};
+let audioUnlocked = false;
 
 const foodOptions = document.getElementById("foodOptions");
 const scoreText = document.getElementById("score");
 const message = document.getElementById("message");
+
+const correctSound = document.getElementById("correctSound");
+const clapSound = document.getElementById("clapSound");
+const wrongSound = document.getElementById("wrongSound");
+
+function unlockAudio(){
+  if(audioUnlocked) return;
+
+  [correctSound, clapSound, wrongSound].forEach(sound=>{
+    sound.volume = 0.01;
+    sound.play().then(()=>{
+      sound.pause();
+      sound.currentTime = 0;
+      sound.volume = 1;
+    }).catch(()=>{});
+  });
+
+  audioUnlocked = true;
+}
+
+document.addEventListener("click", unlockAudio, {once:true});
+document.addEventListener("touchstart", unlockAudio, {once:true});
+
+function playSound(sound){
+  try{
+    sound.pause();
+    sound.currentTime = 0;
+    sound.volume = 1;
+    sound.play().catch(()=>{});
+  }catch(e){}
+}
 
 foods.forEach((food,index)=>{
   const item = document.createElement("div");
@@ -387,6 +420,8 @@ foods.forEach((food,index)=>{
   item.dataset.index = index;
 
   item.addEventListener("click",()=>{
+    unlockAudio();
+
     if(item.classList.contains("done")) return;
 
     document.querySelectorAll(".food").forEach(f=>f.classList.remove("selected"));
@@ -400,6 +435,8 @@ foods.forEach((food,index)=>{
 
 document.querySelectorAll("[data-group].section, .dairy").forEach(section=>{
   section.addEventListener("click",()=>{
+    unlockAudio();
+
     if(!selected){
       message.textContent = "First tap a food item.";
       return;
@@ -412,6 +449,8 @@ document.querySelectorAll("[data-group].section, .dairy").forEach(section=>{
     attempts[index] = attempts[index] || 0;
 
     if(foodGroup === sectionGroup){
+      playSound(correctSound);
+
       score++;
       scoreText.textContent = score;
       selected.classList.add("done");
@@ -421,10 +460,13 @@ document.querySelectorAll("[data-group].section, .dairy").forEach(section=>{
 
       if(score === foods.length){
         setTimeout(()=>{
+          playSound(clapSound);
           document.getElementById("endScreen").style.display = "flex";
         },600);
       }
+
     }else{
+      playSound(wrongSound);
       attempts[index]++;
 
       if(attempts[index] >= 2){
