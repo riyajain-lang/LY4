@@ -1,632 +1,312 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-<meta charset="UTF-8" />
-<meta name="viewport"
-content="width=device-width,
-initial-scale=1.0,
-maximum-scale=1.0,
-user-scalable=no">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>My Healthy Plate</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-  user-select:none;
+margin:0;
+padding:0;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
 }
+
+html,body{
+width:100%;
+height:100%;
+overflow:hidden;
+font-family:Arial, sans-serif;
+background:#dff5f5;
+}
+
+/* BACKGROUND */
 
 body{
-  width:100vw;
-  height:100vh;
-  overflow:hidden;
-  font-family:'Baloo 2', cursive;
-  background:#fff7f0;
+background-image:
+linear-gradient(rgba(255,255,255,0.78), rgba(255,255,255,0.78)),
+url('assets/picnic-bg.jpg');
+
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
 }
 
-/* =========================================
-   INTRO SCREEN
-========================================= */
-
-#introScreen{
-  position:fixed;
-  inset:0;
-  background:white;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  z-index:9999;
-  animation:fadeOut 1s forwards;
-  animation-delay:2s;
-}
-
-#introScreen img{
-  width:260px;
-  max-width:75%;
-}
-
-@keyframes fadeOut{
-  to{
-    opacity:0;
-    visibility:hidden;
-  }
-}
-
-/* =========================================
-   GAME BACKGROUND
-========================================= */
+/* MAIN GAME */
 
 .game-container{
-  width:100%;
-  height:100vh;
-  position:relative;
-  overflow:hidden;
-
-  background:
-  linear-gradient(
-  rgba(255,248,240,0.3),
-  rgba(255,248,240,0.3)
-  ),
-
-  url('https://images.unsplash.com/photo-1498837167922-ddd27525d352?q=80&w=1600&auto=format&fit=crop');
-
-  background-size:cover;
-  background-position:center;
-  background-repeat:no-repeat;
+width:100vw;
+height:100vh;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:space-between;
+padding:1vh 1vw;
+overflow:hidden;
 }
 
-/* Table mat */
+/* HEADER */
 
-.table-mat{
-  position:absolute;
-
-  width:min(70vw,850px);
-  aspect-ratio:1/1;
-
-  top:15%;
-  left:50%;
-
-  transform:translateX(-50%);
-
-  border-radius:50%;
-
-  background:
-  repeating-radial-gradient(
-  circle,
-  #ffe0b2,
-  #ffe0b2 15px,
-  #ffd699 15px,
-  #ffd699 30px
-  );
-
-  opacity:0.9;
-
-  z-index:1;
-
-  box-shadow:
-  0 0 30px rgba(0,0,0,0.2);
-}
-
-/* floating decorations */
-
-.floating{
-  position:absolute;
-  animation:float 4s ease-in-out infinite;
-  z-index:2;
-  opacity:0.9;
-}
-
-.float1{
-  top:8%;
-  left:5%;
-  width:70px;
-}
-
-.float2{
-  top:10%;
-  right:6%;
-  width:65px;
-}
-
-.float3{
-  bottom:15%;
-  left:4%;
-  width:70px;
-}
-
-.float4{
-  bottom:12%;
-  right:5%;
-  width:65px;
-}
-
-@keyframes float{
-  0%{transform:translateY(0px);}
-  50%{transform:translateY(-10px);}
-  100%{transform:translateY(0px);}
-}
-
-/* =========================================
-   HEADER
-========================================= */
-
-.header{
-  position:absolute;
-  top:2%;
-  left:50%;
-  transform:translateX(-50%);
-  width:95%;
-  z-index:100;
-  text-align:center;
+.top-bar{
+width:100%;
+display:flex;
+justify-content:center;
+align-items:center;
+position:relative;
+height:11vh;
+min-height:60px;
 }
 
 .title{
-  font-size:clamp(34px,5vw,72px);
-  font-weight:700;
-  color:#ff7043;
-
-  text-shadow:
-  3px 3px 10px rgba(255,255,255,0.95);
-
-  margin-bottom:12px;
+font-size:clamp(28px,5vw,60px);
+font-weight:bold;
+color:#ff784e;
+text-shadow:2px 2px 0px white;
 }
 
-.instructions{
-
-  display:inline-block;
-
-  background:rgba(255,255,255,0.92);
-
-  padding:12px 28px;
-
-  border-radius:30px;
-
-  font-size:clamp(15px,1.3vw,23px);
-
-  color:#6d4c41;
-
-  font-weight:600;
-
-  box-shadow:
-  0 4px 12px rgba(0,0,0,0.12);
+.score-box{
+position:absolute;
+right:2vw;
+top:1vh;
+background:white;
+padding:8px 14px;
+border-radius:18px;
+font-size:clamp(14px,2vw,24px);
+font-weight:bold;
+box-shadow:0 2px 8px rgba(0,0,0,0.15);
+color:#ff8a00;
 }
 
-/* =========================================
-   PROGRESS
-========================================= */
+/* INSTRUCTION */
 
-.progress-box{
-
-  position:absolute;
-
-  top:15px;
-  right:18px;
-
-  background:white;
-
-  padding:10px 18px;
-
-  border-radius:20px;
-
-  font-size:20px;
-
-  font-weight:700;
-
-  color:#ff7043;
-
-  z-index:200;
-
-  box-shadow:
-  0 4px 12px rgba(0,0,0,0.15);
+.instruction{
+background:rgba(255,255,255,0.92);
+padding:8px 18px;
+border-radius:30px;
+font-size:clamp(12px,1.6vw,22px);
+font-weight:bold;
+color:#6a4d43;
+text-align:center;
+margin-top:-0.5vh;
+margin-bottom:0.5vh;
+box-shadow:0 3px 8px rgba(0,0,0,0.1);
+max-width:70vw;
+z-index:2;
 }
 
-/* =========================================
-   CHEF CHARACTER
-========================================= */
+/* PLATE AREA */
 
-.chef{
-
-  position:absolute;
-
-  left:2%;
-  top:28%;
-
-  width:130px;
-
-  z-index:100;
-
-  animation:bounce 2s infinite;
+.middle-section{
+flex:1;
+width:100%;
+display:flex;
+justify-content:center;
+align-items:center;
+position:relative;
+overflow:hidden;
 }
 
-.chef img{
-  width:100%;
-}
-
-.speech{
-
-  position:absolute;
-
-  top:-10px;
-  left:105px;
-
-  background:white;
-
-  padding:10px 14px;
-
-  border-radius:20px;
-
-  width:170px;
-
-  font-size:16px;
-
-  font-weight:700;
-
-  color:#ff7043;
-
-  box-shadow:
-  0 4px 10px rgba(0,0,0,0.15);
-}
-
-@keyframes bounce{
-  0%{transform:translateY(0);}
-  50%{transform:translateY(-8px);}
-  100%{transform:translateY(0);}
-}
-
-/* =========================================
-   PLATE
-========================================= */
-
-.plate-wrapper{
-  position:absolute;
-
-  top:18%;
-  left:50%;
-
-  transform:translateX(-50%);
-
-  width:min(58vw,700px);
-
-  aspect-ratio:1/1;
-
-  z-index:10;
-}
+/* PLATE */
 
 .plate{
-  width:100%;
-  height:100%;
-
-  border-radius:50%;
-  overflow:hidden;
-  position:relative;
-
-  border:25px solid #fff;
-
-  background:white;
-
-  box-shadow:
-  0 12px 35px rgba(0,0,0,0.25),
-  inset 0 0 10px rgba(255,255,255,0.95);
+width:min(70vw,68vh);
+height:min(70vw,68vh);
+border-radius:50%;
+background:#f6d7a6;
+position:relative;
+border:16px solid #efc98f;
+box-shadow:
+inset 0 0 0 10px #f9e6c4,
+0 6px 15px rgba(0,0,0,0.15);
+overflow:hidden;
 }
+
+/* PLATE SECTIONS */
 
 .section{
-  position:absolute;
-
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-wrap:wrap;
-
-  padding:14px;
-
-  transition:0.3s;
+position:absolute;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:clamp(16px,2vw,28px);
+font-weight:bold;
+color:#444;
+text-align:center;
+padding:8px;
 }
 
-.section.glow{
-  box-shadow:
-  inset 0 0 30px rgba(255,255,255,0.8);
+.section span{
+background:rgba(255,255,255,0.85);
+padding:6px 12px;
+border-radius:18px;
 }
+
+/* FRUITS */
 
 .fruits{
-  top:0;
-  left:0;
-  width:50%;
-  height:50%;
-  background:#ffe082;
-  border-right:5px solid white;
-  border-bottom:5px solid white;
+width:50%;
+height:50%;
+left:0;
+top:0;
+background:#f3df83;
+border-right:6px solid white;
+border-bottom:6px solid white;
 }
+
+/* VEGETABLES */
 
 .vegetables{
-  top:0;
-  right:0;
-  width:50%;
-  height:50%;
-  background:#b9f6ca;
-  border-left:5px solid white;
-  border-bottom:5px solid white;
+width:50%;
+height:50%;
+right:0;
+top:0;
+background:#b8e9bf;
+border-left:6px solid white;
+border-bottom:6px solid white;
 }
+
+/* GRAINS */
 
 .grains{
-  bottom:0;
-  left:0;
-  width:50%;
-  height:50%;
-  background:#ffcc80;
-  border-right:5px solid white;
-  border-top:5px solid white;
+width:50%;
+height:50%;
+left:0;
+bottom:0;
+background:#f4c983;
+border-right:6px solid white;
+border-top:6px solid white;
 }
+
+/* PROTEIN */
 
 .protein{
-  bottom:0;
-  right:0;
-  width:50%;
-  height:50%;
-  background:#ef9a9a;
-  border-left:5px solid white;
-  border-top:5px solid white;
+width:50%;
+height:50%;
+right:0;
+bottom:0;
+background:#e59a9c;
+border-left:6px solid white;
+border-top:6px solid white;
 }
+
+/* DAIRY */
 
 .dairy{
-  width:30%;
-  height:30%;
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  border-radius:50%;
-  background:#bbdefb;
-  border:8px solid white;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  z-index:50;
+position:absolute;
+width:28%;
+height:28%;
+background:#b8d8f5;
+border-radius:50%;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:clamp(16px,2vw,28px);
+font-weight:bold;
+border:8px solid white;
+z-index:5;
 }
 
-.section-label{
-
-  position:absolute;
-
-  background:rgba(255,255,255,0.95);
-
-  padding:9px 16px;
-
-  border-radius:24px;
-
-  font-size:clamp(14px,1vw,22px);
-
-  font-weight:700;
+.dairy span{
+background:rgba(255,255,255,0.9);
+padding:8px 14px;
+border-radius:18px;
 }
 
-.fruit-label{
-  top:15px;
-  left:15px;
+/* FOOD OPTIONS */
+
+.food-options{
+width:100%;
+display:flex;
+justify-content:center;
+align-items:center;
+gap:10px;
+padding:0.8vh 1vw;
+flex-wrap:nowrap;
+overflow:hidden;
 }
 
-.veg-label{
-  top:15px;
-  right:15px;
+.food-item{
+width:min(7vw,80px);
+height:min(7vw,80px);
+min-width:50px;
+min-height:50px;
+background:white;
+border:3px solid #ffb347;
+border-radius:18px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:clamp(24px,3vw,42px);
+cursor:pointer;
+box-shadow:0 3px 8px rgba(0,0,0,0.15);
+transition:0.2s;
 }
 
-.grain-label{
-  bottom:15px;
-  left:15px;
+.food-item:active{
+transform:scale(0.92);
 }
 
-.protein-label{
-  bottom:15px;
-  right:15px;
+.selected{
+outline:5px solid #ff7f50;
 }
 
-.dairy-label{
-  position:relative;
+/* MESSAGE */
+
+.message{
+height:4vh;
+font-size:clamp(14px,2vw,24px);
+font-weight:bold;
+color:#2d7d46;
+display:flex;
+align-items:center;
+justify-content:center;
 }
 
-/* =========================================
-   FOOD ITEMS
-========================================= */
-
-.food-container{
-  position:absolute;
-  bottom:1%;
-  left:50%;
-  transform:translateX(-50%);
-  width:98%;
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:10px;
-  z-index:200;
-}
-
-.food{
-
-  width:88px;
-  height:88px;
-
-  background:white;
-
-  border-radius:22px;
-
-  border:4px solid #ffb74d;
-
-  display:flex;
-  justify-content:center;
-  align-items:center;
-
-  cursor:grab;
-
-  touch-action:none;
-
-  box-shadow:
-  0 4px 10px rgba(0,0,0,0.18);
-
-  transition:0.25s;
-}
-
-.food:hover{
-  transform:scale(1.08);
-}
-
-.food img{
-  width:68px;
-  height:68px;
-  object-fit:contain;
-  pointer-events:none;
-}
-
-.correct{
-  border-color:#43a047 !important;
-  background:#e8f5e9 !important;
-  animation:pop 0.4s ease;
-}
-
-.wrong{
-  animation:shake 0.4s;
-}
-
-@keyframes pop{
-  0%{transform:scale(0.5);}
-  100%{transform:scale(1);}
-}
-
-@keyframes shake{
-  0%{transform:translateX(0);}
-  25%{transform:translateX(-5px);}
-  50%{transform:translateX(5px);}
-  75%{transform:translateX(-5px);}
-  100%{transform:translateX(0);}
-}
-
-/* =========================================
-   STARS
-========================================= */
-
-.star{
-  position:absolute;
-  font-size:32px;
-  animation:starPop 1s forwards;
-  z-index:500;
-}
-
-@keyframes starPop{
-  0%{
-    opacity:1;
-    transform:translateY(0) scale(0.5);
-  }
-
-  100%{
-    opacity:0;
-    transform:translateY(-80px) scale(1.5);
-  }
-}
-
-/* =========================================
-   SUCCESS SCREEN
-========================================= */
-
-.success{
-
-  position:absolute;
-
-  inset:0;
-
-  background:rgba(255,255,255,0.95);
-
-  display:none;
-
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
-
-  z-index:9999;
-}
-
-.success h1{
-  font-size:clamp(42px,5vw,80px);
-  color:#ff7043;
-}
-
-.success p{
-  font-size:28px;
-  color:#6d4c41;
-  margin-top:10px;
-}
-
-.replay-btn{
-
-  margin-top:25px;
-
-  background:#ff7043;
-
-  color:white;
-
-  border:none;
-
-  padding:14px 30px;
-
-  border-radius:30px;
-
-  font-size:24px;
-
-  font-family:'Baloo 2', cursive;
-
-  cursor:pointer;
-}
-
-/* =========================================
-   RESPONSIVE
-========================================= */
+/* MOBILE */
 
 @media(max-width:768px){
 
-  .title{
-    font-size:42px;
-  }
+.title{
+font-size:clamp(26px,8vw,42px);
+}
 
-  .instructions{
-    width:95%;
-    font-size:13px;
-    padding:9px 14px;
-  }
+.plate{
+width:min(88vw,55vh);
+height:min(88vw,55vh);
+}
 
-  .plate-wrapper{
-    width:92vw;
-    top:20%;
-  }
+.food-item{
+width:13vw;
+height:13vw;
+font-size:7vw;
+min-width:48px;
+min-height:48px;
+}
 
-  .food{
-    width:60px;
-    height:60px;
-  }
+.instruction{
+max-width:92vw;
+font-size:12px;
+padding:7px 12px;
+}
 
-  .food img{
-    width:44px;
-    height:44px;
-  }
+.score-box{
+font-size:14px;
+padding:7px 10px;
+}
 
-  .chef{
-    width:80px;
-    top:26%;
-  }
+.section{
+font-size:14px;
+}
 
-  .speech{
-    width:120px;
-    font-size:11px;
-    left:70px;
-  }
-
-  .progress-box{
-    font-size:14px;
-    padding:7px 12px;
-  }
+.dairy{
+font-size:14px;
+}
 }
 
 </style>
@@ -634,372 +314,87 @@ body{
 
 <body>
 
-<!-- INTRO -->
-
-<div id="introScreen">
-  <img src="assets/innovine-logo.png">
-</div>
-
-<!-- GAME -->
-
 <div class="game-container">
 
-  <!-- TABLE MAT -->
+<!-- HEADER -->
 
-  <div class="table-mat"></div>
+<div class="top-bar">
 
-  <!-- FLOATING DECOR -->
+<div class="title">
+🍽️ My Healthy Plate 🍎
+</div>
 
-  <img src="assets/apple.png" class="floating float1">
-  <img src="assets/carrot.png" class="floating float2">
-  <img src="assets/broccoli.png" class="floating float3">
-  <img src="assets/orange.png" class="floating float4">
-
-  <!-- HEADER -->
-
-  <div class="header">
-
-    <div class="title">
-      🍽️ My Healthy Plate 🍎
-    </div>
-
-    <div class="instructions">
-      Drag each food item to the correct food group on the healthy plate!
-    </div>
-
-  </div>
-
-  <!-- PROGRESS -->
-
-  <div class="progress-box">
-    ⭐ <span id="progress">0</span>/15
-  </div>
-
-  <!-- CHEF -->
-
-  <div class="chef">
-
-    <img src="https://cdn-icons-png.flaticon.com/512/1995/1995574.png">
-
-    <div class="speech" id="speechBubble">
-      Let's make a healthy plate!
-    </div>
-
-  </div>
-
-  <!-- PLATE -->
-
-  <div class="plate-wrapper">
-
-    <div class="plate">
-
-      <div class="section fruits dropzone"
-      data-group="fruits">
-
-        <div class="section-label fruit-label">
-          🍎 Fruits
-        </div>
-
-      </div>
-
-      <div class="section vegetables dropzone"
-      data-group="vegetables">
-
-        <div class="section-label veg-label">
-          🥦 Vegetables
-        </div>
-
-      </div>
-
-      <div class="section grains dropzone"
-      data-group="grains">
-
-        <div class="section-label grain-label">
-          🌾 Grains
-        </div>
-
-      </div>
-
-      <div class="section protein dropzone"
-      data-group="protein">
-
-        <div class="section-label protein-label">
-          🥚 Protein
-        </div>
-
-      </div>
-
-      <div class="dairy dropzone"
-      data-group="dairy">
-
-        <div class="section-label dairy-label">
-          🥛 Dairy
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- FOOD ITEMS -->
-
-  <div class="food-container" id="foodContainer">
-
-    <div class="food" draggable="true" data-group="fruits">
-      <img src="assets/banana.png">
-    </div>
-
-    <div class="food" draggable="true" data-group="fruits">
-      <img src="assets/apple.png">
-    </div>
-
-    <div class="food" draggable="true" data-group="fruits">
-      <img src="assets/orange.png">
-    </div>
-
-    <div class="food" draggable="true" data-group="vegetables">
-      <img src="assets/spinach.png">
-    </div>
-
-    <div class="food" draggable="true" data-group="vegetables">
-      <img src="assets/broccoli.png">
-    </div>
-
-    <div class="food" draggable="true" data-group="vegetables">
-      <img src="assets/carrot.png">
-    </div>
-
-    <div class="food" draggable="true" data-group="grains">
-      <img src="assets/brown-rice.png">
-    </div>
-
-    <div class="food" draggable="true" data-group="grains">
-      <img src="assets/oats.png">
-    </div>
-
-    <div class="food" draggable="true" data-group="grains">
-      <img src="assets/whole-wheat-bread.png">
-    </div>
-
-    <div class="food" draggable="true" data-group="protein">
-      <img src="assets/lentils.png">
-    </div>
-
-    <div class="food" draggable="true" data-group="protein">
-      <img src="assets/beans.png">
-    </div>
-
-    <div class="food" draggable="true" data-group="protein">
-      <img src="assets/egg.png">
-    </div>
-
-    <div class="food" draggable="true" data-group="protein">
-      <img src="assets/paneer.png">
-    </div>
-
-    <div class="food" draggable="true" data-group="dairy">
-      <img src="assets/yogurt.png">
-    </div>
-
-    <div class="food" draggable="true" data-group="dairy">
-      <img src="assets/buttermilk.png">
-    </div>
-
-  </div>
-
-  <!-- SUCCESS -->
-
-  <div class="success" id="successScreen">
-
-    <h1>🎉 Amazing! 🎉</h1>
-
-    <p>You made a Healthy Plate!</p>
-
-    <button class="replay-btn"
-    onclick="location.reload()">
-
-      Play Again
-
-    </button>
-
-  </div>
+<div class="score-box">
+⭐ 0/15
+</div>
 
 </div>
 
-<!-- AUDIO -->
+<!-- INSTRUCTION -->
 
-<audio id="correctSound"
-src="assets/correct.mp3"></audio>
+<div class="instruction">
+Tap a food item and then tap the correct section on the healthy plate.
+</div>
 
-<audio id="wrongSound"
-src="assets/wrong.mp3"></audio>
+<!-- MIDDLE -->
 
-<audio id="clapSound"
-src="assets/freesound_community-claps-44774.mp3"></audio>
+<div class="middle-section">
 
-<script>
+<div class="plate">
 
-const foods =
-document.querySelectorAll('.food');
+<div class="section fruits">
+<span>Fruits</span>
+</div>
 
-const zones =
-document.querySelectorAll('.dropzone');
+<div class="section vegetables">
+<span>Vegetables</span>
+</div>
 
-const progress =
-document.getElementById('progress');
+<div class="section grains">
+<span>Grains</span>
+</div>
 
-const speech =
-document.getElementById('speechBubble');
+<div class="section protein">
+<span>Protein</span>
+</div>
 
-const successScreen =
-document.getElementById('successScreen');
+<div class="dairy">
+<span>Dairy</span>
+</div>
 
-const correctSound =
-document.getElementById('correctSound');
+</div>
 
-const wrongSound =
-document.getElementById('wrongSound');
+</div>
 
-const clapSound =
-document.getElementById('clapSound');
+<!-- FOOD OPTIONS -->
 
-let draggedFood = null;
-let completed = 0;
+<div class="food-options">
 
-/* shuffle foods */
+<div class="food-item">🌾</div>
+<div class="food-item">🫘</div>
+<div class="food-item">🍎</div>
+<div class="food-item">🍚</div>
+<div class="food-item">🥤</div>
+<div class="food-item">🥬</div>
+<div class="food-item">🥕</div>
+<div class="food-item">🥛</div>
+<div class="food-item">🍊</div>
+<div class="food-item">🍞</div>
+<div class="food-item">🥚</div>
+<div class="food-item">🍗</div>
+<div class="food-item">🍌</div>
+<div class="food-item">🫘</div>
+<div class="food-item">🥦</div>
 
-const container =
-document.getElementById('foodContainer');
+</div>
 
-for(let i = container.children.length;
-i >= 0;
-i--){
+<!-- MESSAGE -->
 
-  container.appendChild(
-  container.children[
-  Math.random() * i | 0
-  ]);
-}
+<div class="message">
+Let's make a healthy plate!
+</div>
 
-/* desktop drag */
-
-foods.forEach(food=>{
-
-  food.addEventListener('dragstart',()=>{
-
-    draggedFood = food;
-
-    zones.forEach(zone=>{
-
-      if(zone.dataset.group ===
-      food.dataset.group){
-
-        zone.classList.add('glow');
-      }
-    });
-
-  });
-
-});
-
-zones.forEach(zone=>{
-
-  zone.addEventListener('dragover',(e)=>{
-    e.preventDefault();
-  });
-
-  zone.addEventListener('drop',()=>{
-
-    zones.forEach(z=>{
-      z.classList.remove('glow');
-    });
-
-    if(!draggedFood) return;
-
-    const foodGroup =
-    draggedFood.dataset.group;
-
-    const zoneGroup =
-    zone.dataset.group;
-
-    if(foodGroup === zoneGroup){
-
-      zone.appendChild(draggedFood);
-
-      draggedFood.classList.add('correct');
-
-      draggedFood.style.position='relative';
-      draggedFood.style.left='0';
-      draggedFood.style.top='0';
-      draggedFood.style.margin='4px';
-
-      draggedFood.setAttribute(
-      'draggable','false');
-
-      correctSound.play();
-      clapSound.play();
-
-      createStar();
-
-      completed++;
-
-      progress.textContent =
-      completed;
-
-      speech.innerHTML =
-      "Great Job! ⭐";
-
-      if(completed === 15){
-
-        setTimeout(()=>{
-          successScreen.style.display='flex';
-        },1200);
-      }
-
-    }else{
-
-      draggedFood.classList.add('wrong');
-
-      wrongSound.play();
-
-      speech.innerHTML =
-      "Oops! Try Again!";
-
-      setTimeout(()=>{
-        draggedFood.classList.remove('wrong');
-      },400);
-    }
-
-  });
-
-});
-
-/* stars */
-
-function createStar(){
-
-  const star =
-  document.createElement('div');
-
-  star.className = 'star';
-
-  star.innerHTML = '⭐';
-
-  star.style.left =
-  Math.random()*window.innerWidth+'px';
-
-  star.style.top =
-  (window.innerHeight-180)+'px';
-
-  document.body.appendChild(star);
-
-  setTimeout(()=>{
-    star.remove();
-  },1000);
-}
-
-</script>
+</div>
 
 </body>
 </html>
