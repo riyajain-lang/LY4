@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Blends L, S & R Game</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Comic Sans MS', Arial, sans-serif; }
 body, html { width: 100%; height: 100%; overflow: hidden; display: flex; justify-content: center; align-items: center; background: #fff; }
 #game-container { width: 100%; height: 100%; max-width: 600px; position: relative; }
 
@@ -14,8 +14,9 @@ body, html { width: 100%; height: 100%; overflow: hidden; display: flex; justify
 
 #splash img { width: 200px; height: auto; }
 
+/* Question Screen with bright colorful background */
 #question-screen {
-    background: url('assets/abebb555-9880-4dca-8e06-8bb3230a05cc.png') no-repeat center center;
+    background: url('assets/a_bright_colorful_kids_educational_game_ui_scene.png') no-repeat center center;
     background-size: cover;
     padding: 20px;
     flex-direction: column;
@@ -28,21 +29,26 @@ body, html { width: 100%; height: 100%; overflow: hidden; display: flex; justify
     font-weight: bold; 
     padding: 10px 20px; 
     border-radius: 15px; 
-    background: rgba(0,0,0,0.4);
+    background: rgba(0,0,0,0.5);
     margin-bottom: 10px;
     text-shadow: 1px 1px 2px #000;
 }
 
-#question-img { max-width: 80%; height: auto; margin-bottom: 20px; border-radius: 10px; }
+#question-img { max-width: 70%; height: auto; margin: 15px 0; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);}
 .options { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; width: 100%; }
-.option { flex: 1 1 45%; background: #f0f0f0; padding: 15px; border-radius: 10px; text-align: center; font-size: 1.2rem; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
-.option.correct { background: #c8facc; border: 2px solid #3c9b0b; }
-.option.wrong { background: #faccac; border: 2px solid #c92a1f; }
-.option.glow { box-shadow: 0 0 20px 5px yellow; }
-#feedback { font-size: 1.5rem; margin: 10px; color: green; display: none; }
+.option { flex: 1 1 45%; padding: 15px; border-radius: 15px; text-align: center; font-size: 1.2rem; cursor: pointer; font-weight: bold;
+         transition: transform 0.2s, box-shadow 0.2s; color: #fff; }
+.option.correct { background: #4CAF50; }
+.option.wrong { background: #F44336; }
+.option.glow { box-shadow: 0 0 25px 8px yellow; }
+.option:nth-child(1){background:#FF9800;}
+.option:nth-child(2){background:#4CAF50;}
+.option:nth-child(3){background:#2196F3;}
+.option:nth-child(4){background:#E91E63;}
+#feedback { font-size: 1.5rem; margin: 10px; color: yellow; display: none; text-shadow: 1px 1px 2px #000; }
 
 #end-screen { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-#end-screen button { margin-top: 20px; padding: 15px 25px; font-size: 1.2rem; border: none; border-radius: 10px; background-color: #4CAF50; color: #fff; cursor: pointer; }
+#end-screen button { margin-top: 20px; padding: 15px 25px; font-size: 1.2rem; border: none; border-radius: 10px; background-color: #FF5722; color: #fff; cursor: pointer; }
 
 canvas { position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; }
 </style>
@@ -51,10 +57,12 @@ canvas { position: absolute; top:0; left:0; width:100%; height:100%; pointer-eve
 
 <div id="game-container">
 
+    <!-- Splash Screen -->
     <div class="screen" id="splash">
         <img src="assets/innovine-logo.png" alt="Innovine Logo">
     </div>
 
+    <!-- Question Screen -->
     <div class="screen hidden" id="question-screen">
         <div id="instruction">Find the Blend</div>
         <img id="question-img" src="" alt="Question">
@@ -62,6 +70,7 @@ canvas { position: absolute; top:0; left:0; width:100%; height:100%; pointer-eve
         <div id="feedback">Good Job!</div>
     </div>
 
+    <!-- End Screen -->
     <div class="screen hidden" id="end-screen">
         <h1>🎉 Well Done! 🎉</h1>
         <button id="play-again">Play Again</button>
@@ -207,5 +216,6 @@ function drawConfetti() {
     if(confettiParticles.length>0) requestAnimationFrame(drawConfetti);
 }
 </script>
+
 </body>
 </html>
