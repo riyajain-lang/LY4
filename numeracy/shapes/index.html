@@ -23,10 +23,8 @@ body {
     justify-content:center;
     position:relative;
 }
-#splash img {
-    width:200px;
-    height:auto;
-}
+#splash img { width:200px; height:auto; }
+
 #game {
     background: url('assets/background_tile.png') center/cover no-repeat;
     display:flex;
@@ -37,9 +35,9 @@ body {
 #instructionBox {
     width: 90%;
     max-width: 600px;
-    background: #f8d152; /* instruction bar color from palette */
+    background: #f8d152;
     border-radius:8px;
-    padding:10px;
+    padding:12px;
     text-align:center;
     font-size:1.2em;
     margin-bottom:20px;
@@ -51,28 +49,30 @@ body {
     display:flex;
     flex-wrap:wrap;
     justify-content:center;
-    gap:20px;
+    gap:25px;
     margin-bottom:20px;
 }
 .optionWrapper {
-    width:80px;
-    height:80px;
+    width:100px;
+    height:100px;
+    border-radius:50%;
     display:flex;
     align-items:center;
     justify-content:center;
-    border-radius:12px;
+    background: linear-gradient(145deg,#fefbf2,#f7ab3e); /* ombre shade */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
 }
-.optionWrapper.shade1 { background-color:#fefbf2; }
-.optionWrapper.shade2 { background-color:#f8d152; }
-.optionWrapper.shade3 { background-color:#f7ab3e; }
-.optionWrapper.shade4 { background-color:#5e6cb3; }
+.optionWrapper.correct { border: 3px solid green; }
+.optionWrapper.wrong { border: 3px solid red; }
+
 .option {
-    width:60px;
-    height:60px;
+    width:70px;
+    height:70px;
     display:flex;
     align-items:center;
     justify-content:center;
-    border-radius:8px;
+    border-radius:50%;
     cursor:pointer;
     transition: transform 0.2s;
     background:white;
@@ -80,6 +80,7 @@ body {
 }
 .option.correct { border-color:green; }
 .option.wrong { border-color:red; animation:shake 0.3s; }
+
 @keyframes shake {
     0% { transform: translateX(0px); }
     25% { transform: translateX(-5px); }
@@ -87,6 +88,7 @@ body {
     75% { transform: translateX(-5px); }
     100% { transform: translateX(0px); }
 }
+
 #endScreen h1 { font-size:2em; margin:10px; color:#4b2e83; }
 #playAgain { margin-top:20px; padding:10px 20px; font-size:1.2em; cursor:pointer; border:none; border-radius:8px; background:#ff99cc; color:white; }
 canvas#confetti { position:absolute; top:0; left:0; pointer-events:none; }
@@ -114,7 +116,6 @@ canvas#confetti { position:absolute; top:0; left:0; pointer-events:none; }
 <audio id="clapSound" src="assets/freesound_community-claps-44774.mp3"></audio>
 
 <script>
-// Splash & Game elements
 const splash = document.getElementById('splash');
 const game = document.getElementById('game');
 const endScreen = document.getElementById('endScreen');
@@ -125,7 +126,6 @@ const correctSound = document.getElementById('correctSound');
 const wrongSound = document.getElementById('wrongSound');
 const clapSound = document.getElementById('clapSound');
 
-// Confetti
 const confettiCanvas = document.getElementById('confetti');
 const confettiCtx = confettiCanvas.getContext('2d');
 let confettiParticles = [];
@@ -155,8 +155,6 @@ function updateConfetti(){
     requestAnimationFrame(updateConfetti);
 }
 
-// Game Data
-const palette = ['shade1','shade2','shade3','shade4'];
 const questions = [
     {options:['circle','triangle','square'],answer:'circle'},
     {options:['star','rectangle','semicircle'],answer:'star'},
@@ -169,20 +167,21 @@ const questions = [
     {options:['triangle','circle','diamond'],answer:'circle'},
     {options:['semicircle','star','diamond'],answer:'semicircle'}
 ];
+
 let currentQuestion=0, attempts=0;
 
-// Functions
 function showQuestion(){
     questionBox.innerHTML=''; attempts=0;
     const q=questions[currentQuestion];
     instructionBox.innerHTML=`Tap the <strong>${q.answer}</strong>!`;
     q.options.forEach((opt,i)=>{
         const wrapper = document.createElement('div');
-        wrapper.classList.add('optionWrapper',palette[i%palette.length]);
+        wrapper.classList.add('optionWrapper');
+        wrapper.style.background = `linear-gradient(145deg, rgba(255,255,255,0.8), rgba(248,209,82,0.8))`;
         const div = document.createElement('div');
         div.classList.add('option');
         div.dataset.shape = opt;
-        div.innerHTML = `<img src="assets/${opt}.png" alt="${opt}" style="width:60px;height:60px;">`;
+        div.innerHTML = `<img src="assets/${opt}.png" alt="${opt}" style="width:70px;height:70px;">`;
         div.addEventListener('click', checkAnswer);
         wrapper.appendChild(div);
         questionBox.appendChild(wrapper);
@@ -211,12 +210,10 @@ function checkAnswer(e){
 
 function endGame(){ game.style.display='none'; endScreen.style.display='flex'; initConfetti(); updateConfetti(); }
 
-// Event Listener
 playAgain.addEventListener('click',()=>{
     currentQuestion=0; endScreen.style.display='none'; game.style.display='flex'; showQuestion();
 });
 
-// Start Game
 function startGame(){ splash.style.display='flex'; setTimeout(()=>{ splash.style.display='none'; game.style.display='flex'; showQuestion(); },2000); }
 startGame();
 </script>
