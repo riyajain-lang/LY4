@@ -32,41 +32,55 @@ body {
     align-items:center;
     justify-content:center;
 }
-#instructionBox {
-    width: 90%;
-    max-width: 600px;
-    background: #f8d152;
-    border-radius:8px;
-    padding:12px;
-    text-align:center;
-    font-size:1.2em;
-    margin-bottom:20px;
-    color:#333;
+
+/* Main box behind instructions and options */
+#questionArea {
+    position:relative;
+    z-index:1;
+    background: rgba(255,255,255,0.95);
+    border: 10px solid #ff80ff; /* pink border */
+    border-radius:25px;
+    padding:30px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    max-width:750px;
+    margin-top:40px;
 }
+
+#instructionBox {
+    background:#f8d152;
+    padding:12px 20px;
+    border-radius:12px;
+    margin-bottom:25px;
+    text-align:center;
+    font-size:1.3em;
+}
+
 #questionBox {
-    width: 90%;
-    max-width: 600px;
+    width: 100%;
     display:flex;
     justify-content:space-around;
-    gap:20px;
-    margin-bottom:20px;
+    gap:25px;
 }
+
 .optionWrapper {
-    width:120px;
-    height:120px;
+    width:130px;
+    height:130px;
     background: linear-gradient(145deg,#a16945,#f0d9b5);
-    border-radius:12px;
+    border-radius:20px;
     display:flex;
     align-items:center;
     justify-content:center;
     box-shadow: 0 4px 6px rgba(0,0,0,0.2);
     transition: transform 0.2s;
 }
-.optionWrapper.correct { border: 3px solid green; }
-.optionWrapper.wrong { border: 3px solid red; }
+.optionWrapper.correct { border: 4px solid green; }
+.optionWrapper.wrong { border: 4px solid red; }
+
 .option {
-    width:90px;
-    height:90px;
+    width:95px;
+    height:95px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -78,6 +92,7 @@ body {
 }
 .option.correct { border-color:green; }
 .option.wrong { border-color:red; animation:shake 0.3s; }
+
 @keyframes shake {
     0% { transform: translateX(0px); }
     25% { transform: translateX(-5px); }
@@ -85,8 +100,9 @@ body {
     75% { transform: translateX(-5px); }
     100% { transform: translateX(0px); }
 }
+
 #endScreen h1 { font-size:2em; margin:10px; color:#4b2e83; }
-#playAgain { margin-top:20px; padding:10px 20px; font-size:1.2em; cursor:pointer; border:none; border-radius:8px; background:#ff99cc; color:white; }
+#playAgain { margin-top:20px; padding:12px 25px; font-size:1.3em; cursor:pointer; border:none; border-radius:10px; background:#ff99cc; color:white; }
 canvas#confetti { position:absolute; top:0; left:0; pointer-events:none; }
 </style>
 </head>
@@ -97,8 +113,10 @@ canvas#confetti { position:absolute; top:0; left:0; pointer-events:none; }
 </div>
 
 <div id="game">
+  <div id="questionArea">
     <div id="instructionBox">Tap the correct shape!</div>
     <div id="questionBox"></div>
+  </div>
 </div>
 
 <div id="endScreen">
@@ -151,14 +169,14 @@ function updateConfetti(){
     requestAnimationFrame(updateConfetti);
 }
 
+// Questions array without the moon question
 const questions = [
     {options:['circle','triangle','square'],answer:'circle'},
     {options:['star','rectangle','semicircle'],answer:'star'},
-    {options:['triangle','moon','square'],answer:'moon'},
     {options:['circle','diamond','semicircle'],answer:'diamond'},
     {options:['oval','triangle','rectangle'],answer:'rectangle'},
     {options:['star','diamond','circle'],answer:'circle'},
-    {options:['moon','triangle','star'],answer:'triangle'},
+    {options:['triangle','star','square'],answer:'triangle'},
     {options:['square','oval','star'],answer:'star'},
     {options:['triangle','circle','diamond'],answer:'circle'},
     {options:['semicircle','star','diamond'],answer:'semicircle'}
@@ -176,7 +194,7 @@ function showQuestion(){
         const div = document.createElement('div');
         div.classList.add('option');
         div.dataset.shape = opt;
-        div.innerHTML = `<img src="assets/${opt}.png" alt="${opt}" style="width:90px;height:90px;">`;
+        div.innerHTML = `<img src="assets/${opt}.png" alt="${opt}" style="width:95px;height:95px;">`;
         div.addEventListener('click', checkAnswer);
         wrapper.appendChild(div);
         questionBox.appendChild(wrapper);
