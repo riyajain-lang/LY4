@@ -11,17 +11,26 @@ body, html {
   background: url('assets/background.png') no-repeat center center;
   background-size: cover;
 }
-#logoScreen, #gameScreen, #endScreen { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; flex-direction: column; position: absolute; top: 0; left:0;}
+#logoScreen, #gameScreen, #endScreen {
+  width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; flex-direction: column; position: absolute; top: 0; left:0;
+}
 #logoScreen { background: #fff; z-index:2;}
 #logoScreen img { width: 200px; }
-#gameScreen { z-index:1; display:none;}
+#gameScreen { background: #4CAF50; z-index:1; display:none;}
 #creamBox { background: #fffdd0; border-radius: 12px; width: 90%; max-width: 400px; padding: 10px; box-shadow: 0 0 10px #00000033; }
 #instruction { text-align:center; font-size:16px; margin-bottom:5px; color:#333; }
-#lineContainer { margin-bottom: 10px; }
-.line { display:flex; align-items:center; justify-content:flex-start; min-height: 35px; margin:3px 0; border-bottom:1px solid #ccc; font-size:18px; padding-left:5px; cursor:pointer; flex-wrap: wrap; }
-.lineThumb { width:30px; height:30px; margin-left:5px; display:none; border-radius:4px; }
 #imageContainer { width: 100%; text-align:center; margin-bottom:10px; }
 #imageContainer img { max-width: 100%; border-radius:8px; }
+#lineContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  min-height: 35px;
+  border-bottom: 1px solid #ccc;
+  padding-left: 5px;
+  align-items: center;
+  font-size: 18px;
+}
 .wordBank { display:flex; flex-wrap: wrap; justify-content: center; margin-top:10px; }
 .word { background:#4CAF50; color:white; padding:5px 10px; margin:3px; border-radius:5px; cursor:pointer; user-select:none; font-size:16px; }
 .word.used { background:#9E9E9E; cursor:default; }
@@ -43,12 +52,7 @@ body, html {
   <div id="creamBox">
     <div id="instruction">Tap on a word below and place it in the line to form a sentence</div>
     <div id="imageContainer"><img id="mainImage" src="" alt=""></div>
-    <div id="linesContainer">
-      <div class="line" data-index="0"><img class="lineThumb" src="" alt=""></div>
-      <div class="line" data-index="1"><img class="lineThumb" src="" alt=""></div>
-      <div class="line" data-index="2"><img class="lineThumb" src="" alt=""></div>
-      <div class="line" data-index="3"><img class="lineThumb" src="" alt=""></div>
-    </div>
+    <div id="lineContainer"></div>
     <div class="wordBank" id="wordBank"></div>
     <div id="feedback"></div>
     <div id="score"></div>
@@ -68,16 +72,16 @@ body, html {
 
 <script>
 const questions = [
-  {img:'assets/car.png', sentence:['The','car','is','fast'], words:['The','car','is','fast']},
-  {img:'assets/school.png', sentence:['I','go','to','school'], words:['I','go','to','school']},
-  {img:'assets/mountains.png', sentence:['Mountains','are','high','today'], words:['Mountains','are','high','today']},
-  {img:'assets/tree.png', sentence:['The','tree','has','leaves'], words:['The','tree','has','leaves']},
-  {img:'assets/butterfly.png', sentence:['The','butterfly','is','colorful'], words:['The','butterfly','is','colorful']},
-  {img:'assets/dance.png', sentence:['She','likes','to','dance'], words:['She','likes','to','dance']}
+  {img:'assets/car.png', sentence:['The','car','is','fast'], words:['car','fast','is','The']},
+  {img:'assets/school.png', sentence:['I','go','to','school'], words:['to','school','I','go']},
+  {img:'assets/mountains.png', sentence:['Mountains','are','high','today'], words:['today','Mountains','high','are']},
+  {img:'assets/tree.png', sentence:['The','tree','has','leaves'], words:['has','leaves','The','tree']},
+  {img:'assets/butterfly.png', sentence:['The','butterfly','is','colorful'], words:['colorful','is','The','butterfly']},
+  {img:'assets/dance.png', sentence:['She','likes','to','dance'], words:['dance','likes','She','to']}
 ];
 
 let currentQ = 0;
-let userAnswer = [[],[],[],[]];
+let userAnswer = [];
 let score = 0;
 
 function showQuestion(){
@@ -85,96 +89,94 @@ function showQuestion(){
   document.getElementById('mainImage').src = q.img;
   document.getElementById('feedback').textContent = '';
   document.getElementById('nextBtn').style.display = 'none';
-  
-  const lines = document.querySelectorAll('.line');
-  lines.forEach(l=>{ l.textContent=''; l.querySelector('.lineThumb').style.display='none'; });
-  
+  document.getElementById('lineContainer').innerHTML = '';
+  userAnswer = [];
+
   const bank = document.getElementById('wordBank');
-  bank.innerHTML='';
-  shuffle([...q.words]).forEach(w=>{
+  bank.innerHTML = '';
+  shuffle([...q.words]).forEach(word => {
     const btn = document.createElement('div');
-    btn.textContent=w; btn.className='word';
-    btn.onclick = ()=>{ selectWord(w,btn); };
+    btn.textContent = word;
+    btn.className = 'word';
+    btn.onclick = ()=> selectWord(word, btn);
     bank.appendChild(btn);
   });
 }
 
 function selectWord(word, btn){
-  const lines = document.querySelectorAll('.line');
-  let placed = false;
-  for(let i=0;i<lines.length;i++){
-    // place horizontally in first empty line
-    if(lines[i].textContent.split(' ').length < 4){
-      if(lines[i].textContent===''){
-        lines[i].textContent = word;
-      } else {
-        lines[i].textContent += ' ' + word;
-      }
-      userAnswer[i].push(word);
-      
-      const thumb = lines[i].querySelector('.lineThumb');
-      thumb.src = questions[currentQ].img; 
-      thumb.style.display = 'inline-block';
-      
-      btn.classList.add('used');
-      placed=true; break;
-    }
-  }
-  if(placed && userAnswer.flat().length===questions[currentQ].sentence.length){
+  const line = document.getElementById('lineContainer');
+  const span = document.createElement('span');
+  span.textContent = word;
+  line.appendChild(span);
+  userAnswer.push(word);
+  btn.classList.add('used');
+
+  if(userAnswer.length === questions[currentQ].sentence.length){
     checkAnswer();
   }
 }
 
 function checkAnswer(){
   const q = questions[currentQ];
-  let correct=true;
-  for(let i=0;i<q.sentence.length;i++){
-    if(userAnswer[i][0]!==q.sentence[i]){ correct=false; break; }
-  }
+  let correct = userAnswer.join(' ') === q.sentence.join(' ');
+  const feedback = document.getElementById('feedback');
+
   if(correct){
-    document.getElementById('feedback').textContent='✅ Good Job!';
+    feedback.textContent = '✅ Good Job!';
     document.getElementById('correctSound').play();
     score++;
-  }else{
-    document.getElementById('feedback').textContent='❌ Try Again';
+    document.getElementById('score').textContent = `Score: ${score} / ${questions.length}`;
+    document.getElementById('nextBtn').style.display = 'inline-block';
+  } else {
+    feedback.textContent = '❌ Try Again';
     document.getElementById('wrongSound').play();
+    // retry after 1 second
+    setTimeout(resetLine, 1000);
   }
-  document.getElementById('score').textContent='Score: '+score+' / '+questions.length;
-  document.getElementById('nextBtn').style.display='inline-block';
+}
+
+function resetLine(){
+  const line = document.getElementById('lineContainer');
+  line.innerHTML = '';
+  userAnswer = [];
+
+  // reset word buttons
+  const wordButtons = document.querySelectorAll('.word');
+  wordButtons.forEach(btn => btn.classList.remove('used'));
 }
 
 document.getElementById('nextBtn').onclick = ()=>{
   currentQ++;
-  userAnswer=[[],[],[],[]];
-  if(currentQ<questions.length){ showQuestion(); }
-  else{
-    document.getElementById('gameScreen').style.display='none';
-    document.getElementById('endScreen').style.display='flex';
+  if(currentQ < questions.length){
+    showQuestion();
+  } else {
+    document.getElementById('gameScreen').style.display = 'none';
+    document.getElementById('endScreen').style.display = 'flex';
     document.getElementById('clapSound').play();
   }
 };
 
 function restartGame(){
-  currentQ=0; score=0; userAnswer=[[],[],[],[]];
-  document.getElementById('endScreen').style.display='none';
-  document.getElementById('gameScreen').style.display='flex';
+  currentQ = 0; score = 0;
+  document.getElementById('endScreen').style.display = 'none';
+  document.getElementById('gameScreen').style.display = 'flex';
   showQuestion();
 }
 
 function shuffle(array){
-  for (let i = array.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random() * (i + 1));
+  for(let i=array.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
     [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
 }
 
-// Logo screen timeout
+// Show logo for 2 seconds
 setTimeout(()=>{
   document.getElementById('logoScreen').style.display='none';
   document.getElementById('gameScreen').style.display='flex';
   showQuestion();
-},2000);
+}, 2000);
 
 </script>
 </body>
