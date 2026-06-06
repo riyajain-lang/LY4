@@ -9,6 +9,8 @@ body, html {
   margin:0; padding:0; font-family: Arial, sans-serif;
   width:100%; height:100%; overflow:hidden;
 }
+
+/* Screens */
 #logoScreen, #gameScreen, #endScreen {
   position:absolute; top:0; left:0;
   width:100%; height:100%;
@@ -19,41 +21,51 @@ body, html {
 
 #gameScreen {
   display:none;
-  background: url('assets/a-an-background.png') no-repeat center center;
+  background: url('assets/a-an-backgroung.png') no-repeat center center;
   background-size: cover;
-  padding:10px; box-sizing:border-box;
+  padding:20px; box-sizing:border-box;
+  flex-direction:column;
 }
+
+/* Instruction box */
 #instructions {
-  width:100%; max-width:500px; text-align:center;
-  font-size:18px; background:rgba(255,255,255,0.9); padding:10px; border-radius:10px;
+  width:90%; max-width:600px; text-align:center;
+  font-size:18px; background:rgba(255,255,255,0.9);
+  padding:15px; border:3px solid #c5b1ff; border-radius:10px;
   margin-bottom:20px;
 }
+
+/* Image and sentence */
 .sentence-box {
   background: rgba(255,255,255,0.9); border-radius:10px;
-  padding:15px; margin:10px 0; width:100%; max-width:500px;
-  text-align:center; font-size:18px; display:flex; align-items:center; justify-content:center; gap:10px;
+  padding:15px; margin:10px 0; width:90%; max-width:400px;
+  text-align:center; font-size:20px;
+  display:flex; flex-direction:column; align-items:center; gap:15px;
 }
-.sentence-box img { width:50px; height:50px; object-fit:contain; }
+.sentence-box img { width:120px; height:120px; object-fit:contain; }
 
-.options { margin-top:10px; display:flex; justify-content:center; gap:20px; }
+/* Options */
+.options { margin-top:10px; display:flex; justify-content:center; gap:40px; }
 .option-btn {
-  padding:10px 20px; font-size:18px; border-radius:8px; border:none;
-  cursor:pointer; background-color:#FFD700;
+  padding:15px 25px; font-size:22px; border-radius:50%;
+  border:none; cursor:pointer; background-color:#FFD700;
+  min-width:70px; min-height:70px;
 }
-.option-btn:hover { opacity:0.8; }
+.option-btn:hover { opacity:0.85; }
 
+/* End Screen */
 #endScreen {
   display:none; background:#FFF0F5; z-index:3; justify-content:center; align-items:center; text-align:center;
 }
-#endScreen h1 { font-size:32px; color:#FF69B4; margin-bottom:20px; }
-#playAgainBtn { padding:12px 25px; font-size:20px; border-radius:10px; border:none; cursor:pointer; background-color:#FFB6C1; }
+#endScreen h1 { font-size:36px; color:#FF69B4; margin-bottom:25px; }
+#playAgainBtn { padding:15px 30px; font-size:22px; border-radius:12px; border:none; cursor:pointer; background-color:#FFB6C1; }
 canvas { position:absolute; top:0; left:0; pointer-events:none; }
 
 </style>
 </head>
 <body>
 
-<!-- Logo Screen -->
+<!-- Logo -->
 <div id="logoScreen">
   <img src="assets/innovine-logo.png" alt="Innovine Logo">
 </div>
@@ -61,7 +73,7 @@ canvas { position:absolute; top:0; left:0; pointer-events:none; }
 <!-- Game Screen -->
 <div id="gameScreen">
   <div id="instructions">Tap the correct word to complete the sentence: “a” or “an”</div>
-  <div class="sentence-box" id="sentenceText">
+  <div class="sentence-box">
     <img id="sentenceImage" src="" alt="">
     <span id="sentenceSpan"></span>
   </div>
@@ -78,11 +90,13 @@ canvas { position:absolute; top:0; left:0; pointer-events:none; }
   <canvas id="confettiCanvas"></canvas>
 </div>
 
+<!-- Audio -->
 <audio id="correctSound" src="assets/correct.mp3"></audio>
 <audio id="wrongSound" src="assets/wrong.mp3"></audio>
 <audio id="clapSound" src="assets/freesound_community-claps-44774.mp3"></audio>
 
 <script>
+// Sentences and images
 const sentences = [
   {text:"I eat ___ orange", answer:"an", image:"assets/orange.png"},
   {text:"I see ___ car", answer:"a", image:"assets/car.png"},
@@ -94,6 +108,8 @@ const sentences = [
 ];
 
 let currentIndex = 0;
+
+// Elements
 const sentenceSpan = document.getElementById("sentenceSpan");
 const sentenceImage = document.getElementById("sentenceImage");
 const optionA = document.getElementById("optionA");
@@ -106,9 +122,10 @@ const wrongSound = document.getElementById("wrongSound");
 const clapSound = document.getElementById("clapSound");
 const playAgainBtn = document.getElementById("playAgainBtn");
 
-// Show Logo 2s
+// Show logo 2s
 setTimeout(()=>{ logoScreen.style.display="none"; startGame(); }, 2000);
 
+// Game functions
 function startGame(){
   currentIndex=0;
   endScreen.style.display="none";
@@ -130,35 +147,37 @@ function checkAnswer(selected){
     clapSound.play();
     setTimeout(()=>{
       currentIndex++;
-      if(currentIndex<sentences.length){ showSentence(); }
-      else{ showEndScreen(); }
+      if(currentIndex<sentences.length) showSentence();
+      else showEndScreen();
     },1000);
   } else { wrongSound.play(); }
 }
 
+// Events
 optionA.addEventListener("click", ()=>checkAnswer("a"));
 optionAn.addEventListener("click", ()=>checkAnswer("an"));
 playAgainBtn.addEventListener("click", startGame);
 
+// End screen + confetti
 function showEndScreen(){
   gameScreen.style.display="none";
   endScreen.style.display="flex";
   confetti();
 }
 
-// Confetti
 function confetti(){
   const canvas = document.getElementById('confettiCanvas');
   const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-  const confettis = [];
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const confettis=[];
   for(let i=0;i<150;i++){
     confettis.push({
       x:Math.random()*canvas.width,
-      y:Math.random()*canvas.height - canvas.height,
+      y:Math.random()*canvas.height-canvas.height,
       r:Math.random()*6+4,
       d:Math.random()*150+50,
-      color:Math.random()<0.5 ? "#FFB6C1":"#FFFFE0",
+      color:Math.random()<0.5?"#FFB6C1":"#FFFFE0",
       tilt:Math.random()*10-10
     });
   }
