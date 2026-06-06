@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A and AN Game</title>
+<style>
+  body, html {
+    margin: 0; padding: 0;
+    font-family: Arial, sans-serif;
+    width: 100%; height: 100%;
+    overflow: hidden;
+  }
+
+  #logoScreen, #gameScreen, #endScreen {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex; justify-content: center; align-items: center;
+    flex-direction: column;
+  }
+
+  /* Logo Screen */
+  #logoScreen { background: white; z-index: 2; }
+  #logoScreen img { width: 200px; }
+
+  /* Game Screen */
+  #gameScreen {
+    display: none;
+    background: url('assets/a-an-background.png') no-repeat center center;
+    background-size: cover;
+    padding: 10px;
+    box-sizing: border-box;
+    flex-direction: column;
+  }
+
+  #instructions {
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    font-size: 18px;
+    background: rgba(255,255,255,0.9);
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+
+  .sentence-box {
+    background: rgba(255,255,255,0.9);
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px 0;
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    font-size: 18px;
+  }
+
+  .options {
+    margin-top: 10px;
+    display: flex; justify-content: center; gap: 20px;
+  }
+
+  .option-btn {
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background-color: #FFD700;
+  }
+
+  .option-btn:hover { opacity: 0.8; }
+
+  /* End Screen */
+  #endScreen {
+    display: none;
+    background: #FFF0F5;
+    z-index: 3;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  #endScreen h1 {
+    font-size: 32px;
+    color: #FF69B4;
+    margin-bottom: 20px;
+  }
+
+  #playAgainBtn {
+    padding: 12px 25px;
+    font-size: 20px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background-color: #FFB6C1;
+  }
+
+  canvas { position: absolute; top:0; left:0; pointer-events:none; }
+</style>
+</head>
+<body>
+
+<!-- Logo Screen -->
+<div id="logoScreen">
+  <img src="assets/innovine-logo.png" alt="Innovine Logo">
+</div>
+
+<!-- Game Screen -->
+<div id="gameScreen">
+  <div id="instructions">Tap the correct word to complete the sentence: “a” or “an”</div>
+  <div class="sentence-box" id="sentenceText"></div>
+  <div class="options">
+    <button class="option-btn" id="optionA">a</button>
+    <button class="option-btn" id="optionAn">an</button>
+  </div>
+</div>
+
+<!-- End Screen -->
+<div id="endScreen">
+  <h1>Good Job!</h1>
+  <button id="playAgainBtn">Play Again</button>
+  <canvas id="confettiCanvas"></canvas>
+</div>
+
+<audio id="correctSound" src="assets/correct.mp3"></audio>
+<audio id="wrongSound" src="assets/wrong.mp3"></audio>
+<audio id="clapSound" src="assets/freesound_community-claps-44774.mp3"></audio>
+
+<script>
+const sentences = [
+  {text:"I eat ___ orange", answer:"an"},
+  {text:"I see ___ car", answer:"a"},
+  {text:"___ ant is reading", answer:"an"},
+  {text:"The boy is riding ___ bike cycle", answer:"a"},
+  {text:"It is ___ igloo", answer:"an"},
+  {text:"He wants ___ cookie", answer:"a"},
+  {text:"It is ___ apple", answer:"an"}
+];
+
+let currentIndex = 0;
+const sentenceText = document.getElementById("sentenceText");
+const optionA = document.getElementById("optionA");
+const optionAn = document.getElementById("optionAn");
+const gameScreen = document.getElementById("gameScreen");
+const logoScreen = document.getElementById("logoScreen");
+const endScreen = document.getElementById("endScreen");
+const correctSound = document.getElementById("correctSound");
+const wrongSound = document.getElementById("wrongSound");
+const clapSound = document.getElementById("clapSound");
+const playAgainBtn = document.getElementById("playAgainBtn");
+
+// Show Logo for 2 seconds
+setTimeout(() => {
+  logoScreen.style.display = "none";
+  startGame();
+}, 2000);
+
+function startGame(){
+  currentIndex = 0;
+  endScreen.style.display = "none";
+  gameScreen.style.display = "flex";
+  showSentence();
+}
+
+function showSentence(){
+  sentenceText.textContent = sentences[currentIndex].text;
+}
+
+function checkAnswer(selected){
+  const correct = sentences[currentIndex].answer;
+  if(selected === correct){
+    correctSound.play();
+    sentenceText.textContent = sentences[currentIndex].text.replace("___", correct);
+    clapSound.play();
+    setTimeout(() => {
+      currentIndex++;
+      if(currentIndex < sentences.length){
+        showSentence();
+      } else {
+        showEndScreen();
+      }
+    }, 1000);
+  } else {
+    wrongSound.play();
+  }
+}
+
+optionA.addEventListener("click", ()=> checkAnswer("a"));
+optionAn.addEventListener("click", ()=> checkAnswer("an"));
+playAgainBtn.addEventListener("click", startGame);
+
+// Confetti
+function showEndScreen(){
+  gameScreen.style.display = "none";
+  endScreen.style.display = "flex";
+  confetti();
+}
+
+function confetti(){
+  const canvas = document.getElementById('confettiCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const confettis = [];
+  for(let i=0;i<150;i++){
+    confettis.push({
+      x: Math.random()*canvas.width,
+      y: Math.random()*canvas.height - canvas.height,
+      r: Math.random()*6+4,
+      d: Math.random()*150+50,
+      color: Math.random() < 0.5 ? "#FFB6C1" : "#FFFFE0",
+      tilt: Math.random()*10-10
+    });
+  }
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    confettis.forEach(c=>{
+      ctx.beginPath();
+      ctx.lineWidth = c.r/2;
+      ctx.strokeStyle = c.color;
+      ctx.moveTo(c.x + c.tilt + c.r/4, c.y);
+      ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r/4);
+      ctx.stroke();
+      c.y += 2;
+      if(c.y > canvas.height) c.y = -10;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+</script>
+</body>
+</html>
