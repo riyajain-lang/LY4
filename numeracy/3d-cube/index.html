@@ -20,20 +20,23 @@ body { background: #fff; }
 
 /* Game Screen */
 #gameScreen {
-  display:none; flex-direction:column; justify-content:flex-start; align-items:center;
+  display:none; flex-direction:column;
+  justify-content:flex-start; align-items:center;
   background: url('assets/background.png') no-repeat center center;
   background-size: cover;
-  padding-top:50px;
+  padding-top: 50px;
+  box-sizing: border-box;
+  height: 100vh;
 }
 
 /* Instruction frame */
 #instructionFrame {
   position: relative; display: flex; justify-content: center; align-items: center;
-  width: 90%; max-width: 450px; height: 90px; margin-bottom: 50px;
+  width: 90%; max-width: 450px; height: 100px; margin-bottom: 30px;
   background: url('assets/instruction-frame.png') no-repeat center center;
   background-size: contain;
   border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(255,182,193,0.5); /* cute soft shadow */
+  box-shadow: 0 4px 8px rgba(255,182,193,0.5);
   padding: 0 10px;
 }
 #instructionFrame span {
@@ -41,19 +44,22 @@ body { background: #fff; }
 }
 
 /* Options frame */
-#options { display:flex; justify-content:center; gap:25px; }
+#options {
+  display:flex; justify-content:center; gap:25px;
+  flex: 1; align-items: center; /* center vertically in remaining space */
+}
 .optionWrapper {
-  position: relative; width:130px; height:130px; /* bigger for easy tap */
+  position: relative; width:120px; height:120px; 
   background: url('assets/option-frame.png') no-repeat center center;
   background-size: contain;
   display:flex; justify-content:center; align-items:center;
   border-radius:20px;
-  box-shadow:0 4px 10px rgba(173,216,230,0.5); /* pastel cute shadow */
+  box-shadow:0 4px 10px rgba(173,216,230,0.5);
 }
 .optionWrapper img.option-img {
-  width:100px; height:100px; cursor:pointer; border-radius:15px;
+  width:90px; height:90px; cursor:pointer; border-radius:15px;
   transition: transform 0.2s, box-shadow 0.2s;
-  border:2px solid #ffb6c1; /* pastel cute border */
+  border:2px solid #ffb6c1;
 }
 .optionWrapper img.option-img.glow { box-shadow:0 0 20px 5px #0f0; }
 
@@ -69,10 +75,10 @@ canvas { position:absolute; top:0; left:0; pointer-events:none; }
 
 /* Responsive */
 @media(max-width:480px) {
-  #instructionFrame { height:70px; }
+  #instructionFrame { height:80px; }
   #instructionFrame span { font-size:20px; padding:0 15px; }
-  .optionWrapper { width:100px; height:100px; }
-  .optionWrapper img.option-img { width:80px; height:80px; }
+  .optionWrapper { width:90px; height:90px; }
+  .optionWrapper img.option-img { width:70px; height:70px; }
 }
 </style>
 </head>
