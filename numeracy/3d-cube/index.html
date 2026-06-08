@@ -24,9 +24,36 @@
   #logoScreen { background: #fff; z-index: 10; }
   #logoScreen img { width: 150px; }
 
-  #gameScreen { background: url('assets/background.png') no-repeat center center; background-size: cover; display: none; }
-  #instruction { font-size: 20px; color: #333; margin-bottom: 20px; text-align: center; }
-  #options { display: flex; justify-content: center; gap: 15px; }
+  #gameScreen {
+    background: url('assets/background.png') no-repeat center center;
+    background-size: contain;
+    display: none;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 60px;
+  }
+
+  #instruction {
+    font-size: 24px;
+    color: #9c1d6a;
+    margin-bottom: 50px;
+    text-align: center;
+    border: 2px solid #9c1d6a;
+    padding: 10px 20px;
+    border-radius: 10px;
+    background-color: rgba(255,255,255,0.7);
+    max-width: 90%;
+  }
+
+  #options {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    width: 100%;
+    flex-wrap: nowrap;
+  }
+
   .option-img {
     width: 100px;
     height: 100px;
@@ -34,8 +61,11 @@
     cursor: pointer;
     transition: transform 0.2s;
     border-radius: 10px;
+    border: 2px solid #9c1d6a;
+    background-color: rgba(255,255,255,0.7);
   }
-  .option-img.glow { box-shadow: 0 0 15px 5px #0f0; }
+
+  .option-img.glow { box-shadow: 0 0 20px 5px #0f0; }
 
   #tick {
     display: none;
@@ -49,16 +79,25 @@
     background: #fff;
     z-index: 20;
     text-align: center;
+    justify-content: center;
+    align-items: center;
   }
   #playAgainBtn {
     margin-top: 20px;
-    padding: 10px 20px;
+    padding: 12px 25px;
     font-size: 20px;
     cursor: pointer;
     border-radius: 10px;
+    background-color: #9c1d6a;
+    color: white;
+    border: none;
   }
 
   canvas { position: absolute; top:0; left:0; pointer-events: none; }
+  @media(max-width: 480px) {
+    #instruction { font-size: 18px; margin-bottom: 30px; }
+    .option-img { width: 80px; height: 80px; }
+  }
 </style>
 </head>
 <body>
@@ -111,7 +150,6 @@ const correctSound = document.getElementById('correctSound');
 const wrongSound = document.getElementById('wrongSound');
 const applauseSound = document.getElementById('applauseSound');
 
-// Show game after 2s logo
 setTimeout(() => {
   logoScreen.style.display = 'none';
   showQuestion();
@@ -124,7 +162,6 @@ function showQuestion() {
   const q = questions[currentQuestion];
   instructionDiv.textContent = q.instruction;
   optionsDiv.innerHTML = '';
-  // shuffle options
   const shuffled = q.options.sort(() => Math.random() - 0.5);
   shuffled.forEach(opt => {
     const img = document.createElement('img');
@@ -140,7 +177,6 @@ function checkAnswer(selected, imgEl) {
   if(selected === q.correct) {
     correctSound.play();
     tickDiv.style.display = 'block';
-    // move to next question after 1s
     setTimeout(() => {
       currentQuestion++;
       if(currentQuestion < questions.length) {
@@ -152,12 +188,10 @@ function checkAnswer(selected, imgEl) {
   } else {
     wrongSound.play();
     wrongAttempts++;
-    // jiggle animation
     imgEl.style.transform = 'translateX(-10px)';
     setTimeout(() => { imgEl.style.transform = 'translateX(10px)'; }, 100);
     setTimeout(() => { imgEl.style.transform = 'translateX(0px)'; }, 200);
     if(wrongAttempts >= 2) {
-      // glow correct option
       Array.from(optionsDiv.children).forEach(c => {
         if(c.src.includes(q.correct)) c.classList.add('glow');
       });
@@ -165,7 +199,6 @@ function checkAnswer(selected, imgEl) {
   }
 }
 
-// End game
 function endGame() {
   gameScreen.style.display = 'none';
   endScreen.style.display = 'flex';
@@ -173,7 +206,6 @@ function endGame() {
   startConfetti();
 }
 
-// Play again
 playAgainBtn.addEventListener('click', () => {
   currentQuestion = 0;
   endScreen.style.display = 'none';
