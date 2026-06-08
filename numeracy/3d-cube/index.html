@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LY4 3D Cube Game</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%; height: 100%;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+  }
+  body { background: #fff; }
+
+  #logoScreen, #gameScreen, #endScreen {
+    width: 100%; height: 100%;
+    position: absolute; top: 0; left: 0;
+    display: flex; justify-content: center; align-items: center;
+    flex-direction: column;
+  }
+
+  #logoScreen { background: #fff; z-index: 10; }
+  #logoScreen img { width: 150px; }
+
+  #gameScreen { background: url('assets/background.png') no-repeat center center; background-size: cover; display: none; }
+  #instruction { font-size: 20px; color: #333; margin-bottom: 20px; text-align: center; }
+  #options { display: flex; justify-content: center; gap: 15px; }
+  .option-img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    cursor: pointer;
+    transition: transform 0.2s;
+    border-radius: 10px;
+  }
+  .option-img.glow { box-shadow: 0 0 15px 5px #0f0; }
+
+  #tick {
+    display: none;
+    font-size: 50px;
+    color: green;
+    margin-top: 20px;
+  }
+
+  #endScreen {
+    display: none;
+    background: #fff;
+    z-index: 20;
+    text-align: center;
+  }
+  #playAgainBtn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 10px;
+  }
+
+  canvas { position: absolute; top:0; left:0; pointer-events: none; }
+</style>
+</head>
+<body>
+
+<div id="logoScreen">
+  <img src="assets/innovine-logo.png" alt="Innovine Logo">
+</div>
+
+<div id="gameScreen">
+  <div id="instruction"></div>
+  <div id="options"></div>
+  <div id="tick">✔️ Good Job!</div>
+</div>
+
+<div id="endScreen">
+  <h1>Good Job!</h1>
+  <canvas id="confettiCanvas"></canvas>
+  <button id="playAgainBtn">Play Again</button>
+</div>
+
+<audio id="correctSound" src="assets/correct.mp3"></audio>
+<audio id="wrongSound" src="assets/wrong.mp3"></audio>
+<audio id="applauseSound" src="assets/freesound_community-claps-44774.mp3"></audio>
+
+<script>
+// Game data
+const questions = [
+  { correct: 'cube1.png', options: ['cube1.png', 'circle.png', 'cone.png'], instruction: 'Tap the cube!' },
+  { correct: 'cube2.png', options: ['cube2.png', 'cylinder.png', 'daimond.png'], instruction: 'Find the cube!' },
+  { correct: 'cube3.png', options: ['cone.png', 'cube3.png', 'circle.png'], instruction: 'Which one is a cube?' },
+  { correct: 'cube1.png', options: ['cube1.png', 'daimond.png', 'cylinder.png'], instruction: 'Click the cube!' },
+  { correct: 'cube2.png', options: ['cube2.png', 'cone.png', 'circle.png'], instruction: 'Tap the cube!' },
+  { correct: 'cube3.png', options: ['cube3.png', 'cylinder.png', 'daimond.png'], instruction: 'Find the cube!' },
+  { correct: 'cube1.png', options: ['cube1.png', 'circle.png', 'cone.png'], instruction: 'Which one is a cube?' },
+  { correct: 'cube2.png', options: ['cube2.png', 'daimond.png', 'cylinder.png'], instruction: 'Click the cube!' },
+];
+
+let currentQuestion = 0;
+let wrongAttempts = 0;
+
+const logoScreen = document.getElementById('logoScreen');
+const gameScreen = document.getElementById('gameScreen');
+const instructionDiv = document.getElementById('instruction');
+const optionsDiv = document.getElementById('options');
+const tickDiv = document.getElementById('tick');
+const endScreen = document.getElementById('endScreen');
+const playAgainBtn = document.getElementById('playAgainBtn');
+
+const correctSound = document.getElementById('correctSound');
+const wrongSound = document.getElementById('wrongSound');
+const applauseSound = document.getElementById('applauseSound');
+
+// Show game after 2s logo
+setTimeout(() => {
+  logoScreen.style.display = 'none';
+  showQuestion();
+  gameScreen.style.display = 'flex';
+}, 2000);
+
+function showQuestion() {
+  tickDiv.style.display = 'none';
+  wrongAttempts = 0;
+  const q = questions[currentQuestion];
+  instructionDiv.textContent = q.instruction;
+  optionsDiv.innerHTML = '';
+  // shuffle options
+  const shuffled = q.options.sort(() => Math.random() - 0.5);
+  shuffled.forEach(opt => {
+    const img = document.createElement('img');
+    img.src = 'assets/' + opt;
+    img.classList.add('option-img');
+    img.addEventListener('click', () => checkAnswer(opt, img));
+    optionsDiv.appendChild(img);
+  });
+}
+
+function checkAnswer(selected, imgEl) {
+  const q = questions[currentQuestion];
+  if(selected === q.correct) {
+    correctSound.play();
+    tickDiv.style.display = 'block';
+    // move to next question after 1s
+    setTimeout(() => {
+      currentQuestion++;
+      if(currentQuestion < questions.length) {
+        showQuestion();
+      } else {
+        endGame();
+      }
+    }, 1000);
+  } else {
+    wrongSound.play();
+    wrongAttempts++;
+    // jiggle animation
+    imgEl.style.transform = 'translateX(-10px)';
+    setTimeout(() => { imgEl.style.transform = 'translateX(10px)'; }, 100);
+    setTimeout(() => { imgEl.style.transform = 'translateX(0px)'; }, 200);
+    if(wrongAttempts >= 2) {
+      // glow correct option
+      Array.from(optionsDiv.children).forEach(c => {
+        if(c.src.includes(q.correct)) c.classList.add('glow');
+      });
+    }
+  }
+}
+
+// End game
+function endGame() {
+  gameScreen.style.display = 'none';
+  endScreen.style.display = 'flex';
+  applauseSound.play();
+  startConfetti();
+}
+
+// Play again
+playAgainBtn.addEventListener('click', () => {
+  currentQuestion = 0;
+  endScreen.style.display = 'none';
+  showQuestion();
+  gameScreen.style.display = 'flex';
+  stopConfetti();
+});
+
+// Confetti
+const confettiCanvas = document.getElementById('confettiCanvas');
+const ctx = confettiCanvas.getContext('2d');
+confettiCanvas.width = window.innerWidth;
+confettiCanvas.height = window.innerHeight;
+let confettiPieces = [];
+let confettiInterval;
+
+function startConfetti() {
+  confettiPieces = [];
+  for(let i=0; i<150; i++){
+    confettiPieces.push({
+      x: Math.random()*confettiCanvas.width,
+      y: Math.random()*confettiCanvas.height,
+      r: Math.random()*6+2,
+      d: Math.random()*150+10,
+      color: 'rgb('+(Math.floor(Math.random()*255))+','+(Math.floor(Math.random()*255))+','+(Math.floor(Math.random()*255))+')',
+      tilt: Math.random()*10-10,
+      tiltAngleIncremental: Math.random()*0.07+0.05,
+      tiltAngle: 0
+    });
+  }
+  confettiInterval = setInterval(drawConfetti, 20);
+}
+
+function drawConfetti(){
+  ctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
+  confettiPieces.forEach(p => {
+    ctx.beginPath();
+    ctx.lineWidth = p.r;
+    ctx.strokeStyle = p.color;
+    ctx.moveTo(p.x + p.tilt + p.r/2, p.y);
+    ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r/2);
+    ctx.stroke();
+    p.tiltAngle += p.tiltAngleIncremental;
+    p.y += (Math.cos(p.d) + 3 + p.r/2)/2;
+    p.tilt = Math.sin(p.tiltAngle) * 15;
+    if(p.y > confettiCanvas.height){ p.y = -10; p.x = Math.random()*confettiCanvas.width; }
+  });
+}
+
+function stopConfetti() {
+  clearInterval(confettiInterval);
+  ctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
+}
+</script>
+
+</body>
+</html>
