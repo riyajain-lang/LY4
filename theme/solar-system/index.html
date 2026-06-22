@@ -79,7 +79,7 @@ body{background:url('./assets/background.png') no-repeat center center; backgrou
   <div class="card">
     <div class="topBar">
       <span id="slideNo">Question 1 / 8</span>
-      <span>Tap letters</span>
+      <span>Tap the letters and the blanks to complete the words.</span>
     </div>
 
     <img id="planetImage" class="planetImg" src="" alt="Planet">
@@ -129,7 +129,7 @@ function loadQuestion(){
   const q=questions[current];
   document.getElementById("slideNo").innerText="Question "+(current+1)+" / "+questions.length;
   document.getElementById("planetImage").src=q.image;
-  document.getElementById("correctWord").innerText=q.answer; // show correct spelling
+  document.getElementById("correctWord").innerText=q.answer;
   document.getElementById("blankArea").innerHTML="";
   document.getElementById("letterArea").innerHTML="";
   document.getElementById("message").innerText="";
@@ -166,38 +166,56 @@ function createLetters(jumble){
 function placeLetter(blank){
   if(!selectedLetter || blank.innerText!=="") return;
   if(selectedLetter===blank.dataset.correct){
-    blank.innerText=selectedLetter; selectedButton.classList.add("used"); selectedButton.style.outline="none";
-    selectedLetter=null; selectedButton=null; filledCount++;
+    blank.innerText=selectedLetter;
+    selectedButton.classList.add("used");
+    selectedButton.style.outline="none";
+    selectedLetter=null; selectedButton=null;
+    filledCount++;
     playSound("correctSound");
     if(filledCount===questions[current].answer.length){
       document.getElementById("message").innerText="Correct! 🌟";
       setTimeout(()=>{
-        current++; current<questions.length?loadQuestion():showFinalScreen();
+        current++;
+        current<questions.length?loadQuestion():showFinalScreen();
       },800);
     }
   }else{
-    playSound("wrongSound"); document.getElementById("message").innerText="Try again";
-    setTimeout(()=>{document.getElementById("message").innerText="";},700);
+    playSound("wrongSound");
+    document.getElementById("message").innerText="Try again";
+    setTimeout(()=>{
+      document.getElementById("message").innerText="";
+    },700);
   }
 }
 
 function showFinalScreen(){
-  gameScreen.style.display="none"; finalScreen.style.display="flex"; playSound("clapSound"); createConfetti();
+  gameScreen.style.display="none";
+  finalScreen.style.display="flex";
+  playSound("clapSound");
+  createConfetti();
 }
 
 function createConfetti(){
   finalScreen.querySelectorAll(".confetti").forEach(c=>c.remove());
   for(let i=0;i<45;i++){
-    const c=document.createElement("div"); c.className="confetti";
+    const c=document.createElement("div");
+    c.className="confetti";
     c.style.left=Math.random()*100+"vw";
     c.style.background=["#4a90e2","#6ab0f5","#65d4ff","#3c6bbf","#2f8cde"][i%5];
-    c.style.animationDelay=Math.random()*2+"s"; finalScreen.appendChild(c);
+    c.style.animationDelay=Math.random()*2+"s";
+    finalScreen.appendChild(c);
   }
 }
 
 function restartGame(){
-  current=0; finalScreen.style.display="none"; logoScreen.style.display="flex";
-  setTimeout(()=>{logoScreen.style.display="none"; gameScreen.style.display="flex"; loadQuestion();},2000);
+  current=0;
+  finalScreen.style.display="none";
+  logoScreen.style.display="flex";
+  setTimeout(()=>{
+    logoScreen.style.display="none";
+    gameScreen.style.display="flex";
+    loadQuestion();
+  },2000);
 }
 </script>
 </body>
