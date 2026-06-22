@@ -153,7 +153,7 @@ body{background:#fff;}
   <div class="card">
     <div class="topBar">
       <span id="slideNo">Question 1 / 5</span>
-      <span>Tap letters</span>
+      <span>Tap the letters and the blanks.</span>
     </div>
 
     <img id="flowerImage" class="flowerImg" src="" alt="Flower">
@@ -176,36 +176,11 @@ body{background:#fff;}
 
 <script>
 const questions = [
-  {
-    answer:"CHERRY BLOSSOM",
-    display:"CHERRY BLOSSOM",
-    jumble:"YHERCRSBOLSOM",
-    image:"./assets/cherry-blossom.png"
-  },
-  {
-    answer:"RAFFLESIA",
-    display:"RAFFLESIA",
-    jumble:"AFRSEFAIL",
-    image:"./assets/rafflesia.png"
-  },
-  {
-    answer:"PASSION FLOWER",
-    display:"PASSION FLOWER",
-    jumble:"SIPASNOFROWLE",
-    image:"./assets/passion.png"
-  },
-  {
-    answer:"SNOWDROP",
-    display:"SNOWDROP",
-    jumble:"WDOSNROP",
-    image:"./assets/snowdrop.png"
-  },
-  {
-    answer:"PROTEA",
-    display:"PROTEA",
-    jumble:"TAEPOR",
-    image:"./assets/protea.png"
-  }
+  {answer:"CHERRY BLOSSOM",display:"CHERRY BLOSSOM",jumble:"YHERCRSBOLSOM",image:"./assets/cherry-blossom.png"},
+  {answer:"RAFFLESIA",display:"RAFFLESIA",jumble:"AFRSEFAIL",image:"./assets/rafflesia.png"},
+  {answer:"PASSION FLOWER",display:"PASSION FLOWER",jumble:"SIPASNOFROWLE",image:"./assets/passion.png"},
+  {answer:"SNOWDROP",display:"SNOWDROP",jumble:"WDOSNROP",image:"./assets/snowdrop.png"},
+  {answer:"PROTEA",display:"PROTEA",jumble:"TAEPOR",image:"./assets/protea.png"}
 ];
 
 let current = 0;
