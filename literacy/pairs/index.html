@@ -11,19 +11,27 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+:root {
+  --app-height: 100vh;
+  --target-size: 155px;
+  --option-size: 145px;
+  --grid-gap: 10px;
+}
+
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100%;
+  height: var(--app-height);
   overflow: hidden;
   font-family: Arial, sans-serif;
   background: #fff7db;
+  touch-action: manipulation;
 }
 
 .screen {
   width: 100vw;
-  height: 100vh;
+  height: var(--app-height);
   display: none;
   position: relative;
   overflow: hidden;
@@ -45,10 +53,10 @@ html, body {
   height: auto;
 }
 
-/* Game background */
+/* Background */
 .game-bg {
   background:
-    linear-gradient(rgba(255,255,255,0.18), rgba(255,255,255,0.18)),
+    linear-gradient(rgba(255,255,255,0.14), rgba(255,255,255,0.14)),
     url("assets/background-pairs.png") center/cover no-repeat;
 }
 
@@ -62,7 +70,7 @@ html, body {
 
 .start-card {
   width: min(92vw, 560px);
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 28px;
   padding: 26px 20px;
   box-shadow: 0 10px 28px rgba(0,0,0,0.18);
@@ -85,7 +93,8 @@ html, body {
   margin: 8px 0 20px;
 }
 
-.start-btn, .play-btn {
+.start-btn,
+.play-btn {
   border: none;
   background: linear-gradient(180deg, #3bd66f, #16a84c);
   color: white;
@@ -97,7 +106,8 @@ html, body {
   box-shadow: 0 7px 0 #087a33, 0 10px 20px rgba(0,0,0,0.22);
 }
 
-.start-btn:active, .play-btn:active {
+.start-btn:active,
+.play-btn:active {
   transform: translateY(4px);
   box-shadow: 0 3px 0 #087a33;
 }
@@ -106,62 +116,66 @@ html, body {
 #gameScreen {
   flex-direction: column;
   align-items: center;
-  padding: 10px;
+  justify-content: flex-start;
+  padding: 8px 10px 10px;
 }
 
 .top-bar {
-  width: min(96vw, 900px);
+  width: min(94vw, 900px);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 4px;
   gap: 8px;
+  flex: 0 0 auto;
 }
 
 .badge {
   background: #ffffffee;
   color: #333;
-  padding: 8px 14px;
+  padding: 7px 13px;
   border-radius: 18px;
-  font-size: clamp(15px, 3.5vw, 20px);
+  font-size: clamp(14px, 3.8vw, 20px);
   font-weight: 900;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   border: 3px solid #ffd86b;
+  white-space: nowrap;
 }
 
 .question-title {
   width: min(96vw, 900px);
   text-align: center;
-  margin: 8px 0 6px;
-  font-size: clamp(22px, 5.3vw, 36px);
-  color: #f5f247;
+  margin: 6px 0 4px;
+  font-size: clamp(24px, 6vw, 38px);
+  line-height: 1;
+  color: #d99a00;
   font-weight: 900;
-  text-shadow: 2px 3px 0 rgba(0,0,0,0.25);
+  text-shadow: 2px 3px 0 rgba(255,255,255,0.85);
+  flex: 0 0 auto;
 }
 
 .question-area {
-  width: min(96vw, 900px);
-  flex: 1;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  gap: 8px;
-  align-items: center;
-  justify-items: center;
+  width: 100%;
+  flex: 1 1 auto;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .target-card {
-  width: min(46vw, 220px);
-  aspect-ratio: 1 / 1;
+  width: var(--target-size);
+  height: var(--target-size);
   background: #ffffffee;
-  border-radius: 28px;
+  border-radius: 24px;
   border: 5px solid #ffbd35;
   box-shadow: 0 8px 18px rgba(0,0,0,0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 14px;
+  padding: 11px;
   position: relative;
+  flex: 0 0 auto;
 }
 
 .target-card::after {
@@ -173,7 +187,7 @@ html, body {
   padding: 5px 14px;
   border-radius: 18px;
   font-weight: 900;
-  font-size: clamp(13px, 3vw, 17px);
+  font-size: clamp(12px, 3.2vw, 16px);
   white-space: nowrap;
 }
 
@@ -184,26 +198,28 @@ html, body {
 }
 
 .options-grid {
-  width: min(96vw, 780px);
+  margin-top: 28px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(8px, 2vw, 16px);
+  grid-template-columns: repeat(2, var(--option-size));
+  grid-template-rows: repeat(2, var(--option-size));
+  gap: var(--grid-gap);
   align-items: center;
   justify-content: center;
-  margin-top: 18px;
+  flex: 0 0 auto;
 }
 
 .option {
-  aspect-ratio: 1 / 1;
+  width: var(--option-size);
+  height: var(--option-size);
   background: #ffffffee;
   border: 4px solid #87d8ff;
-  border-radius: 24px;
+  border-radius: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(8px, 2.2vw, 18px);
+  padding: 9px;
   cursor: pointer;
-  box-shadow: 0 7px 0 #4aa9d7, 0 9px 18px rgba(0,0,0,0.18);
+  box-shadow: 0 6px 0 #4aa9d7, 0 8px 16px rgba(0,0,0,0.18);
   transition: transform 0.15s ease;
   position: relative;
 }
@@ -221,7 +237,7 @@ html, body {
 
 .option.correct {
   border-color: #22c55e;
-  box-shadow: 0 7px 0 #15803d, 0 0 20px #55ff91;
+  box-shadow: 0 6px 0 #15803d, 0 0 20px #55ff91;
   background: #edfff3;
 }
 
@@ -231,12 +247,12 @@ html, body {
 
 @keyframes glowPulse {
   from {
-    box-shadow: 0 7px 0 #15803d, 0 0 10px #47ff80;
+    box-shadow: 0 6px 0 #15803d, 0 0 10px #47ff80;
     transform: scale(1);
   }
   to {
-    box-shadow: 0 7px 0 #15803d, 0 0 32px #47ff80;
-    transform: scale(1.06);
+    box-shadow: 0 6px 0 #15803d, 0 0 28px #47ff80;
+    transform: scale(1.04);
   }
 }
 
@@ -247,10 +263,10 @@ html, body {
 
 @keyframes wiggle {
   0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-8px); }
-  40% { transform: translateX(8px); }
-  60% { transform: translateX(-6px); }
-  80% { transform: translateX(6px); }
+  20% { transform: translateX(-7px); }
+  40% { transform: translateX(7px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
 }
 
 .feedback {
@@ -263,8 +279,8 @@ html, body {
   color: #16a34a;
   border: 5px solid #22c55e;
   border-radius: 28px;
-  padding: 18px 30px;
-  font-size: clamp(30px, 8vw, 58px);
+  padding: 16px 28px;
+  font-size: clamp(30px, 8vw, 56px);
   font-weight: 900;
   box-shadow: 0 12px 28px rgba(0,0,0,0.25);
   text-align: center;
@@ -322,61 +338,100 @@ canvas {
   z-index: 3;
 }
 
-/* Small screens */
-@media (max-width: 620px) {
-  #gameScreen {
-    padding: 8px;
+/* Tablet / Desktop */
+@media (min-width: 700px) {
+  :root {
+    --target-size: 210px;
+    --option-size: 160px;
+    --grid-gap: 16px;
   }
 
-  .top-bar {
-    margin-top: 2px;
+  #gameScreen {
+    padding: 12px;
   }
 
   .question-title {
-    margin: 5px 0 4px;
-  }
-
-  .target-card {
-    width: min(43vw, 170px);
-    border-radius: 22px;
-    padding: 10px;
+    margin: 8px 0 6px;
   }
 
   .options-grid {
-    grid-template-columns: repeat(2, 1fr);
-    width: min(92vw, 390px);
-    gap: 10px;
-    margin-top: 16px;
-  }
-
-  .option {
-    border-radius: 20px;
-    padding: 10px;
+    grid-template-columns: repeat(4, var(--option-size));
+    grid-template-rows: repeat(1, var(--option-size));
+    margin-top: 32px;
   }
 }
 
-@media (max-height: 570px) {
-  .question-title {
-    font-size: clamp(18px, 4.5vw, 28px);
-  }
-
-  .target-card {
-    width: min(32vw, 140px);
-  }
-
-  .options-grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    margin-top: 10px;
-  }
-
-  .option {
-    border-radius: 18px;
-    padding: 8px;
+/* Very small phone height */
+@media (max-width: 430px) and (max-height: 720px) {
+  #gameScreen {
+    padding: 6px 8px 8px;
   }
 
   .badge {
     padding: 6px 10px;
+    border-radius: 15px;
+    border-width: 3px;
+  }
+
+  .question-title {
+    margin: 5px 0 3px;
+    font-size: clamp(22px, 6vw, 28px);
+  }
+
+  .target-card {
+    border-radius: 20px;
+    border-width: 4px;
+    padding: 9px;
+  }
+
+  .target-card::after {
+    bottom: -15px;
+    padding: 4px 12px;
+  }
+
+  .options-grid {
+    margin-top: 24px;
+  }
+
+  .option {
+    border-radius: 18px;
+    border-width: 4px;
+    padding: 7px;
+  }
+}
+
+/* Landscape phones */
+@media (orientation: landscape) and (max-height: 520px) {
+  #gameScreen {
+    padding: 6px;
+  }
+
+  .question-title {
+    font-size: clamp(18px, 4vw, 26px);
+    margin: 4px 0;
+  }
+
+  .question-area {
+    flex-direction: row;
+    justify-content: center;
+    gap: 22px;
+  }
+
+  .target-card {
+    width: min(24vw, 130px);
+    height: min(24vw, 130px);
+  }
+
+  .options-grid {
+    margin-top: 0;
+    grid-template-columns: repeat(4, min(18vw, 115px));
+    grid-template-rows: repeat(1, min(18vw, 115px));
+    gap: 8px;
+  }
+
+  .option {
+    width: min(18vw, 115px);
+    height: min(18vw, 115px);
   }
 }
 </style>
@@ -384,12 +439,10 @@ canvas {
 
 <body>
 
-<!-- Slide 1: Logo -->
 <section id="splash" class="screen active">
   <img src="assets/innovine-logo.png" alt="Innovine Logo">
 </section>
 
-<!-- Start Slide -->
 <section id="startScreen" class="screen game-bg">
   <div class="start-card">
     <h1 class="game-title">Pair Up Fun!</h1>
@@ -398,7 +451,6 @@ canvas {
   </div>
 </section>
 
-<!-- Game Slide -->
 <section id="gameScreen" class="screen game-bg">
   <div class="top-bar">
     <div class="badge" id="questionCount">Question 1 / 5</div>
@@ -409,7 +461,7 @@ canvas {
 
   <div class="question-area">
     <div class="target-card">
-      <img id="targetImage" src="" alt="Question">
+      <img id="targetImage" src="" alt="">
     </div>
 
     <div class="options-grid" id="optionsGrid"></div>
@@ -418,7 +470,6 @@ canvas {
   <div id="feedback" class="feedback">✓<br>Good job!</div>
 </section>
 
-<!-- End Slide -->
 <section id="endScreen" class="screen game-bg">
   <canvas id="confettiCanvas"></canvas>
 
@@ -433,43 +484,69 @@ canvas {
 <audio id="wrongSound" src="assets/wrong.mp3" preload="auto"></audio>
 
 <script>
-const allPairs = [
-  {
-    question: "book.png",
-    answer: "pencil.png"
-  },
-  {
-    question: "lock.png",
-    answer: "key.png"
-  },
-  {
-    question: "socks.png",
-    answer: "shoes.png"
-  },
-  {
-    question: "comb.png",
-    answer: "hair.png"
-  },
-  {
-    question: "bee.png",
-    answer: "flowers.png"
-  },
-  {
-    question: "spoon.png",
-    answer: "fork.png"
-  },
-  {
-    question: "nail.png",
-    answer: "hammer.png"
-  },
-  {
-    question: "candle.png",
-    answer: "matchstiks.png"
-  },
-  {
-    question: "nuts.png",
-    answer: "bolts.png"
+function setAppHeightAndSizes() {
+  const visualHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  const visualWidth = window.visualViewport ? window.visualViewport.width : window.innerWidth;
+
+  document.documentElement.style.setProperty("--app-height", visualHeight + "px");
+
+  if (visualWidth < 700) {
+    let targetSize = Math.min(155, Math.max(108, visualWidth * 0.36, visualHeight * 0.19));
+
+    const topBarSpace = 48;
+    const titleSpace = 35;
+    const findPairLabelSpace = 18;
+    const verticalGaps = 34;
+    const bottomPadding = 12;
+
+    let remainingForOptions = visualHeight - topBarSpace - titleSpace - targetSize - findPairLabelSpace - verticalGaps - bottomPadding;
+    let optionByHeight = (remainingForOptions - 10) / 2;
+    let optionByWidth = (visualWidth * 0.86 - 10) / 2;
+
+    let optionSize = Math.min(optionByHeight, optionByWidth, 155);
+
+    if (optionSize < 108) {
+      targetSize = Math.max(96, targetSize - 16);
+      remainingForOptions = visualHeight - topBarSpace - titleSpace - targetSize - findPairLabelSpace - verticalGaps - bottomPadding;
+      optionByHeight = (remainingForOptions - 10) / 2;
+      optionSize = Math.min(optionByHeight, optionByWidth, 145);
+    }
+
+    optionSize = Math.max(96, Math.floor(optionSize));
+    targetSize = Math.floor(targetSize);
+
+    document.documentElement.style.setProperty("--target-size", targetSize + "px");
+    document.documentElement.style.setProperty("--option-size", optionSize + "px");
+    document.documentElement.style.setProperty("--grid-gap", "10px");
+  } else {
+    document.documentElement.style.setProperty("--target-size", "210px");
+    document.documentElement.style.setProperty("--option-size", "160px");
+    document.documentElement.style.setProperty("--grid-gap", "16px");
   }
+}
+
+setAppHeightAndSizes();
+
+window.addEventListener("resize", setAppHeightAndSizes);
+window.addEventListener("orientationchange", () => {
+  setTimeout(setAppHeightAndSizes, 300);
+});
+
+if (window.visualViewport) {
+  window.visualViewport.addEventListener("resize", setAppHeightAndSizes);
+  window.visualViewport.addEventListener("scroll", setAppHeightAndSizes);
+}
+
+const allPairs = [
+  { question: "book.png", answer: "pencil.png" },
+  { question: "lock.png", answer: "key.png" },
+  { question: "socks.png", answer: "shoes.png" },
+  { question: "comb.png", answer: "hair.png" },
+  { question: "bee.png", answer: "flowers.png" },
+  { question: "spoon.png", answer: "fork.png" },
+  { question: "nail.png", answer: "hammer.png" },
+  { question: "candle.png", answer: "matchsticks.png" },
+  { question: "nuts.png", answer: "bolts.png" }
 ];
 
 let questions = [];
@@ -494,6 +571,7 @@ const wrongSound = document.getElementById("wrongSound");
 const finalScore = document.getElementById("finalScore");
 
 window.addEventListener("load", () => {
+  setAppHeightAndSizes();
   setTimeout(() => {
     showScreen(startScreen);
   }, 2000);
@@ -502,6 +580,7 @@ window.addEventListener("load", () => {
 function showScreen(screen) {
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   screen.classList.add("active");
+  setAppHeightAndSizes();
 }
 
 function startGame() {
@@ -520,6 +599,8 @@ function restartGame() {
 }
 
 function loadQuestion() {
+  setAppHeightAndSizes();
+
   locked = false;
   wrongAttempts = 0;
   feedback.classList.remove("show");
@@ -546,7 +627,7 @@ function loadQuestion() {
 
     const img = document.createElement("img");
     img.src = "assets/" + file;
-    img.alt = "Option";
+    img.alt = "";
 
     option.appendChild(img);
     option.addEventListener("click", () => checkAnswer(option, file));
@@ -575,7 +656,7 @@ function checkAnswer(option, selectedFile) {
       } else {
         endGame();
       }
-    }, 1300);
+    }, 1200);
 
   } else {
     wrongAttempts++;
@@ -635,6 +716,7 @@ function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 }
+
 window.addEventListener("resize", resizeCanvas);
 
 function startConfetti() {
