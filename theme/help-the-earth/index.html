@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Help the Earth</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:Arial, sans-serif;
+  background:#ffffff;
+  user-select:none;
+}
+
+.screen{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+.active{
+  display:flex;
+}
+
+/* Logo screen */
+#logoScreen{
+  background:#ffffff;
+  z-index:10;
+}
+
+#logoScreen img{
+  width:170px;
+  max-width:55vw;
+}
+
+/* Earth message screen */
+#earthScreen{
+  background:linear-gradient(#bff3ff,#ecfff1);
+  flex-direction:column;
+  padding:20px;
+}
+
+.earth{
+  width:190px;
+  height:190px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 35%, #7dd3fc 0 18%, transparent 19%),
+    radial-gradient(circle at 65% 40%, #22c55e 0 18%, transparent 19%),
+    radial-gradient(circle at 42% 70%, #16a34a 0 16%, transparent 17%),
+    radial-gradient(circle at 70% 72%, #65a30d 0 12%, transparent 13%),
+    #38bdf8;
+  border:7px solid #ffffff;
+  box-shadow:0 12px 28px rgba(0,0,0,0.22);
+  position:relative;
+  animation:floatEarth 2s infinite ease-in-out;
+}
+
+.earth::before{
+  content:"";
+  position:absolute;
+  width:18px;
+  height:18px;
+  background:#111827;
+  border-radius:50%;
+  left:58px;
+  top:65px;
+  box-shadow:55px 0 #111827;
+}
+
+.earth::after{
+  content:"";
+  position:absolute;
+  width:60px;
+  height:28px;
+  border-bottom:5px solid #111827;
+  border-radius:0 0 60px 60px;
+  left:63px;
+  top:96px;
+}
+
+@keyframes floatEarth{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+
+.earthMsg{
+  margin-top:22px;
+  background:#ffffff;
+  color:#166534;
+  padding:18px 22px;
+  border-radius:22px;
+  font-size:clamp(24px,5vw,38px);
+  font-weight:800;
+  line-height:1.2;
+  box-shadow:0 8px 22px rgba(0,0,0,0.16);
+}
+
+/* Game screen */
+#gameScreen{
+  background:url("assets/help-the-earth_background.png") center/cover no-repeat;
+  flex-direction:column;
+  justify-content:flex-start;
+  padding:8px;
+}
+
+.topBar{
+  width:100%;
+  height:17vh;
+  min-height:86px;
+  max-height:125px;
+  background:rgba(255,255,255,0.92);
+  border-radius:18px;
+  padding:8px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 5px 15px rgba(0,0,0,0.16);
+}
+
+.title{
+  font-size:clamp(22px,4.5vw,34px);
+  color:#166534;
+  font-weight:900;
+  margin-bottom:5px;
+}
+
+.question{
+  font-size:clamp(17px,3.5vw,25px);
+  color:#1f2937;
+  font-weight:800;
+  line-height:1.2;
+}
+
+.scoreText{
+  margin-top:3px;
+  font-size:clamp(13px,2.7vw,17px);
+  color:#374151;
+  font-weight:700;
+}
+
+.playArea{
+  position:relative;
+  width:100%;
+  height:calc(83vh - 16px);
+  margin-top:8px;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+/* Items */
+.item{
+  position:absolute;
+  width:clamp(62px,14vw,95px);
+  height:clamp(62px,14vw,95px);
+  border-radius:20px;
+  background:rgba(255,255,255,0.92);
+  border:3px solid rgba(255,255,255,0.95);
+  box-shadow:0 7px 14px rgba(0,0,0,0.22);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:clamp(34px,8vw,56px);
+  cursor:pointer;
+  transition:transform 0.2s, box-shadow 0.2s, opacity 0.3s;
+}
+
+.item.selected{
+  transform:scale(1.1);
+  box-shadow:0 0 0 6px #22c55e, 0 10px 20px rgba(0,0,0,0.25);
+}
+
+.item.correctGlow{
+  animation:glow 0.8s infinite alternate;
+}
+
+@keyframes glow{
+  from{box-shadow:0 0 0 5px #facc15, 0 8px 16px rgba(0,0,0,0.24)}
+  to{box-shadow:0 0 0 11px #22c55e, 0 8px 16px rgba(0,0,0,0.24)}
+}
+
+.wiggle{
+  animation:wiggle 0.35s;
+}
+
+@keyframes wiggle{
+  0%{transform:translateX(0)}
+  25%{transform:translateX(-10px)}
+  50%{transform:translateX(10px)}
+  75%{transform:translateX(-8px)}
+  100%{transform:translateX(0)}
+}
+
+/* Dustbin */
+.dustbin{
+  position:absolute;
+  right:4%;
+  bottom:5%;
+  width:clamp(105px,23vw,155px);
+  height:clamp(120px,27vw,180px);
+  cursor:pointer;
+  z-index:4;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-end;
+}
+
+.binLid{
+  width:80%;
+  height:16%;
+  background:#166534;
+  border-radius:12px 12px 6px 6px;
+  border:3px solid #ffffff;
+}
+
+.binBody{
+  width:68%;
+  height:78%;
+  background:#22c55e;
+  border-radius:8px 8px 18px 18px;
+  border:4px solid #ffffff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:clamp(14px,3vw,22px);
+  font-weight:900;
+  color:#ffffff;
+  line-height:1.05;
+  text-shadow:1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.dustbin.ready{
+  animation:binPulse 0.7s infinite alternate;
+}
+
+@keyframes binPulse{
+  from{transform:scale(1)}
+  to{transform:scale(1.06)}
+}
+
+/* Feedback */
+.feedback{
+  position:absolute;
+  left:50%;
+  top:45%;
+  transform:translate(-50%,-50%);
+  background:rgba(255,255,255,0.96);
+  color:#15803d;
+  padding:16px 24px;
+  border-radius:22px;
+  font-size:clamp(26px,6vw,46px);
+  font-weight:900;
+  box-shadow:0 8px 22px rgba(0,0,0,0.22);
+  display:none;
+  z-index:7;
+}
+
+.feedback.show{
+  display:block;
+}
+
+/* End screen */
+#endScreen{
+  background:linear-gradient(#dcfce7,#e0f2fe);
+  flex-direction:column;
+  padding:20px;
+}
+
+.endCard{
+  width:min(92vw,520px);
+  background:#ffffff;
+  padding:28px 20px;
+  border-radius:28px;
+  box-shadow:0 12px 28px rgba(0,0,0,0.2);
+  z-index:3;
+}
+
+.endTitle{
+  font-size:clamp(34px,8vw,56px);
+  color:#15803d;
+  font-weight:900;
+  margin-bottom:12px;
+}
+
+.endText{
+  font-size:clamp(18px,4vw,26px);
+  color:#1f2937;
+  font-weight:800;
+  margin-bottom:18px;
+  line-height:1.3;
+}
+
+button{
+  border:none;
+  outline:none;
+  padding:14px 26px;
+  border-radius:999px;
+  background:#16a34a;
+  color:#ffffff;
+  font-size:clamp(18px,4vw,24px);
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 7px 15px rgba(0,0,0,0.22);
+}
+
+button:active{
+  transform:scale(0.96);
+}
+
+/* Confetti */
+.confetti{
+  position:fixed;
+  width:12px;
+  height:12px;
+  top:-20px;
+  z-index:20;
+  animation:fall 2.8s linear forwards;
+}
+
+@keyframes fall{
+  to{
+    transform:translateY(110vh) rotate(720deg);
+    opacity:0;
+  }
+}
+
+/* Small height devices */
+@media(max-height:560px){
+  .topBar{
+    height:19vh;
+    min-height:78px;
+  }
+
+  .playArea{
+    height:calc(81vh - 16px);
+  }
+
+  .item{
+    width:56px;
+    height:56px;
+    font-size:32px;
+    border-radius:16px;
+  }
+
+  .dustbin{
+    width:92px;
+    height:112px;
+  }
+
+  .title{
+    font-size:21px;
+  }
+
+  .question{
+    font-size:16px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<audio id="clapSound" src="assets/claps.mp3" preload="auto"></audio>
+<audio id="wrongSound" src="assets/wrong.mp3" preload="auto"></audio>
+
+<!-- Logo Screen -->
+<div id="logoScreen" class="screen active">
+  <img src="assets/innovine-logo.png" alt="Innovine Logo">
+</div>
+
+<!-- Earth Message Screen -->
+<div id="earthScreen" class="screen">
+  <div class="earth"></div>
+  <div class="earthMsg">Help me!<br>Keep Me Neat And Clean</div>
+</div>
+
+<!-- Game Screen -->
+<div id="gameScreen" class="screen">
+  <div class="topBar">
+    <div class="title">Help the Earth</div>
+    <div id="question" class="question">Tap the waste item. Then tap the dustbin.</div>
+    <div id="scoreText" class="scoreText">Question 1 of 10</div>
+  </div>
+
+  <div id="playArea" class="playArea">
+    <div id="feedback" class="feedback">✓ Good Job!</div>
+
+    <div id="dustbin" class="dustbin">
+      <div class="binLid"></div>
+      <div class="binBody">DUST<br>BIN</div>
+    </div>
+  </div>
+</div>
+
+<!-- End Screen -->
+<div id="endScreen" class="screen">
+  <div class="endCard">
+    <div class="endTitle">Good Job!</div>
+    <div class="endText">You helped the Earth become neat and clean.</div>
+    <button onclick="restartGame()">Play Again</button>
+  </div>
+</div>
+
+<script>
+var screens = {
+  logo: document.getElementById("logoScreen"),
+  earth: document.getElementById("earthScreen"),
+  game: document.getElementById("gameScreen"),
+  end: document.getElementById("endScreen")
+};
+
+var playArea = document.getElementById("playArea");
+var questionText = document.getElementById("question");
+var scoreText = document.getElementById("scoreText");
+var feedback = document.getElementById("feedback");
+var dustbin = document.getElementById("dustbin");
+var clapSound = document.getElementById("clapSound");
+var wrongSound = document.getElementById("wrongSound");
+
+var questions = [
+  {
+    text:"Tap the banana peel. Then tap the dustbin.",
+    answer:"banana peel",
+    items:[
+      {name:"banana peel", icon:"🍌"},
+      {name:"bottle", icon:"🍼"},
+      {name:"paper", icon:"📄"},
+      {name:"leaf", icon:"🍃"}
+    ]
+  },
+  {
+    text:"Tap the paper. Then tap the dustbin.",
+    answer:"paper",
+    items:[
+      {name:"paper", icon:"📄"},
+      {name:"apple", icon:"🍎"},
+      {name:"cup", icon:"🥤"},
+      {name:"flower", icon:"🌸"}
+    ]
+  },
+  {
+    text:"Tap the plastic bottle. Then tap the dustbin.",
+    answer:"bottle",
+    items:[
+      {name:"bottle", icon:"🍼"},
+      {name:"banana peel", icon:"🍌"},
+      {name:"leaf", icon:"🍃"},
+      {name:"toy", icon:"🧸"}
+    ]
+  },
+  {
+    text:"Tap the paper cup. Then tap the dustbin.",
+    answer:"cup",
+    items:[
+      {name:"cup", icon:"🥤"},
+      {name:"book", icon:"📘"},
+      {name:"apple", icon:"🍎"},
+      {name:"flower", icon:"🌼"}
+    ]
+  },
+  {
+    text:"Tap the food wrapper. Then tap the dustbin.",
+    answer:"wrapper",
+    items:[
+      {name:"wrapper", icon:"🍬"},
+      {name:"ball", icon:"⚽"},
+      {name:"leaf", icon:"🍃"},
+      {name:"paper", icon:"📄"}
+    ]
+  },
+  {
+    text:"Tap the tin can. Then tap the dustbin.",
+    answer:"can",
+    items:[
+      {name:"can", icon:"🥫"},
+      {name:"banana peel", icon:"🍌"},
+      {name:"flower", icon:"🌷"},
+      {name:"book", icon:"📗"}
+    ]
+  },
+  {
+    text:"Tap the plastic bag. Then tap the dustbin.",
+    answer:"bag",
+    items:[
+      {name:"bag", icon:"🛍️"},
+      {name:"apple", icon:"🍎"},
+      {name:"leaf", icon:"🍃"},
+      {name:"toy", icon:"🧸"}
+    ]
+  },
+  {
+    text:"Tap the tissue. Then tap the dustbin.",
+    answer:"tissue",
+    items:[
+      {name:"tissue", icon:"🧻"},
+      {name:"cup", icon:"🥤"},
+      {name:"flower", icon:"🌸"},
+      {name:"ball", icon:"⚽"}
+    ]
+  },
+  {
+    text:"Tap the apple core. Then tap the dustbin.",
+    answer:"apple core",
+    items:[
+      {name:"apple core", icon:"🍎"},
+      {name:"paper", icon:"📄"},
+      {name:"leaf", icon:"🍃"},
+      {name:"book", icon:"📘"}
+    ]
+  },
+  {
+    text:"Tap the straw. Then tap the dustbin.",
+    answer:"straw",
+    items:[
+      {name:"straw", icon:"🥤"},
+      {name:"banana peel", icon:"🍌"},
+      {name:"flower", icon:"🌼"},
+      {name:"toy", icon:"🧸"}
+    ]
+  }
+];
+
+var current = 0;
+var wrongAttempts = 0;
+var selectedItem = null;
+var accepting = true;
+var gameQuestions = [];
+
+var itemPositions = [
+  {left:"7%", top:"7%"},
+  {left:"34%", top:"10%"},
+  {left:"62%", top:"8%"},
+  {left:"12%", top:"38%"},
+  {left:"42%", top:"40%"},
+  {left:"68%", top:"38%"}
+];
+
+function showScreen(name){
+  for(var key in screens){
+    screens[key].classList.remove("active");
+  }
+  screens[name].classList.add("active");
+}
+
+function shuffle(array){
+  for(var i=array.length-1;i>0;i--){
+    var j=Math.floor(Math.random()*(i+1));
+    var temp=array[i];
+    array[i]=array[j];
+    array[j]=temp;
+  }
+  return array;
+}
+
+function playSound(audio){
+  try{
+    audio.currentTime = 0;
+    audio.play();
+  }catch(e){}
+}
+
+function startFlow(){
+  setTimeout(function(){
+    showScreen("earth");
+    setTimeout(function(){
+      startGame();
+    },2500);
+  },2000);
+}
+
+function startGame(){
+  showScreen("game");
+  current = 0;
+  gameQuestions = shuffle(questions.slice());
+  loadQuestion();
+}
+
+function loadQuestion(){
+  accepting = true;
+  wrongAttempts = 0;
+  selectedItem = null;
+  feedback.classList.remove("show");
+  dustbin.classList.remove("ready");
+
+  var oldItems = document.querySelectorAll(".item");
+  for(var i=0;i<oldItems.length;i++){
+    oldItems[i].parentNode.removeChild(oldItems[i]);
+  }
+
+  if(current >= gameQuestions.length){
+    endGame();
+    return;
+  }
+
+  var q = gameQuestions[current];
+  questionText.textContent = q.text;
+  scoreText.textContent = "Question " + (current + 1) + " of " + gameQuestions.length;
+
+  var shuffledItems = shuffle(q.items.slice());
+  var shuffledPositions = shuffle(itemPositions.slice());
+
+  for(var k=0;k<shuffledItems.length;k++){
+    createItem(shuffledItems[k], shuffledPositions[k]);
+  }
+}
+
+function createItem(data, pos){
+  var div = document.createElement("div");
+  div.className = "item";
+  div.textContent = data.icon;
+  div.setAttribute("data-name", data.name);
+  div.style.left = pos.left;
+  div.style.top = pos.top;
+
+  div.onclick = function(){
+    tapItem(div);
+  };
+
+  playArea.appendChild(div);
+}
+
+function tapItem(item){
+  if(!accepting) return;
+
+  var q = gameQuestions[current];
+  var itemName = item.getAttribute("data-name");
+
+  if(itemName === q.answer){
+    var allItems = document.querySelectorAll(".item");
+    for(var i=0;i<allItems.length;i++){
+      allItems[i].classList.remove("selected");
+    }
+
+    selectedItem = item;
+    item.classList.add("selected");
+    dustbin.classList.add("ready");
+    questionText.textContent = "Great! Now tap the dustbin.";
+  }else{
+    wrongAttempts++;
+    item.classList.add("wiggle");
+    playSound(wrongSound);
+
+    setTimeout(function(){
+      item.classList.remove("wiggle");
+    },400);
+
+    if(wrongAttempts >= 2){
+      showCorrectGlow();
+      questionText.textContent = "Look carefully! Tap the glowing waste item.";
+    }else{
+      questionText.textContent = "Try again! Tap the correct waste item.";
+    }
+  }
+}
+
+function showCorrectGlow(){
+  var q = gameQuestions[current];
+  var allItems = document.querySelectorAll(".item");
+
+  for(var i=0;i<allItems.length;i++){
+    if(allItems[i].getAttribute("data-name") === q.answer){
+      allItems[i].classList.add("correctGlow");
+    }
+  }
+}
+
+dustbin.onclick = function(){
+  if(!accepting) return;
+
+  if(selectedItem){
+    correctAnswer();
+  }else{
+    playSound(wrongSound);
+    dustbin.classList.add("wiggle");
+
+    setTimeout(function(){
+      dustbin.classList.remove("wiggle");
+    },400);
+
+    questionText.textContent = "First tap the waste item. Then tap the dustbin.";
+  }
+};
+
+function correctAnswer(){
+  accepting = false;
+  dustbin.classList.remove("ready");
+  selectedItem.classList.remove("correctGlow");
+
+  var binRect = dustbin.getBoundingClientRect();
+  var areaRect = playArea.getBoundingClientRect();
+
+  selectedItem.style.left = (binRect.left - areaRect.left + binRect.width/2 - selectedItem.offsetWidth/2) + "px";
+  selectedItem.style.top = (binRect.top - areaRect.top + binRect.height/2 - selectedItem.offsetHeight/2) + "px";
+  selectedItem.style.transform = "scale(0.2)";
+  selectedItem.style.opacity = "0";
+
+  feedback.textContent = "✓ Good Job!";
+  feedback.classList.add("show");
+  playSound(clapSound);
+
+  setTimeout(function(){
+    feedback.classList.remove("show");
+    current++;
+    loadQuestion();
+  },1200);
+}
+
+function endGame(){
+  showScreen("end");
+  makeConfetti();
+  playSound(clapSound);
+}
+
+function makeConfetti(){
+  var colors = ["#22c55e","#38bdf8","#facc15","#fb7185","#a78bfa","#f97316"];
+
+  for(var i=0;i<90;i++){
+    var piece = document.createElement("div");
+    piece.className = "confetti";
+    piece.style.left = Math.random()*100 + "vw";
+    piece.style.background = colors[Math.floor(Math.random()*colors.length)];
+    piece.style.animationDelay = Math.random()*1.2 + "s";
+    piece.style.borderRadius = Math.random() > 0.5 ? "50%" : "2px";
+    document.body.appendChild(piece);
+
+    setTimeout((function(p){
+      return function(){
+        if(p && p.parentNode){
+          p.parentNode.removeChild(p);
+        }
+      };
+    })(piece),4200);
+  }
+}
+
+function restartGame(){
+  var confetti = document.querySelectorAll(".confetti");
+  for(var i=0;i<confetti.length;i++){
+    confetti[i].parentNode.removeChild(confetti[i]);
+  }
+
+  showScreen("earth");
+  setTimeout(function(){
+    startGame();
+  },1800);
+}
+
+startFlow();
+</script>
+
+</body>
+</html>
