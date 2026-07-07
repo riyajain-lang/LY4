@@ -143,7 +143,7 @@ html,body{
   margin-bottom:4px;
 }
 
-.question{
+.instruction{
   font-size:clamp(16px,3.3vw,25px);
   color:#1f2937;
   font-weight:800;
@@ -188,11 +188,11 @@ html,body{
 }
 
 .litter.selected{
-  transform:scale(1.13);
+  transform:scale(1.14);
 }
 
 .litter.selected img{
-  filter:drop-shadow(0 0 10px #22c55e) drop-shadow(0 8px 6px rgba(0,0,0,0.25));
+  filter:drop-shadow(0 0 12px #22c55e) drop-shadow(0 8px 6px rgba(0,0,0,0.25));
 }
 
 .litter.glow img{
@@ -399,7 +399,7 @@ button:active{
     font-size:21px;
   }
 
-  .question{
+  .instruction{
     font-size:15px;
   }
 
@@ -443,8 +443,8 @@ button:active{
 <div id="gameScreen" class="screen">
   <div class="topPanel">
     <div class="gameTitle">Help the Earth</div>
-    <div id="question" class="question">Tap the waste item. Then tap the dustbin.</div>
-    <div id="counter" class="counter">Question 1 of 6</div>
+    <div id="instruction" class="instruction">Tap any garbage. Then tap the dustbin.</div>
+    <div id="counter" class="counter">Cleaned 0 of 6</div>
   </div>
 
   <div id="scene" class="scene">
@@ -477,7 +477,7 @@ var gameScreen = document.getElementById("gameScreen");
 var endScreen = document.getElementById("endScreen");
 
 var scene = document.getElementById("scene");
-var questionBox = document.getElementById("question");
+var instructionBox = document.getElementById("instruction");
 var counterBox = document.getElementById("counter");
 var feedback = document.getElementById("feedback");
 var dustbin = document.getElementById("dustbin");
@@ -485,55 +485,49 @@ var dustbin = document.getElementById("dustbin");
 var clapSound = document.getElementById("clapSound");
 var wrongSound = document.getElementById("wrongSound");
 
-var allItems = [
+var garbageItems = [
   {
     id:"bottle",
     name:"bottle",
-    question:"Tap the bottle. Then tap the dustbin.",
     img:"assets/bottle.png",
     pos:"pos-bottle"
   },
   {
     id:"chocolate",
-    name:"chocolate wrapper",
-    question:"Tap the chocolate wrapper. Then tap the dustbin.",
+    name:"chocolate",
     img:"assets/chocolate.png",
     pos:"pos-chocolate"
   },
   {
     id:"fruits",
     name:"fruit waste",
-    question:"Tap the fruit waste. Then tap the dustbin.",
     img:"assets/fruits.png",
     pos:"pos-fruits"
   },
   {
     id:"can",
     name:"can",
-    question:"Tap the can. Then tap the dustbin.",
     img:"assets/can.png",
     pos:"pos-can"
   },
   {
     id:"cloth",
     name:"cloth",
-    question:"Tap the cloth. Then tap the dustbin.",
     img:"assets/cloth.png",
     pos:"pos-cloth"
   },
   {
     id:"icecream",
     name:"ice cream waste",
-    question:"Tap the ice cream waste. Then tap the dustbin.",
     img:"assets/ice-cream.png",
     pos:"pos-icecream"
   }
 ];
 
-var gameOrder = [];
-var currentIndex = 0;
 var selectedItem = null;
-var wrongAttempts = 0;
+var cleanedCount = 0;
+var totalItems = garbageItems.length;
+var dustbinWrongAttempts = 0;
 var accepting = true;
 
 function showScreen(screenName){
@@ -555,16 +549,6 @@ function playAudio(audio){
   }catch(e){}
 }
 
-function shuffle(arr){
-  for(var i = arr.length - 1; i > 0; i--){
-    var j = Math.floor(Math.random() * (i + 1));
-    var temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
-  }
-  return arr;
-}
-
 function startOpening(){
   showScreen("logo");
 
@@ -581,16 +565,14 @@ function startOpening(){
 function startGame(){
   showScreen("game");
 
-  currentIndex = 0;
   selectedItem = null;
-  wrongAttempts = 0;
+  cleanedCount = 0;
+  dustbinWrongAttempts = 0;
   accepting = true;
-
-  gameOrder = shuffle(allItems.slice());
 
   removeOldLitter();
   createAllLitter();
-  loadQuestion();
+  updateTopText();
 }
 
 function removeOldLitter(){
@@ -601,8 +583,8 @@ function removeOldLitter(){
 }
 
 function createAllLitter(){
-  for(var i = 0; i < allItems.length; i++){
-    var item = allItems[i];
+  for(var i = 0; i < garbageItems.length; i++){
+    var item = garbageItems[i];
 
     var div = document.createElement("div");
     div.className = "litter " + item.pos;
@@ -622,75 +604,31 @@ function createAllLitter(){
   }
 }
 
-function loadQuestion(){
-  accepting = true;
-  selectedItem = null;
-  wrongAttempts = 0;
-  feedback.classList.remove("show");
-  dustbin.classList.remove("ready");
-
-  var litters = document.querySelectorAll(".litter");
-  for(var i = 0; i < litters.length; i++){
-    litters[i].classList.remove("selected");
-    litters[i].classList.remove("glow");
-    litters[i].classList.remove("wiggle");
+function updateTopText(){
+  if(selectedItem){
+    instructionBox.textContent = "Great! Now tap the dustbin.";
+  }else{
+    instructionBox.textContent = "Tap any garbage. Then tap the dustbin.";
   }
 
-  if(currentIndex >= gameOrder.length){
-    endGame();
-    return;
-  }
-
-  var currentQ = gameOrder[currentIndex];
-
-  questionBox.textContent = currentQ.question;
-  counterBox.textContent = "Question " + (currentIndex + 1) + " of " + gameOrder.length;
+  counterBox.textContent = "Cleaned " + cleanedCount + " of " + totalItems;
 }
 
 function tapLitter(element){
   if(!accepting) return;
 
-  var currentQ = gameOrder[currentIndex];
-  var tappedId = element.getAttribute("data-id");
-
-  if(tappedId === currentQ.id){
-    var litters = document.querySelectorAll(".litter");
-    for(var i = 0; i < litters.length; i++){
-      litters[i].classList.remove("selected");
-      litters[i].classList.remove("glow");
-    }
-
-    selectedItem = element;
-    selectedItem.classList.add("selected");
-    dustbin.classList.add("ready");
-    questionBox.textContent = "Great! Now tap the dustbin.";
-  }else{
-    wrongAttempts++;
-    playAudio(wrongSound);
-
-    element.classList.add("wiggle");
-    setTimeout(function(){
-      element.classList.remove("wiggle");
-    },400);
-
-    if(wrongAttempts >= 2){
-      glowCorrectItem();
-      questionBox.textContent = "Look carefully! Tap the glowing item.";
-    }else{
-      questionBox.textContent = "Try again! Tap the correct waste item.";
-    }
+  var allLitter = document.querySelectorAll(".litter");
+  for(var i = 0; i < allLitter.length; i++){
+    allLitter[i].classList.remove("selected");
+    allLitter[i].classList.remove("glow");
   }
-}
 
-function glowCorrectItem(){
-  var currentQ = gameOrder[currentIndex];
-  var litters = document.querySelectorAll(".litter");
+  selectedItem = element;
+  selectedItem.classList.add("selected");
+  dustbin.classList.add("ready");
+  dustbinWrongAttempts = 0;
 
-  for(var i = 0; i < litters.length; i++){
-    if(litters[i].getAttribute("data-id") === currentQ.id){
-      litters[i].classList.add("glow");
-    }
-  }
+  updateTopText();
 }
 
 dustbin.onclick = function(){
@@ -699,6 +637,7 @@ dustbin.onclick = function(){
   if(selectedItem){
     putInDustbin();
   }else{
+    dustbinWrongAttempts++;
     playAudio(wrongSound);
 
     dustbin.classList.add("wiggle");
@@ -706,31 +645,57 @@ dustbin.onclick = function(){
       dustbin.classList.remove("wiggle");
     },400);
 
-    questionBox.textContent = "First tap the waste item. Then tap the dustbin.";
+    instructionBox.textContent = "First tap any garbage. Then tap the dustbin.";
+
+    if(dustbinWrongAttempts >= 2){
+      glowAllGarbage();
+      instructionBox.textContent = "Tap any glowing garbage first.";
+    }
   }
 };
+
+function glowAllGarbage(){
+  var allLitter = document.querySelectorAll(".litter");
+  for(var i = 0; i < allLitter.length; i++){
+    if(allLitter[i].style.display !== "none"){
+      allLitter[i].classList.add("glow");
+    }
+  }
+}
 
 function putInDustbin(){
   accepting = false;
   dustbin.classList.remove("ready");
 
+  var itemToClean = selectedItem;
+
   var binRect = dustbin.getBoundingClientRect();
   var sceneRect = scene.getBoundingClientRect();
 
-  selectedItem.style.left = (binRect.left - sceneRect.left + binRect.width / 2 - selectedItem.offsetWidth / 2) + "px";
-  selectedItem.style.top = (binRect.top - sceneRect.top + binRect.height / 2 - selectedItem.offsetHeight / 2) + "px";
-  selectedItem.style.transform = "scale(0.2)";
-  selectedItem.style.opacity = "0";
+  itemToClean.style.left = (binRect.left - sceneRect.left + binRect.width / 2 - itemToClean.offsetWidth / 2) + "px";
+  itemToClean.style.top = (binRect.top - sceneRect.top + binRect.height / 2 - itemToClean.offsetHeight / 2) + "px";
+  itemToClean.style.transform = "scale(0.2)";
+  itemToClean.style.opacity = "0";
 
   feedback.classList.add("show");
   playAudio(clapSound);
 
   setTimeout(function(){
-    selectedItem.style.display = "none";
+    itemToClean.style.display = "none";
+
+    cleanedCount++;
+    selectedItem = null;
+    accepting = true;
+
     feedback.classList.remove("show");
-    currentIndex++;
-    loadQuestion();
-  },1200);
+    updateTopText();
+
+    if(cleanedCount >= totalItems){
+      setTimeout(function(){
+        endGame();
+      },500);
+    }
+  },1100);
 }
 
 function endGame(){
