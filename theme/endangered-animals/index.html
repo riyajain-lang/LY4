@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, maximum-scale=1,
+  user-scalable=no, viewport-fit=cover"
+>
+
+<title>Endangered Animals Word Puzzle</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  background: #fff9e8;
+  color: #30485b;
+}
+
+button {
+  font-family: inherit;
+  touch-action: manipulation;
+}
+
+/* All screens */
+.screen {
+  display: none;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.screen.active {
+  display: flex;
+}
+
+/* ---------------- SPLASH SCREEN ---------------- */
+
+#splashScreen {
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+}
+
+#splashScreen img {
+  width: 230px;
+  max-width: 66vw;
+  max-height: 55vh;
+  object-fit: contain;
+}
+
+/* ---------------- GAME SCREEN ---------------- */
+
+#gameScreen {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding:
+    max(8px, env(safe-area-inset-top))
+    max(10px, env(safe-area-inset-right))
+    max(8px, env(safe-area-inset-bottom))
+    max(10px, env(safe-area-inset-left));
+
+  background:
+    radial-gradient(circle at 10% 15%, #ffffff 0 28px, transparent 29px),
+    radial-gradient(circle at 90% 15%, #ffffff 0 35px, transparent 36px),
+    radial-gradient(circle at 15% 90%, #fff3b8 0 42px, transparent 43px),
+    linear-gradient(145deg, #e8f8d8, #fff2c7 55%, #dff5ff);
+}
+
+.game-wrapper {
+  width: 100%;
+  height: 100%;
+  max-width: 950px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.top-bar {
+  width: 100%;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.mini-logo {
+  width: 92px;
+  height: 45px;
+  object-fit: contain;
+}
+
+.progress-box {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #7bc5a3;
+  border-radius: 22px;
+  padding: 7px 14px;
+  font-size: 16px;
+  font-weight: bold;
+  white-space: nowrap;
+  box-shadow: 0 4px 0 rgba(61, 139, 104, 0.15);
+}
+
+.game-card {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  background: rgba(255, 255, 255, 0.97);
+  border: 4px solid #5eb994;
+  border-radius: 28px;
+  box-shadow:
+    0 8px 0 rgba(49, 130, 99, 0.15),
+    0 12px 28px rgba(44, 92, 85, 0.13);
+  padding: 10px 16px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  overflow: hidden;
+}
+
+.title {
+  margin: 0;
+  text-align: center;
+  font-size: 30px;
+  font-size: clamp(20px, 4.5vw, 34px);
+  line-height: 1.05;
+  color: #e15c8f;
+}
+
+.instruction {
+  margin: 2px 0 4px;
+  text-align: center;
+  font-size: 16px;
+  font-size: clamp(13px, 3vw, 19px);
+  color: #536d7a;
+}
+
+.clue-area {
+  width: 100%;
+  min-height: 120px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.animal-frame {
+  position: relative;
+  width: 190px;
+  height: 160px;
+  max-width: 48vw;
+  max-height: 25vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4fcff;
+  border: 3px dashed #68b9d3;
+  border-radius: 50% 45% 50% 42%;
+}
+
+#animalImage {
+  width: 88%;
+  height: 88%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.image-fallback {
+  display: none;
+  font-size: 70px;
+}
+
+.jumble-label {
+  margin: 0;
+  font-size: 14px;
+  font-size: clamp(12px, 2.7vw, 17px);
+  font-weight: bold;
+  color: #6a7880;
+}
+
+.letter-board {
+  width: 100%;
+  min-height: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin: 3px 0 5px;
+}
+
+.letter-tile {
+  width: 38px;
+  height: 42px;
+  width: clamp(25px, 6.7vw, 43px);
+  height: clamp(30px, 7.6vw, 47px);
+  border-radius: 10px;
+  background: linear-gradient(#ffd66d, #ffbc52);
+  border: 2px solid #e99a35;
+  box-shadow: 0 4px 0 #d9872b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #5b4430;
+  font-size: 24px;
+  font-size: clamp(17px, 4.8vw, 27px);
+  font-weight: 900;
+}
+
+.answer-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+}
+
+.answer-button {
+  position: relative;
+  min-height: 57px;
+  padding: 8px 5px;
+  border: 3px solid #75b7dc;
+  border-radius: 17px;
+  background: linear-gradient(#f5fcff, #dff4ff);
+  color: #285a74;
+  font-size: 20px;
+  font-size: clamp(12px, 3.7vw, 22px);
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 5px 0 #4f96bd;
+  overflow-wrap: anywhere;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.answer-button:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 #4f96bd;
+}
+
+.answer-button.wrong-answer {
+  background: #ffe2e2;
+  border-color: #ed7575;
+  color: #aa3d3d;
+  box-shadow: 0 5px 0 #c85d5d;
+}
+
+.answer-button.used {
+  opacity: 0.45;
+}
+
+.answer-button.correct-answer {
+  color: #176c41;
+  background: #c9f7d5;
+  border-color: #44b673;
+  box-shadow: 0 5px 0 #2d9259;
+}
+
+.answer-button.correct-answer::after {
+  content: "✓";
+  position: absolute;
+  top: -5px;
+  right: -3px;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #25ad64;
+  color: #ffffff;
+  font-size: 18px;
+  border: 2px solid #ffffff;
+}
+
+.answer-button.glow {
+  animation: correctGlow 0.8s infinite alternate;
+}
+
+.feedback {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 20px;
+  font-size: 20px;
+  font-size: clamp(15px, 3.8vw, 23px);
+  font-weight: 900;
+  color: #5b6e78;
+}
+
+.feedback.good {
+  color: #168248;
+  background: #ddf9e5;
+}
+
+.feedback.try-again {
+  color: #b14d4d;
+  background: #fff0ef;
+}
+
+.feedback.hint {
+  color: #87600d;
+  background: #fff2bc;
+}
+
+/* ---------------- END SCREEN ---------------- */
+
+#endScreen {
+  align-items: center;
+  justify-content: center;
+  padding:
+    max(15px, env(safe-area-inset-top))
+    max(15px, env(safe-area-inset-right))
+    max(15px, env(safe-area-inset-bottom))
+    max(15px, env(safe-area-inset-left));
+
+  background: linear-gradient(145deg, #dcf8ff, #fff2c7, #e6ffd9);
+}
+
+.end-card {
+  position: relative;
+  z-index: 5;
+  width: 92%;
+  max-width: 600px;
+  padding: 24px 18px;
+  background: #ffffff;
+  border: 5px solid #63bb91;
+  border-radius: 32px;
+  text-align: center;
+  box-shadow: 0 10px 0 rgba(49, 130, 99, 0.18);
+}
+
+.end-logo {
+  width: 130px;
+  max-height: 80px;
+  object-fit: contain;
+}
+
+.end-animal {
+  font-size: 72px;
+  line-height: 1;
+  margin: 4px 0;
+  animation: happyBounce 1.2s infinite;
+}
+
+.end-card h1 {
+  margin: 5px 0;
+  color: #e05389;
+  font-size: 42px;
+  font-size: clamp(30px, 9vw, 50px);
+}
+
+.end-card p {
+  margin: 8px 0 18px;
+  color: #4e6b78;
+  font-size: 21px;
+  font-size: clamp(16px, 4.5vw, 24px);
+  font-weight: bold;
+}
+
+.play-again-button {
+  min-width: 190px;
+  min-height: 58px;
+  border: 3px solid #248b5a;
+  border-radius: 28px;
+  background: linear-gradient(#69d99b, #3cbc79);
+  color: #ffffff;
+  font-size: 23px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 6px 0 #238450;
+}
+
+.play-again-button:active {
+  transform: translateY(5px);
+  box-shadow: 0 1px 0 #238450;
+}
+
+/* ---------------- ANIMATIONS ---------------- */
+
+.shake {
+  animation: shakeOption 0.42s ease;
+}
+
+@keyframes shakeOption {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px) rotate(-2deg); }
+  40% { transform: translateX(8px) rotate(2deg); }
+  60% { transform: translateX(-6px) rotate(-1deg); }
+  80% { transform: translateX(6px) rotate(1deg); }
+}
+
+@keyframes correctGlow {
+  from {
+    transform: scale(1);
+    box-shadow:
+      0 5px 0 #2d9259,
+      0 0 4px 2px rgba(67, 215, 126, 0.4);
+  }
+
+  to {
+    transform: scale(1.05);
+    box-shadow:
+      0 5px 0 #2d9259,
+      0 0 16px 8px rgba(67, 215, 126, 0.85);
+  }
+}
+
+@keyframes happyBounce {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(-10px) rotate(4deg); }
+}
+
+/* ---------------- CONFETTI ---------------- */
+
+#confettiContainer {
+  pointer-events: none;
+  position: fixed;
+  z-index: 3;
+  inset: 0;
+  overflow: hidden;
+}
+
+.confetti {
+  position: absolute;
+  top: -25px;
+  width: 12px;
+  height: 18px;
+  border-radius: 3px;
+  animation: confettiFall linear forwards;
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-20px) rotate(0deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(110vh) rotate(720deg);
+    opacity: 0.9;
+  }
+}
+
+/* ---------------- SMALL HEIGHTS ---------------- */
+
+@media (max-height: 650px) {
+  .top-bar {
+    min-height: 45px;
+  }
+
+  .mini-logo {
+    height: 38px;
+  }
+
+  .game-card {
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+
+  .animal-frame {
+    width: 145px;
+    height: 115px;
+  }
+
+  .answer-button {
+    min-height: 48px;
+  }
+
+  .feedback {
+    min-height: 36px;
+    margin-top: 5px;
+  }
+}
+
+/* Landscape phones */
+@media (orientation: landscape) and (max-height: 520px) {
+  .game-wrapper {
+    max-width: 900px;
+  }
+
+  .top-bar {
+    min-height: 39px;
+  }
+
+  .mini-logo {
+    width: 75px;
+    height: 34px;
+  }
+
+  .progress-box {
+    padding: 4px 10px;
+    font-size: 13px;
+  }
+
+  .game-card {
+    display: grid;
+    grid-template-columns: 32% 68%;
+    grid-template-rows: auto auto 1fr auto auto;
+    column-gap: 10px;
+    padding: 5px 11px;
+  }
+
+  .title {
+    grid-column: 1 / 3;
+    grid-row: 1;
+  }
+
+  .instruction {
+    grid-column: 1 / 3;
+    grid-row: 2;
+  }
+
+  .clue-area {
+    grid-column: 1;
+    grid-row: 3 / 6;
+    min-height: 0;
+  }
+
+  .animal-frame {
+    width: 150px;
+    height: 125px;
+    max-width: 25vw;
+    max-height: 39vh;
+  }
+
+  .jumble-section {
+    grid-column: 2;
+    grid-row: 3;
+    align-self: center;
+  }
+
+  .answer-grid {
+    grid-column: 2;
+    grid-row: 4;
+  }
+
+  .feedback {
+    grid-column: 2;
+    grid-row: 5;
+    min-height: 31px;
+    margin-top: 3px;
+  }
+
+  .answer-button {
+    min-height: 43px;
+  }
+
+  .letter-tile {
+    width: 31px;
+    height: 34px;
+    font-size: 19px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Logo screen -->
+<section id="splashScreen" class="screen active">
+  <img
+    src="assets/innovine-logo.png"
+    alt="Innovine"
+    draggable="false"
+  >
+</section>
+
+<!-- Main game -->
+<section id="gameScreen" class="screen">
+  <div class="game-wrapper">
+
+    <header class="top-bar">
+      <img
+        class="mini-logo"
+        src="assets/innovine-logo.png"
+        alt="Innovine"
+        draggable="false"
+      >
+
+      <div id="progressBox" class="progress-box">
+        Question 1 of 6
+      </div>
+    </header>
+
+    <main class="game-card">
+      <h1 class="title">Unscramble the Animal!</h1>
+
+      <p class="instruction">
+        Look at the picture and tap the correct name.
+      </p>
+
+      <div class="clue-area">
+        <div class="animal-frame">
+          <img
+            id="animalImage"
+            src=""
+            alt="Endangered animal"
+            draggable="false"
+          >
+          <div id="imageFallback" class="image-fallback">🐾</div>
+        </div>
+      </div>
+
+      <div class="jumble-section">
+        <p class="jumble-label">Jumbled word</p>
+        <div id="letterBoard" class="letter-board"></div>
+      </div>
+
+      <div id="answerGrid" class="answer-grid"></div>
+
+      <div id="feedback" class="feedback" aria-live="polite"></div>
+    </main>
+
+  </div>
+</section>
+
+<!-- End screen -->
+<section id="endScreen" class="screen">
+  <div id="confettiContainer"></div>
+
+  <div class="end-card">
+    <img
+      class="end-logo"
+      src="assets/innovine-logo.png"
+      alt="Innovine"
+      draggable="false"
+    >
+
+    <div class="end-animal">🦁</div>
+
+    <h1>Good Job!</h1>
+
+    <p>You unscrambled all the endangered animals!</p>
+
+    <button
+      id="playAgainButton"
+      class="play-again-button"
+      type="button"
+    >
+      Play Again
+    </button>
+  </div>
+</section>
+
+<script>
+(function () {
+  "use strict";
+
+  var animals = [
+    {
+      name: "whale",
+      jumble: "HAWLE",
+      image: "assets/whale.png",
+      emoji: "🐋"
+    },
+    {
+      name: "tiger",
+      jumble: "GITER",
+      image: "assets/tiger.png",
+      emoji: "🐯"
+    },
+    {
+      name: "rhinoceros",
+      jumble: "RINHOCERHOS",
+      image: "assets/rhinoceros.png",
+      emoji: "🦏"
+    },
+    {
+      name: "dolphin",
+      jumble: "DOLPHNI",
+      image: "assets/dolphin.png",
+      emoji: "🐬"
+    },
+    {
+      name: "lion",
+      jumble: "LINO",
+      image: "assets/lion.png",
+      emoji: "🦁"
+    },
+    {
+      name: "elephant",
+      jumble: "ELEPHNAT",
+      image: "assets/elephant.png",
+      emoji: "🐘"
+    }
+  ];
+
+  var splashScreen = document.getElementById("splashScreen");
+  var gameScreen = document.getElementById("gameScreen");
+  var endScreen = document.getElementById("endScreen");
+
+  var animalImage = document.getElementById("animalImage");
+  var imageFallback = document.getElementById("imageFallback");
+  var letterBoard = document.getElementById("letterBoard");
+  var answerGrid = document.getElementById("answerGrid");
+  var feedback = document.getElementById("feedback");
+  var progressBox = document.getElementById("progressBox");
+  var playAgainButton = document.getElementById("playAgainButton");
+  var confettiContainer = document.getElementById("confettiContainer");
+
+  var clapAudio = new Audio("assets/claps.mp3");
+  var wrongAudio = new Audio("assets/wrong.mp3");
+
+  clapAudio.preload = "auto";
+  wrongAudio.preload = "auto";
+
+  var gameAnimals = [];
+  var currentQuestion = 0;
+  var wrongAttempts = 0;
+  var questionLocked = false;
+  var nextQuestionTimer = null;
+
+  function shuffle(array) {
+    var copiedArray = array.slice();
+
+    for (var i = copiedArray.length - 1; i > 0; i--) {
+      var randomIndex = Math.floor(Math.random() * (i + 1));
+      var temporaryItem = copiedArray[i];
+
+      copiedArray[i] = copiedArray[randomIndex];
+      copiedArray[randomIndex] = temporaryItem;
+    }
+
+    return copiedArray;
+  }
+
+  function showScreen(screenToShow) {
+    splashScreen.classList.remove("active");
+    gameScreen.classList.remove("active");
+    endScreen.classList.remove("active");
+
+    screenToShow.classList.add("active");
+  }
+
+  function safelyPlay(audioElement) {
+    try {
+      audioElement.pause();
+      audioElement.currentTime = 0;
+
+      var playPromise = audioElement.play();
+
+      if (playPromise && typeof playPromise.catch === "function") {
+        playPromise.catch(function () {
+          /* Audio may be blocked on some devices. */
+        });
+      }
+    } catch (error) {
+      /* Keep the game running even if audio cannot play. */
+    }
+  }
+
+  function capitalise(word) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }
+
+  function startGame() {
+    clearTimeout(nextQuestionTimer);
+
+    currentQuestion = 0;
+    wrongAttempts = 0;
+    questionLocked = false;
+    gameAnimals = shuffle(animals);
+
+    confettiContainer.innerHTML = "";
+    showScreen(gameScreen);
+    loadQuestion();
+  }
+
+  function loadQuestion() {
+    wrongAttempts = 0;
+    questionLocked = false;
+
+    feedback.textContent = "";
+    feedback.className = "feedback";
+
+    answerGrid.innerHTML = "";
+    letterBoard.innerHTML = "";
+
+    var currentAnimal = gameAnimals[currentQuestion];
+
+    progressBox.textContent =
+      "Question " +
+      (currentQuestion + 1) +
+      " of " +
+      gameAnimals.length;
+
+    animalImage.style.display = "block";
+    imageFallback.style.display = "none";
+    imageFallback.textContent = currentAnimal.emoji;
+
+    animalImage.alt = capitalise(currentAnimal.name);
+    animalImage.src = currentAnimal.image;
+
+    animalImage.onerror = function () {
+      animalImage.style.display = "none";
+      imageFallback.style.display = "block";
+    };
+
+    createLetterTiles(currentAnimal.jumble);
+    createAnswerOptions(currentAnimal);
+  }
+
+  function createLetterTiles(jumbledWord) {
+    var letters = jumbledWord.split("");
+
+    for (var i = 0; i < letters.length; i++) {
+      var tile = document.createElement("div");
+      tile.className = "letter-tile";
+      tile.textContent = letters[i];
+      letterBoard.appendChild(tile);
+    }
+  }
+
+  function createAnswerOptions(correctAnimal) {
+    var incorrectAnimals = animals.filter(function (animal) {
+      return animal.name !== correctAnimal.name;
+    });
+
+    incorrectAnimals = shuffle(incorrectAnimals).slice(0, 2);
+
+    var answerChoices = [
+      correctAnimal.name,
+      incorrectAnimals[0].name,
+      incorrectAnimals[1].name
+    ];
+
+    answerChoices = shuffle(answerChoices);
+
+    for (var i = 0; i < answerChoices.length; i++) {
+      var optionButton = document.createElement("button");
+
+      optionButton.type = "button";
+      optionButton.className = "answer-button";
+      optionButton.textContent = capitalise(answerChoices[i]);
+      optionButton.setAttribute("data-answer", answerChoices[i]);
+
+      optionButton.addEventListener("click", checkAnswer);
+
+      answerGrid.appendChild(optionButton);
+    }
+  }
+
+  function checkAnswer(event) {
+    if (questionLocked) {
+      return;
+    }
+
+    var selectedButton = event.currentTarget;
+    var selectedAnswer = selectedButton.getAttribute("data-answer");
+    var correctAnswer = gameAnimals[currentQuestion].name;
+
+    if (selectedButton.classList.contains("used")) {
+      return;
+    }
+
+    if (selectedAnswer === correctAnswer) {
+      handleCorrectAnswer(selectedButton);
+    } else {
+      handleWrongAnswer(selectedButton);
+    }
+  }
+
+  function handleWrongAnswer(selectedButton) {
+    wrongAttempts++;
+
+    safelyPlay(wrongAudio);
+
+    selectedButton.classList.add("wrong-answer");
+    selectedButton.classList.add("shake");
+
+    setTimeout(function () {
+      selectedButton.classList.remove("shake");
+      selectedButton.classList.add("used");
+    }, 430);
+
+    if (wrongAttempts >= 2) {
+      feedback.textContent = "Look for the glowing answer!";
+      feedback.className = "feedback hint";
+
+      revealCorrectOption();
+    } else {
+      feedback.textContent = "Oops! Try again.";
+      feedback.className = "feedback try-again";
+    }
+  }
+
+  function revealCorrectOption() {
+    var buttons = answerGrid.getElementsByClassName("answer-button");
+    var correctAnswer = gameAnimals[currentQuestion].name;
+
+    for (var i = 0; i < buttons.length; i++) {
+      var buttonAnswer = buttons[i].getAttribute("data-answer");
+
+      if (buttonAnswer === correctAnswer) {
+        buttons[i].classList.add("glow");
+      } else {
+        buttons[i].classList.add("used");
+      }
+    }
+  }
+
+  function handleCorrectAnswer(selectedButton) {
+    questionLocked = true;
+
+    selectedButton.classList.remove("glow");
+    selectedButton.classList.add("correct-answer");
+
+    feedback.textContent = "✓ Good job!";
+    feedback.className = "feedback good";
+
+    safelyPlay(clapAudio);
+
+    nextQuestionTimer = setTimeout(function () {
+      currentQuestion++;
+
+      if (currentQuestion < gameAnimals.length) {
+        loadQuestion();
+      } else {
+        finishGame();
+      }
+    }, 1450);
+  }
+
+  function finishGame() {
+    showScreen(endScreen);
+    safelyPlay(clapAudio);
+    createConfetti();
+  }
+
+  function createConfetti() {
+    confettiContainer.innerHTML = "";
+
+    var colours = [
+      "#ff5470",
+      "#ffcf56",
+      "#4ecdc4",
+      "#6c63ff",
+      "#55c271",
+      "#ff83c1",
+      "#4ba3ff"
+    ];
+
+    var numberOfPieces = 75;
+
+    for (var i = 0; i < numberOfPieces; i++) {
+      var piece = document.createElement("span");
+
+      piece.className = "confetti";
+      piece.style.left = Math.random() * 100 + "%";
+      piece.style.backgroundColor =
+        colours[Math.floor(Math.random() * colours.length)];
+      piece.style.animationDelay = Math.random() * 1.3 + "s";
+      piece.style.animationDuration =
+        2.7 + Math.random() * 2.2 + "s";
+      piece.style.transform =
+        "rotate(" + Math.floor(Math.random() * 360) + "deg)";
+
+      confettiContainer.appendChild(piece);
+    }
+  }
+
+  playAgainButton.addEventListener("click", function () {
+    startGame();
+  });
+
+  /* Logo remains visible for 2 seconds. */
+  setTimeout(function () {
+    startGame();
+  }, 2000);
+})();
+</script>
+
+</body>
+</html>
