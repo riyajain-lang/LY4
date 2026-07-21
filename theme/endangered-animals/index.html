@@ -12,6 +12,10 @@
 <title>Endangered Animals Word Puzzle</title>
 
 <style>
+/* -------------------------------------------------
+   GENERAL
+------------------------------------------------- */
+
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
@@ -24,8 +28,8 @@ body {
   height: 100%;
   overflow: hidden;
   font-family: "Trebuchet MS", Arial, sans-serif;
-  background: #fff9e8;
-  color: #30485b;
+  background: #ffffff;
+  color: #294c5e;
 }
 
 button {
@@ -33,7 +37,6 @@ button {
   touch-action: manipulation;
 }
 
-/* All screens */
 .screen {
   display: none;
   position: fixed;
@@ -48,7 +51,9 @@ button {
   display: flex;
 }
 
-/* ---------------- SPLASH SCREEN ---------------- */
+/* -------------------------------------------------
+   SPLASH SCREEN
+------------------------------------------------- */
 
 #splashScreen {
   align-items: center;
@@ -57,65 +62,60 @@ button {
 }
 
 #splashScreen img {
-  width: 230px;
-  max-width: 66vw;
+  width: 250px;
+  max-width: 68vw;
   max-height: 55vh;
   object-fit: contain;
 }
 
-/* ---------------- GAME SCREEN ---------------- */
+/* -------------------------------------------------
+   GAME SCREEN
+------------------------------------------------- */
 
 #gameScreen {
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+
   padding:
-    max(8px, env(safe-area-inset-top))
-    max(10px, env(safe-area-inset-right))
-    max(8px, env(safe-area-inset-bottom))
-    max(10px, env(safe-area-inset-left));
+    max(9px, env(safe-area-inset-top))
+    max(9px, env(safe-area-inset-right))
+    max(9px, env(safe-area-inset-bottom))
+    max(9px, env(safe-area-inset-left));
 
   background:
-    radial-gradient(circle at 10% 15%, #ffffff 0 28px, transparent 29px),
-    radial-gradient(circle at 90% 15%, #ffffff 0 35px, transparent 36px),
-    radial-gradient(circle at 15% 90%, #fff3b8 0 42px, transparent 43px),
-    linear-gradient(145deg, #e8f8d8, #fff2c7 55%, #dff5ff);
+    radial-gradient(circle at 7% 15%, #ffffff 0 32px, transparent 33px),
+    radial-gradient(circle at 92% 18%, #ffffff 0 40px, transparent 41px),
+    radial-gradient(circle at 12% 90%, #fff0ac 0 45px, transparent 46px),
+    radial-gradient(circle at 92% 88%, #d8f4ff 0 50px, transparent 51px),
+    linear-gradient(135deg, #e4f7d2, #fff4ca 52%, #daf4ff);
 }
 
 .game-wrapper {
   width: 100%;
   height: 100%;
-  max-width: 950px;
+  max-width: 1000px;
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
 .top-bar {
   width: 100%;
-  min-height: 54px;
+  min-height: 48px;
   display: flex;
+  justify-content: flex-end;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
   flex-shrink: 0;
 }
 
-.mini-logo {
-  width: 92px;
-  height: 45px;
-  object-fit: contain;
-}
-
 .progress-box {
-  background: rgba(255, 255, 255, 0.9);
-  border: 2px solid #7bc5a3;
+  padding: 7px 16px;
+  border: 2px solid #62b99b;
   border-radius: 22px;
-  padding: 7px 14px;
-  font-size: 16px;
-  font-weight: bold;
-  white-space: nowrap;
-  box-shadow: 0 4px 0 rgba(61, 139, 104, 0.15);
+  background: rgba(255, 255, 255, 0.94);
+  color: #294c5e;
+  font-size: clamp(13px, 2.6vw, 17px);
+  font-weight: 900;
+  box-shadow: 0 4px 0 rgba(57, 136, 108, 0.17);
 }
 
 .game-card {
@@ -123,63 +123,102 @@ button {
   width: 100%;
   flex: 1;
   min-height: 0;
-  background: rgba(255, 255, 255, 0.97);
-  border: 4px solid #5eb994;
-  border-radius: 28px;
-  box-shadow:
-    0 8px 0 rgba(49, 130, 99, 0.15),
-    0 12px 28px rgba(44, 92, 85, 0.13);
-  padding: 10px 16px 12px;
+  overflow: hidden;
+
+  padding: clamp(8px, 2vh, 18px) clamp(10px, 2.5vw, 24px);
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
-  overflow: hidden;
+  justify-content: space-between;
+
+  background: rgba(255, 255, 255, 0.97);
+  border: 4px solid #5db593;
+  border-radius: 30px;
+
+  box-shadow:
+    0 8px 0 rgba(39, 125, 91, 0.17),
+    0 15px 30px rgba(51, 95, 85, 0.13);
+}
+
+/* Decorative corner leaves */
+
+.game-card::before,
+.game-card::after {
+  content: "";
+  position: absolute;
+  width: 55px;
+  height: 55px;
+  border-radius: 50% 10% 50% 10%;
+  background: rgba(119, 208, 157, 0.16);
+  pointer-events: none;
+}
+
+.game-card::before {
+  top: -17px;
+  left: -17px;
+  transform: rotate(25deg);
+}
+
+.game-card::after {
+  right: -17px;
+  bottom: -17px;
+  transform: rotate(205deg);
+}
+
+.heading-area {
+  text-align: center;
+  flex-shrink: 0;
 }
 
 .title {
   margin: 0;
-  text-align: center;
-  font-size: 30px;
-  font-size: clamp(20px, 4.5vw, 34px);
+  color: #e2538a;
+  font-size: clamp(22px, 4.5vw, 36px);
   line-height: 1.05;
-  color: #e15c8f;
 }
 
 .instruction {
-  margin: 2px 0 4px;
-  text-align: center;
-  font-size: 16px;
-  font-size: clamp(13px, 3vw, 19px);
-  color: #536d7a;
+  margin: 4px 0 0;
+  color: #496778;
+  font-size: clamp(12px, 2.7vw, 18px);
+  font-weight: 600;
 }
+
+/* -------------------------------------------------
+   ANIMAL IMAGE
+------------------------------------------------- */
 
 .clue-area {
   width: 100%;
-  min-height: 120px;
   flex: 1;
+  min-height: 105px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.animal-frame {
-  position: relative;
-  width: 190px;
-  height: 160px;
-  max-width: 48vw;
-  max-height: 25vh;
+.animal-box {
+  width: clamp(180px, 38vw, 315px);
+  height: clamp(125px, 25vh, 210px);
+
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f4fcff;
-  border: 3px dashed #68b9d3;
-  border-radius: 50% 45% 50% 42%;
+
+  padding: 10px;
+  background: #ffffff;
+  border: 3px solid #8bc9dd;
+  border-radius: 20px;
+
+  box-shadow:
+    0 6px 0 #d1edf5,
+    0 10px 20px rgba(59, 109, 129, 0.11);
 }
 
 #animalImage {
-  width: 88%;
-  height: 88%;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   user-select: none;
   -webkit-user-drag: none;
@@ -187,263 +226,280 @@ button {
 
 .image-fallback {
   display: none;
-  font-size: 70px;
+  font-size: clamp(55px, 12vw, 90px);
 }
 
-.jumble-label {
-  margin: 0;
-  font-size: 14px;
-  font-size: clamp(12px, 2.7vw, 17px);
-  font-weight: bold;
-  color: #6a7880;
+/* -------------------------------------------------
+   ANSWER BLANKS
+------------------------------------------------- */
+
+.answer-section {
+  width: 100%;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.section-label {
+  margin: 2px 0 5px;
+  color: #637680;
+  font-size: clamp(12px, 2.5vw, 16px);
+  font-weight: 900;
+}
+
+.answer-slots {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(3px, 0.8vw, 7px);
+}
+
+.answer-slot {
+  width: clamp(25px, 6vw, 45px);
+  height: clamp(34px, 7vh, 51px);
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-bottom: 4px solid #7398aa;
+  border-radius: 8px 8px 4px 4px;
+
+  background: #f4fbff;
+  color: #244c62;
+
+  font-size: clamp(17px, 4vw, 27px);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.answer-slot.filled {
+  background: #e1f5ff;
+  border: 2px solid #77b9d6;
+  border-bottom: 4px solid #4d98bb;
+  box-shadow: 0 3px 0 rgba(69, 142, 174, 0.16);
+}
+
+.answer-slot.correct {
+  color: #147044;
+  background: #d7f8df;
+  border: 2px solid #48b875;
+  border-bottom: 4px solid #26945a;
+}
+
+.answer-slot.answer-glow {
+  animation: answerGlow 0.75s infinite alternate;
+}
+
+/* -------------------------------------------------
+   JUMBLED LETTERS
+------------------------------------------------- */
+
+.letters-section {
+  width: 100%;
+  flex-shrink: 0;
+  text-align: center;
 }
 
 .letter-board {
   width: 100%;
-  min-height: 50px;
+  min-height: 53px;
+
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  margin: 3px 0 5px;
+
+  gap: clamp(3px, 0.9vw, 8px);
 }
 
 .letter-tile {
-  width: 38px;
-  height: 42px;
-  width: clamp(25px, 6.7vw, 43px);
-  height: clamp(30px, 7.6vw, 47px);
-  border-radius: 10px;
-  background: linear-gradient(#ffd66d, #ffbc52);
-  border: 2px solid #e99a35;
-  box-shadow: 0 4px 0 #d9872b;
+  width: clamp(28px, 6.4vw, 49px);
+  height: clamp(38px, 7.3vh, 55px);
+  padding: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #5b4430;
-  font-size: 24px;
-  font-size: clamp(17px, 4.8vw, 27px);
-  font-weight: 900;
-}
 
-.answer-grid {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 9px;
-}
+  border: 2px solid #ee9f35;
+  border-radius: 12px;
 
-.answer-button {
-  position: relative;
-  min-height: 57px;
-  padding: 8px 5px;
-  border: 3px solid #75b7dc;
-  border-radius: 17px;
-  background: linear-gradient(#f5fcff, #dff4ff);
-  color: #285a74;
-  font-size: 20px;
-  font-size: clamp(12px, 3.7vw, 22px);
+  background: linear-gradient(180deg, #ffe185, #ffc25b);
+  color: #5c452d;
+
+  box-shadow:
+    0 5px 0 #df902e,
+    0 7px 10px rgba(127, 83, 34, 0.14);
+
+  font-size: clamp(18px, 4.2vw, 28px);
   font-weight: 900;
   cursor: pointer;
-  box-shadow: 0 5px 0 #4f96bd;
-  overflow-wrap: anywhere;
+
   transition:
     transform 0.15s ease,
-    background 0.15s ease,
     opacity 0.15s ease;
 }
 
-.answer-button:active {
+.letter-tile:active {
   transform: translateY(4px);
-  box-shadow: 0 1px 0 #4f96bd;
+  box-shadow: 0 1px 0 #df902e;
 }
 
-.answer-button.wrong-answer {
-  background: #ffe2e2;
-  border-color: #ed7575;
-  color: #aa3d3d;
-  box-shadow: 0 5px 0 #c85d5d;
+.letter-tile.used {
+  opacity: 0.2;
+  pointer-events: none;
+  transform: scale(0.88);
 }
 
-.answer-button.used {
-  opacity: 0.45;
+.letter-tile.hint-glow {
+  color: #0c6242;
+  border-color: #2dae70;
+  background: #bdf4d1;
+
+  animation: tileGlow 0.65s infinite alternate;
 }
 
-.answer-button.correct-answer {
-  color: #176c41;
-  background: #c9f7d5;
-  border-color: #44b673;
-  box-shadow: 0 5px 0 #2d9259;
-}
-
-.answer-button.correct-answer::after {
-  content: "✓";
-  position: absolute;
-  top: -5px;
-  right: -3px;
-  width: 27px;
-  height: 27px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #25ad64;
-  color: #ffffff;
-  font-size: 18px;
-  border: 2px solid #ffffff;
-}
-
-.answer-button.glow {
-  animation: correctGlow 0.8s infinite alternate;
-}
+/* -------------------------------------------------
+   FEEDBACK
+------------------------------------------------- */
 
 .feedback {
   width: 100%;
-  min-height: 44px;
-  margin-top: 8px;
+  min-height: 39px;
+  flex-shrink: 0;
+
+  margin-top: 4px;
+  padding: 5px 10px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  border-radius: 18px;
   text-align: center;
-  border-radius: 20px;
-  font-size: 20px;
-  font-size: clamp(15px, 3.8vw, 23px);
+
+  color: #61747d;
+  font-size: clamp(14px, 3vw, 21px);
   font-weight: 900;
-  color: #5b6e78;
 }
 
 .feedback.good {
-  color: #168248;
-  background: #ddf9e5;
+  color: #147847;
+  background: #dcf8e4;
 }
 
-.feedback.try-again {
-  color: #b14d4d;
+.feedback.wrong {
+  color: #ae4545;
   background: #fff0ef;
 }
 
 .feedback.hint {
-  color: #87600d;
-  background: #fff2bc;
+  color: #85600e;
+  background: #fff3c0;
 }
 
-/* ---------------- END SCREEN ---------------- */
+/* -------------------------------------------------
+   END SCREEN
+------------------------------------------------- */
 
 #endScreen {
   align-items: center;
   justify-content: center;
-  padding:
-    max(15px, env(safe-area-inset-top))
-    max(15px, env(safe-area-inset-right))
-    max(15px, env(safe-area-inset-bottom))
-    max(15px, env(safe-area-inset-left));
 
-  background: linear-gradient(145deg, #dcf8ff, #fff2c7, #e6ffd9);
+  padding:
+    max(14px, env(safe-area-inset-top))
+    max(14px, env(safe-area-inset-right))
+    max(14px, env(safe-area-inset-bottom))
+    max(14px, env(safe-area-inset-left));
+
+  background:
+    radial-gradient(circle at 10% 18%, #ffffff 0 42px, transparent 43px),
+    radial-gradient(circle at 90% 80%, #ffffff 0 52px, transparent 53px),
+    linear-gradient(140deg, #dcf8ff, #fff2c5, #e3ffd7);
 }
 
 .end-card {
   position: relative;
   z-index: 5;
+
   width: 92%;
-  max-width: 600px;
-  padding: 24px 18px;
+  max-width: 620px;
+  padding: 22px 18px;
+
   background: #ffffff;
-  border: 5px solid #63bb91;
-  border-radius: 32px;
+  border: 5px solid #58b38b;
+  border-radius: 34px;
   text-align: center;
-  box-shadow: 0 10px 0 rgba(49, 130, 99, 0.18);
+
+  box-shadow:
+    0 10px 0 rgba(39, 127, 91, 0.18),
+    0 20px 35px rgba(44, 100, 82, 0.14);
 }
 
 .end-logo {
-  width: 130px;
-  max-height: 80px;
+  width: 135px;
+  max-height: 75px;
   object-fit: contain;
 }
 
-.end-animal {
-  font-size: 72px;
+.end-animals {
+  margin: 5px 0;
+  font-size: clamp(50px, 12vw, 78px);
   line-height: 1;
-  margin: 4px 0;
   animation: happyBounce 1.2s infinite;
 }
 
 .end-card h1 {
   margin: 5px 0;
-  color: #e05389;
-  font-size: 42px;
-  font-size: clamp(30px, 9vw, 50px);
+  color: #e2538a;
+  font-size: clamp(31px, 9vw, 52px);
 }
 
 .end-card p {
-  margin: 8px 0 18px;
-  color: #4e6b78;
-  font-size: 21px;
-  font-size: clamp(16px, 4.5vw, 24px);
-  font-weight: bold;
+  margin: 7px 0 17px;
+  color: #4d6a77;
+  font-size: clamp(16px, 4vw, 23px);
+  font-weight: 900;
 }
 
 .play-again-button {
   min-width: 190px;
-  min-height: 58px;
-  border: 3px solid #248b5a;
-  border-radius: 28px;
-  background: linear-gradient(#69d99b, #3cbc79);
+  min-height: 56px;
+  padding: 10px 24px;
+
+  border: 3px solid #238956;
+  border-radius: 29px;
+
+  background: linear-gradient(#71dca2, #39b975);
   color: #ffffff;
-  font-size: 23px;
+
+  box-shadow: 0 6px 0 #24814f;
+
+  font-size: clamp(19px, 4.5vw, 24px);
   font-weight: 900;
   cursor: pointer;
-  box-shadow: 0 6px 0 #238450;
 }
 
 .play-again-button:active {
   transform: translateY(5px);
-  box-shadow: 0 1px 0 #238450;
+  box-shadow: 0 1px 0 #24814f;
 }
 
-/* ---------------- ANIMATIONS ---------------- */
-
-.shake {
-  animation: shakeOption 0.42s ease;
-}
-
-@keyframes shakeOption {
-  0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-8px) rotate(-2deg); }
-  40% { transform: translateX(8px) rotate(2deg); }
-  60% { transform: translateX(-6px) rotate(-1deg); }
-  80% { transform: translateX(6px) rotate(1deg); }
-}
-
-@keyframes correctGlow {
-  from {
-    transform: scale(1);
-    box-shadow:
-      0 5px 0 #2d9259,
-      0 0 4px 2px rgba(67, 215, 126, 0.4);
-  }
-
-  to {
-    transform: scale(1.05);
-    box-shadow:
-      0 5px 0 #2d9259,
-      0 0 16px 8px rgba(67, 215, 126, 0.85);
-  }
-}
-
-@keyframes happyBounce {
-  0%, 100% { transform: translateY(0) rotate(-4deg); }
-  50% { transform: translateY(-10px) rotate(4deg); }
-}
-
-/* ---------------- CONFETTI ---------------- */
+/* -------------------------------------------------
+   CONFETTI
+------------------------------------------------- */
 
 #confettiContainer {
-  pointer-events: none;
   position: fixed;
-  z-index: 3;
+  z-index: 2;
   inset: 0;
   overflow: hidden;
+  pointer-events: none;
 }
 
 .confetti {
@@ -455,126 +511,209 @@ button {
   animation: confettiFall linear forwards;
 }
 
+/* -------------------------------------------------
+   ANIMATIONS
+------------------------------------------------- */
+
+.shake {
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-8px) rotate(-3deg);
+  }
+
+  40% {
+    transform: translateX(8px) rotate(3deg);
+  }
+
+  60% {
+    transform: translateX(-6px) rotate(-2deg);
+  }
+
+  80% {
+    transform: translateX(6px) rotate(2deg);
+  }
+}
+
+@keyframes tileGlow {
+  from {
+    transform: scale(1);
+    box-shadow:
+      0 5px 0 #258c58,
+      0 0 5px rgba(45, 184, 110, 0.5);
+  }
+
+  to {
+    transform: scale(1.12);
+    box-shadow:
+      0 5px 0 #258c58,
+      0 0 18px 7px rgba(55, 221, 132, 0.8);
+  }
+}
+
+@keyframes answerGlow {
+  from {
+    transform: scale(1);
+    box-shadow: 0 0 4px rgba(45, 185, 112, 0.4);
+  }
+
+  to {
+    transform: scale(1.07);
+    box-shadow: 0 0 16px 6px rgba(45, 185, 112, 0.75);
+  }
+}
+
+@keyframes happyBounce {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+
+  50% {
+    transform: translateY(-10px) rotate(3deg);
+  }
+}
+
 @keyframes confettiFall {
-  0% {
-    transform: translateY(-20px) rotate(0deg);
+  from {
+    transform: translateY(-25px) rotate(0deg);
     opacity: 1;
   }
 
-  100% {
-    transform: translateY(110vh) rotate(720deg);
-    opacity: 0.9;
+  to {
+    transform: translateY(110vh) rotate(760deg);
+    opacity: 0.85;
   }
 }
 
-/* ---------------- SMALL HEIGHTS ---------------- */
+/* -------------------------------------------------
+   SHORT SCREENS
+------------------------------------------------- */
 
-@media (max-height: 650px) {
-  .top-bar {
-    min-height: 45px;
-  }
-
-  .mini-logo {
-    height: 38px;
-  }
-
-  .game-card {
-    padding-top: 7px;
-    padding-bottom: 7px;
-  }
-
-  .animal-frame {
-    width: 145px;
-    height: 115px;
-  }
-
-  .answer-button {
-    min-height: 48px;
-  }
-
-  .feedback {
-    min-height: 36px;
-    margin-top: 5px;
-  }
-}
-
-/* Landscape phones */
-@media (orientation: landscape) and (max-height: 520px) {
-  .game-wrapper {
-    max-width: 900px;
-  }
-
+@media (max-height: 670px) {
   .top-bar {
     min-height: 39px;
   }
 
-  .mini-logo {
-    width: 75px;
-    height: 34px;
+  .game-card {
+    border-radius: 23px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+
+  .animal-box {
+    height: clamp(105px, 22vh, 145px);
+  }
+
+  .answer-slot {
+    height: 37px;
+  }
+
+  .letter-tile {
+    height: 41px;
+  }
+
+  .feedback {
+    min-height: 32px;
+    margin-top: 2px;
+  }
+}
+
+/* -------------------------------------------------
+   LANDSCAPE PHONE LAYOUT
+------------------------------------------------- */
+
+@media (orientation: landscape) and (max-height: 540px) {
+  .game-wrapper {
+    max-width: 960px;
+  }
+
+  .top-bar {
+    min-height: 35px;
   }
 
   .progress-box {
-    padding: 4px 10px;
-    font-size: 13px;
+    padding: 4px 11px;
+    font-size: 12px;
   }
 
   .game-card {
     display: grid;
-    grid-template-columns: 32% 68%;
-    grid-template-rows: auto auto 1fr auto auto;
-    column-gap: 10px;
-    padding: 5px 11px;
+    grid-template-columns: 36% 64%;
+    grid-template-rows: auto 1fr auto auto auto;
+    column-gap: 14px;
+    padding: 5px 14px 7px;
   }
 
-  .title {
+  .heading-area {
     grid-column: 1 / 3;
     grid-row: 1;
   }
 
-  .instruction {
-    grid-column: 1 / 3;
-    grid-row: 2;
-  }
-
   .clue-area {
     grid-column: 1;
-    grid-row: 3 / 6;
+    grid-row: 2 / 6;
     min-height: 0;
   }
 
-  .animal-frame {
-    width: 150px;
-    height: 125px;
-    max-width: 25vw;
-    max-height: 39vh;
+  .animal-box {
+    width: min(29vw, 260px);
+    height: min(47vh, 185px);
   }
 
-  .jumble-section {
+  .answer-section {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: end;
+  }
+
+  .letters-section {
     grid-column: 2;
     grid-row: 3;
-    align-self: center;
-  }
-
-  .answer-grid {
-    grid-column: 2;
-    grid-row: 4;
   }
 
   .feedback {
     grid-column: 2;
-    grid-row: 5;
-    min-height: 31px;
-    margin-top: 3px;
+    grid-row: 4;
   }
 
-  .answer-button {
-    min-height: 43px;
+  .answer-slot {
+    width: clamp(25px, 4.2vw, 41px);
+    height: 37px;
   }
 
   .letter-tile {
-    width: 31px;
-    height: 34px;
-    font-size: 19px;
+    width: clamp(28px, 4.5vw, 44px);
+    height: 40px;
+  }
+}
+
+/* Very small phones */
+
+@media (max-width: 390px) {
+  .game-card {
+    padding-left: 7px;
+    padding-right: 7px;
+  }
+
+  .answer-slots,
+  .letter-board {
+    gap: 2px;
+  }
+
+  .answer-slot {
+    width: min(8.3vw, 32px);
+  }
+
+  .letter-tile {
+    width: min(8.5vw, 34px);
   }
 }
 
@@ -591,7 +730,7 @@ button {
 
 <body>
 
-<!-- Logo screen -->
+<!-- Splash screen: logo only for 2 seconds -->
 <section id="splashScreen" class="screen active">
   <img
     src="assets/innovine-logo.png"
@@ -600,57 +739,80 @@ button {
   >
 </section>
 
-<!-- Main game -->
+<!-- Game screen -->
 <section id="gameScreen" class="screen">
   <div class="game-wrapper">
 
     <header class="top-bar">
-      <img
-        class="mini-logo"
-        src="assets/innovine-logo.png"
-        alt="Innovine"
-        draggable="false"
-      >
-
       <div id="progressBox" class="progress-box">
         Question 1 of 6
       </div>
     </header>
 
     <main class="game-card">
-      <h1 class="title">Unscramble the Animal!</h1>
 
-      <p class="instruction">
-        Look at the picture and tap the correct name.
-      </p>
+      <div class="heading-area">
+        <h1 class="title">Unscramble the Animal!</h1>
+
+        <p class="instruction">
+          Tap the letters to complete the animal's name.
+        </p>
+      </div>
 
       <div class="clue-area">
-        <div class="animal-frame">
+        <div class="animal-box">
           <img
             id="animalImage"
             src=""
             alt="Endangered animal"
             draggable="false"
           >
-          <div id="imageFallback" class="image-fallback">🐾</div>
+
+          <div id="imageFallback" class="image-fallback">
+            🐾
+          </div>
         </div>
       </div>
 
-      <div class="jumble-section">
-        <p class="jumble-label">Jumbled word</p>
-        <div id="letterBoard" class="letter-board"></div>
+      <div class="answer-section">
+        <p class="section-label">
+          Complete the spelling
+        </p>
+
+        <div
+          id="answerSlots"
+          class="answer-slots"
+          aria-label="Answer blanks"
+        ></div>
       </div>
 
-      <div id="answerGrid" class="answer-grid"></div>
+      <div class="letters-section">
+        <p class="section-label">
+          Tap the jumbled letters
+        </p>
 
-      <div id="feedback" class="feedback" aria-live="polite"></div>
+        <div
+          id="letterBoard"
+          class="letter-board"
+          aria-label="Jumbled letters"
+        ></div>
+      </div>
+
+      <div
+        id="feedback"
+        class="feedback"
+        aria-live="polite"
+      >
+        Tap a letter to begin.
+      </div>
+
     </main>
-
   </div>
 </section>
 
 <!-- End screen -->
 <section id="endScreen" class="screen">
+
   <div id="confettiContainer"></div>
 
   <div class="end-card">
@@ -661,11 +823,15 @@ button {
       draggable="false"
     >
 
-    <div class="end-animal">🦁</div>
+    <div class="end-animals">
+      🐋 🐯 🦏
+    </div>
 
     <h1>Good Job!</h1>
 
-    <p>You unscrambled all the endangered animals!</p>
+    <p>
+      You completed all the animal names!
+    </p>
 
     <button
       id="playAgainButton"
@@ -684,37 +850,31 @@ button {
   var animals = [
     {
       name: "whale",
-      jumble: "HAWLE",
       image: "assets/whale.png",
       emoji: "🐋"
     },
     {
       name: "tiger",
-      jumble: "GITER",
       image: "assets/tiger.png",
       emoji: "🐯"
     },
     {
       name: "rhinoceros",
-      jumble: "RINHOCERHOS",
       image: "assets/rhinoceros.png",
       emoji: "🦏"
     },
     {
       name: "dolphin",
-      jumble: "DOLPHNI",
       image: "assets/dolphin.png",
       emoji: "🐬"
     },
     {
       name: "lion",
-      jumble: "LINO",
       image: "assets/lion.png",
       emoji: "🦁"
     },
     {
       name: "elephant",
-      jumble: "ELEPHNAT",
       image: "assets/elephant.png",
       emoji: "🐘"
     }
@@ -724,14 +884,19 @@ button {
   var gameScreen = document.getElementById("gameScreen");
   var endScreen = document.getElementById("endScreen");
 
+  var progressBox = document.getElementById("progressBox");
   var animalImage = document.getElementById("animalImage");
   var imageFallback = document.getElementById("imageFallback");
+
+  var answerSlots = document.getElementById("answerSlots");
   var letterBoard = document.getElementById("letterBoard");
-  var answerGrid = document.getElementById("answerGrid");
   var feedback = document.getElementById("feedback");
-  var progressBox = document.getElementById("progressBox");
-  var playAgainButton = document.getElementById("playAgainButton");
-  var confettiContainer = document.getElementById("confettiContainer");
+
+  var playAgainButton =
+    document.getElementById("playAgainButton");
+
+  var confettiContainer =
+    document.getElementById("confettiContainer");
 
   var clapAudio = new Audio("assets/claps.mp3");
   var wrongAudio = new Audio("assets/wrong.mp3");
@@ -741,30 +906,57 @@ button {
 
   var gameAnimals = [];
   var currentQuestion = 0;
+  var currentWord = "";
+  var currentPosition = 0;
   var wrongAttempts = 0;
   var questionLocked = false;
+  var selectedLetters = [];
   var nextQuestionTimer = null;
 
   function shuffle(array) {
     var copiedArray = array.slice();
 
     for (var i = copiedArray.length - 1; i > 0; i--) {
-      var randomIndex = Math.floor(Math.random() * (i + 1));
-      var temporaryItem = copiedArray[i];
+      var randomIndex =
+        Math.floor(Math.random() * (i + 1));
 
+      var temporaryValue = copiedArray[i];
       copiedArray[i] = copiedArray[randomIndex];
-      copiedArray[randomIndex] = temporaryItem;
+      copiedArray[randomIndex] = temporaryValue;
     }
 
     return copiedArray;
   }
 
-  function showScreen(screenToShow) {
+  function createJumbledLetters(word) {
+    var originalLetters = word.toUpperCase().split("");
+    var jumbledLetters;
+    var joinedWord;
+    var attempts = 0;
+
+    do {
+      jumbledLetters = shuffle(originalLetters);
+      joinedWord = jumbledLetters.join("");
+      attempts++;
+    } while (
+      joinedWord === word.toUpperCase() &&
+      attempts < 20
+    );
+
+    if (joinedWord === word.toUpperCase()) {
+      var firstLetter = jumbledLetters.shift();
+      jumbledLetters.push(firstLetter);
+    }
+
+    return jumbledLetters;
+  }
+
+  function showScreen(selectedScreen) {
     splashScreen.classList.remove("active");
     gameScreen.classList.remove("active");
     endScreen.classList.remove("active");
 
-    screenToShow.classList.add("active");
+    selectedScreen.classList.add("active");
   }
 
   function safelyPlay(audioElement) {
@@ -774,13 +966,16 @@ button {
 
       var playPromise = audioElement.play();
 
-      if (playPromise && typeof playPromise.catch === "function") {
+      if (
+        playPromise &&
+        typeof playPromise.catch === "function"
+      ) {
         playPromise.catch(function () {
-          /* Audio may be blocked on some devices. */
+          /* Keep playing the game if audio is blocked. */
         });
       }
     } catch (error) {
-      /* Keep the game running even if audio cannot play. */
+      /* Keep playing the game if audio is unavailable. */
     }
   }
 
@@ -791,27 +986,29 @@ button {
   function startGame() {
     clearTimeout(nextQuestionTimer);
 
-    currentQuestion = 0;
-    wrongAttempts = 0;
-    questionLocked = false;
     gameAnimals = shuffle(animals);
+    currentQuestion = 0;
 
     confettiContainer.innerHTML = "";
+
     showScreen(gameScreen);
     loadQuestion();
   }
 
   function loadQuestion() {
+    var animal = gameAnimals[currentQuestion];
+
+    currentWord = animal.name.toUpperCase();
+    currentPosition = 0;
     wrongAttempts = 0;
     questionLocked = false;
+    selectedLetters = [];
 
-    feedback.textContent = "";
-    feedback.className = "feedback";
-
-    answerGrid.innerHTML = "";
+    answerSlots.innerHTML = "";
     letterBoard.innerHTML = "";
 
-    var currentAnimal = gameAnimals[currentQuestion];
+    feedback.textContent = "Tap a letter to begin.";
+    feedback.className = "feedback";
 
     progressBox.textContent =
       "Question " +
@@ -821,124 +1018,268 @@ button {
 
     animalImage.style.display = "block";
     imageFallback.style.display = "none";
-    imageFallback.textContent = currentAnimal.emoji;
+    imageFallback.textContent = animal.emoji;
 
-    animalImage.alt = capitalise(currentAnimal.name);
-    animalImage.src = currentAnimal.image;
+    animalImage.alt = capitalise(animal.name);
+    animalImage.src = animal.image;
 
     animalImage.onerror = function () {
       animalImage.style.display = "none";
       imageFallback.style.display = "block";
     };
 
-    createLetterTiles(currentAnimal.jumble);
-    createAnswerOptions(currentAnimal);
+    createAnswerSlots();
+    createLetterTiles();
   }
 
-  function createLetterTiles(jumbledWord) {
-    var letters = jumbledWord.split("");
+  function createAnswerSlots() {
+    for (var i = 0; i < currentWord.length; i++) {
+      var slot = document.createElement("button");
 
-    for (var i = 0; i < letters.length; i++) {
-      var tile = document.createElement("div");
+      slot.type = "button";
+      slot.className = "answer-slot";
+      slot.setAttribute("data-position", i);
+      slot.setAttribute(
+        "aria-label",
+        "Blank letter " + (i + 1)
+      );
+
+      slot.addEventListener(
+        "click",
+        removeLetterFromSlot
+      );
+
+      answerSlots.appendChild(slot);
+    }
+  }
+
+  function createLetterTiles() {
+    var jumbledLetters =
+      createJumbledLetters(currentWord);
+
+    for (var i = 0; i < jumbledLetters.length; i++) {
+      var tile = document.createElement("button");
+
+      tile.type = "button";
       tile.className = "letter-tile";
-      tile.textContent = letters[i];
+      tile.textContent = jumbledLetters[i];
+
+      tile.setAttribute("data-letter", jumbledLetters[i]);
+      tile.setAttribute("data-tile-id", "tile-" + i);
+      tile.setAttribute(
+        "aria-label",
+        "Letter " + jumbledLetters[i]
+      );
+
+      tile.addEventListener("click", chooseLetter);
+
       letterBoard.appendChild(tile);
     }
   }
 
-  function createAnswerOptions(correctAnimal) {
-    var incorrectAnimals = animals.filter(function (animal) {
-      return animal.name !== correctAnimal.name;
-    });
-
-    incorrectAnimals = shuffle(incorrectAnimals).slice(0, 2);
-
-    var answerChoices = [
-      correctAnimal.name,
-      incorrectAnimals[0].name,
-      incorrectAnimals[1].name
-    ];
-
-    answerChoices = shuffle(answerChoices);
-
-    for (var i = 0; i < answerChoices.length; i++) {
-      var optionButton = document.createElement("button");
-
-      optionButton.type = "button";
-      optionButton.className = "answer-button";
-      optionButton.textContent = capitalise(answerChoices[i]);
-      optionButton.setAttribute("data-answer", answerChoices[i]);
-
-      optionButton.addEventListener("click", checkAnswer);
-
-      answerGrid.appendChild(optionButton);
-    }
-  }
-
-  function checkAnswer(event) {
+  function chooseLetter(event) {
     if (questionLocked) {
       return;
     }
 
-    var selectedButton = event.currentTarget;
-    var selectedAnswer = selectedButton.getAttribute("data-answer");
-    var correctAnswer = gameAnimals[currentQuestion].name;
+    var selectedTile = event.currentTarget;
 
-    if (selectedButton.classList.contains("used")) {
+    if (selectedTile.classList.contains("used")) {
       return;
     }
 
-    if (selectedAnswer === correctAnswer) {
-      handleCorrectAnswer(selectedButton);
+    var selectedLetter =
+      selectedTile.getAttribute("data-letter");
+
+    var correctLetter =
+      currentWord.charAt(currentPosition);
+
+    clearLetterHints();
+
+    if (selectedLetter === correctLetter) {
+      placeCorrectLetter(selectedTile, selectedLetter);
     } else {
-      handleWrongAnswer(selectedButton);
+      handleWrongLetter(selectedTile);
     }
   }
 
-  function handleWrongAnswer(selectedButton) {
+  function placeCorrectLetter(tile, letter) {
+    var slots =
+      answerSlots.getElementsByClassName("answer-slot");
+
+    var currentSlot = slots[currentPosition];
+
+    currentSlot.textContent = letter;
+    currentSlot.classList.add("filled");
+    currentSlot.setAttribute(
+      "data-tile-id",
+      tile.getAttribute("data-tile-id")
+    );
+
+    tile.classList.add("used");
+
+    selectedLetters[currentPosition] = {
+      letter: letter,
+      tileId: tile.getAttribute("data-tile-id")
+    };
+
+    currentPosition++;
+    wrongAttempts = 0;
+
+    feedback.textContent =
+      currentPosition === currentWord.length
+        ? "Wonderful!"
+        : "Good! Choose the next letter.";
+
+    feedback.className = "feedback good";
+
+    if (currentPosition === currentWord.length) {
+      completeWord();
+    }
+  }
+
+  function handleWrongLetter(tile) {
     wrongAttempts++;
 
     safelyPlay(wrongAudio);
 
-    selectedButton.classList.add("wrong-answer");
-    selectedButton.classList.add("shake");
+    tile.classList.remove("shake");
+
+    void tile.offsetWidth;
+
+    tile.classList.add("shake");
 
     setTimeout(function () {
-      selectedButton.classList.remove("shake");
-      selectedButton.classList.add("used");
+      tile.classList.remove("shake");
     }, 430);
 
     if (wrongAttempts >= 2) {
-      feedback.textContent = "Look for the glowing answer!";
+      feedback.textContent =
+        "Look for the glowing letter.";
+
       feedback.className = "feedback hint";
 
-      revealCorrectOption();
+      glowCorrectLetter();
     } else {
-      feedback.textContent = "Oops! Try again.";
-      feedback.className = "feedback try-again";
+      feedback.textContent =
+        "Oops! Try another letter.";
+
+      feedback.className = "feedback wrong";
     }
   }
 
-  function revealCorrectOption() {
-    var buttons = answerGrid.getElementsByClassName("answer-button");
-    var correctAnswer = gameAnimals[currentQuestion].name;
+  function glowCorrectLetter() {
+    var correctLetter =
+      currentWord.charAt(currentPosition);
 
-    for (var i = 0; i < buttons.length; i++) {
-      var buttonAnswer = buttons[i].getAttribute("data-answer");
+    var tiles =
+      letterBoard.getElementsByClassName("letter-tile");
 
-      if (buttonAnswer === correctAnswer) {
-        buttons[i].classList.add("glow");
-      } else {
-        buttons[i].classList.add("used");
+    for (var i = 0; i < tiles.length; i++) {
+      var tileLetter =
+        tiles[i].getAttribute("data-letter");
+
+      if (
+        tileLetter === correctLetter &&
+        !tiles[i].classList.contains("used")
+      ) {
+        tiles[i].classList.add("hint-glow");
+        break;
       }
     }
+
+    var slots =
+      answerSlots.getElementsByClassName("answer-slot");
+
+    if (slots[currentPosition]) {
+      slots[currentPosition].classList.add(
+        "answer-glow"
+      );
+    }
   }
 
-  function handleCorrectAnswer(selectedButton) {
+  function clearLetterHints() {
+    var glowingTiles =
+      letterBoard.querySelectorAll(".hint-glow");
+
+    for (var i = 0; i < glowingTiles.length; i++) {
+      glowingTiles[i].classList.remove("hint-glow");
+    }
+
+    var glowingSlots =
+      answerSlots.querySelectorAll(".answer-glow");
+
+    for (var j = 0; j < glowingSlots.length; j++) {
+      glowingSlots[j].classList.remove(
+        "answer-glow"
+      );
+    }
+  }
+
+  function removeLetterFromSlot(event) {
+    if (questionLocked) {
+      return;
+    }
+
+    var clickedSlot = event.currentTarget;
+    var slotPosition = parseInt(
+      clickedSlot.getAttribute("data-position"),
+      10
+    );
+
+    if (
+      clickedSlot.textContent === "" ||
+      slotPosition !== currentPosition - 1
+    ) {
+      return;
+    }
+
+    var tileId =
+      clickedSlot.getAttribute("data-tile-id");
+
+    var matchingTile = letterBoard.querySelector(
+      '[data-tile-id="' + tileId + '"]'
+    );
+
+    if (matchingTile) {
+      matchingTile.classList.remove("used");
+    }
+
+    clickedSlot.textContent = "";
+    clickedSlot.classList.remove(
+      "filled",
+      "correct",
+      "answer-glow"
+    );
+
+    clickedSlot.removeAttribute("data-tile-id");
+
+    selectedLetters.splice(slotPosition, 1);
+    currentPosition = slotPosition;
+    wrongAttempts = 0;
+
+    clearLetterHints();
+
+    feedback.textContent =
+      "Choose a different letter.";
+
+    feedback.className = "feedback";
+  }
+
+  function completeWord() {
     questionLocked = true;
 
-    selectedButton.classList.remove("glow");
-    selectedButton.classList.add("correct-answer");
+    var slots =
+      answerSlots.getElementsByClassName("answer-slot");
+
+    for (var i = 0; i < slots.length; i++) {
+      slots[i].classList.remove(
+        "filled",
+        "answer-glow"
+      );
+
+      slots[i].classList.add("correct");
+    }
 
     feedback.textContent = "✓ Good job!";
     feedback.className = "feedback good";
@@ -953,7 +1294,7 @@ button {
       } else {
         finishGame();
       }
-    }, 1450);
+    }, 1500);
   }
 
   function finishGame() {
@@ -963,8 +1304,6 @@ button {
   }
 
   function createConfetti() {
-    confettiContainer.innerHTML = "";
-
     var colours = [
       "#ff5470",
       "#ffcf56",
@@ -975,20 +1314,31 @@ button {
       "#4ba3ff"
     ];
 
-    var numberOfPieces = 75;
+    confettiContainer.innerHTML = "";
 
-    for (var i = 0; i < numberOfPieces; i++) {
+    for (var i = 0; i < 80; i++) {
       var piece = document.createElement("span");
 
       piece.className = "confetti";
-      piece.style.left = Math.random() * 100 + "%";
+
+      piece.style.left =
+        Math.random() * 100 + "%";
+
       piece.style.backgroundColor =
-        colours[Math.floor(Math.random() * colours.length)];
-      piece.style.animationDelay = Math.random() * 1.3 + "s";
+        colours[
+          Math.floor(Math.random() * colours.length)
+        ];
+
+      piece.style.animationDelay =
+        Math.random() * 1.4 + "s";
+
       piece.style.animationDuration =
-        2.7 + Math.random() * 2.2 + "s";
+        2.7 + Math.random() * 2.4 + "s";
+
       piece.style.transform =
-        "rotate(" + Math.floor(Math.random() * 360) + "deg)";
+        "rotate(" +
+        Math.floor(Math.random() * 360) +
+        "deg)";
 
       confettiContainer.appendChild(piece);
     }
@@ -998,7 +1348,7 @@ button {
     startGame();
   });
 
-  /* Logo remains visible for 2 seconds. */
+  /* Display logo splash for 2 seconds. */
   setTimeout(function () {
     startGame();
   }, 2000);
