@@ -1,3 +1,46 @@
+ChatGPT
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Pasted text(96).txt
+Document
+https://riyajain-lang.github.io/LY4/theme/marine-life/
+
+1 change needs to be made: add a tab bar to my instructions above. It has helped you with my code, as well as with my link. Rewrite the fixed code 
+
+Worked for 1m 15s
+I added a three-step instruction tab bar above the game:
+
+1. Tap an Animal → 2. Tap Its Zone → 3. Complete All
+
+The active tab changes automatically as the learner plays. All existing gameplay, sounds, images, buttons, scoring logic, and asset paths remain unchanged.
+
+marine-life-fixed-index.html
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,7 +94,12 @@ html,body{
 }
 
 .header{
-  height:5.5vh;
+  height:10.5vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:.7vh;
   text-align:center;
   font-size:clamp(16px,2.4vw,30px);
   font-weight:bold;
@@ -59,8 +107,13 @@ html,body{
   text-shadow:1px 2px white;
 }
 
+.instructionTabs{display:flex;width:min(96%,760px);gap:6px;padding:5px;background:rgba(255,255,255,.85);border:2px solid #55cfff;border-radius:18px;box-shadow:0 3px 8px rgba(0,80,120,.15)}
+.instructionTab{flex:1;padding:5px 7px;border-radius:13px;font-size:clamp(10px,1.45vw,16px);color:#216482;background:#eafaff;white-space:nowrap}
+.instructionTab.active{background:#ffd447;color:#00456d;box-shadow:0 2px #d99d00}
+.instructionTab.doneStep{background:#8ee6ae;color:#07522d}
+
 .main{
-  height:88.5vh;
+  height:83.5vh;
   display:flex;
   gap:1vw;
 }
@@ -312,7 +365,14 @@ button{
   </div>
 
   <div id="gameSlide">
-    <div class="header">Tap the Marine Animal, Then Tap Its Ocean Zone</div>
+    <div class="header">
+      <div>Marine Life Ocean Zones</div>
+      <div class="instructionTabs" aria-label="Game instructions">
+        <div class="instructionTab active" id="step1">1. Tap an Animal</div>
+        <div class="instructionTab" id="step2">2. Tap Its Zone</div>
+        <div class="instructionTab" id="step3">3. Complete All</div>
+      </div>
+    </div>
 
     <div class="main">
       <div class="animalsPanel" id="animalsPanel"></div>
@@ -393,6 +453,7 @@ function loadAnimals(){
   placedCount=0;
   document.querySelectorAll(".placedAnimal,.confetti").forEach(e=>e.remove());
   document.getElementById("message").textContent="Tap one animal first.";
+  setInstructionStep(1);
 
   shuffle([...animals]).forEach(a=>{
     const div=document.createElement("div");
@@ -406,11 +467,16 @@ function loadAnimals(){
   });
 }
 
+function setInstructionStep(step){
+  [1,2,3].forEach(n=>{const el=document.getElementById("step"+n);el.classList.toggle("active",n===step);el.classList.toggle("doneStep",n<step);});
+}
+
 function selectAnimal(animalDiv){
   document.querySelectorAll(".animal").forEach(a=>a.classList.remove("selected"));
   selectedAnimal=animalDiv;
   selectedAnimal.classList.add("selected");
   document.getElementById("message").textContent="Now tap the correct ocean zone.";
+  setInstructionStep(2);
 }
 
 document.querySelectorAll(".zone").forEach(zone=>{
@@ -441,9 +507,11 @@ function tapZone(zone){
 
     if(placedCount===animals.length){
       document.getElementById("message").textContent="Excellent!";
+      setInstructionStep(3);
       setTimeout(finishGame,900);
     }else{
       document.getElementById("message").textContent="Good Job! Tap another animal.";
+      setInstructionStep(1);
     }
   }else{
     playWrong();
@@ -524,3 +592,6 @@ function resetGame(){
 
 </body>
 </html>
+
+
+
